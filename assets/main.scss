@@ -26,6 +26,18 @@ $content-width:    800px;
 $on-palm:          600px;
 $on-laptop:        800px;
 
+.clearfix::after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
 // Minima also includes a mixin for defining media queries.
 // Use media queries like this:
 // @include media-query($on-palm) {
