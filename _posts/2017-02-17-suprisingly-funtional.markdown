@@ -46,7 +46,7 @@ To be a monad, a type must:
 
 1.	be parameterized by a specific type
 2.	have a unit function that converts an instance of the type to an instance of the monad
-3.	have 
+3.	have a bind operation that takes a instance of monad type and return another monad type
 
 A couple observations from the bowels of standards for C and C++:
 
