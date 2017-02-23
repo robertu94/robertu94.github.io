@@ -14,15 +14,19 @@ layout: default
 				{{ post.date | date: "%b %-d, %Y" }}
 			</span>
 			<span class="right">
-				{% for tag in post.tags %}
-					{% if forloop.last == true %}
-					and
-					{% endif %}
-					{{tag}}
-					{% if forloop.last == false %}
-					,
-					{% endif %}
-				{% endfor %}
+				{% if post.tags.size == 1 %}
+					{{ post.tags | first }}
+				{% else %}
+					{% for tag in post.tags %}
+						{% if forloop.last == true %}
+						and
+						{% endif %}
+						{{tag}}
+						{% if forloop.last == false %}
+						,
+						{% endif %}
+					{% endfor %}
+				{% endif %}
 			</span>
 		</div>
 
