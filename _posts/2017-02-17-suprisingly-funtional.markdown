@@ -110,7 +110,7 @@ And to show that it verifies the monad laws (which is more than you can say abou
 #include "Optional.h"
 int main()
 {
-	std::function<Optional<int*>> f = [](int* v){
+	std::function<Optional<int>(int*)> f = [](int* v){
 			if(v == nullptr)
 			{
 				return Optional<int>(-1);
