@@ -9,7 +9,7 @@ tags:
 - SaltStack
 ---
 
-Configuration Management Systems like Ansible, Chef, Puppet, and SaltStack and in my opinion are nearly essential if you find yourself managing more than 5 machines.
+Configuration Management Systems like Ansible, Chef, Puppet, and SaltStack are in my opinion are nearly essential if you find yourself managing more than 5 machines.
 But what exactly are they, which is better for my circumstances, do I still need them if I use a container based infrastructure, how do I get started?
 This post is the first in a series of posts that will attempt to answer these questions.
 
