@@ -18,7 +18,7 @@ This is not intended to be an exhaustive (for that would be far too long), or op
 
 Everyone needs to start somewhere, for C++ I would start here.
 
-For this section, I would read at least Effective C++, Effective Modern C++, and skim the C++ Core Guidelines.  Together these will give you a broad basis to learn more about C++.  The other references are still useful, but maybe not as pressing.
+For this section, I would read at least Effective C++ and Effective Modern C++, and then I would skim the C++ Core Guidelines.  Together these will give you a broad basis to learn more about C++.  The other references are still useful, but maybe not as pressing.
 
 1. Effective C++ by Scott Meyers - still the best beginners book for C++ and overviews common design concerns in C++.  While it focuses on C++98, much of this book still applies.
 2. Effective STL C++ by Scott Meyers - Overview the standard template libary (set of containers and algorithms included in the standard libary) and how to use the common parts effectively.

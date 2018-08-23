@@ -10,7 +10,7 @@ tags:
 ---
 
 So you know you need a configuration management system and you have an idea of which one will work for you.
-So what should I think about about before deploying one of this systems.
+So what should I think about about before deploying one of this systems?
 In this third and final post in this series, I present some suggestions about using these systems in a way that is flexible and scalable to larger numbers of systems.
 
 Even within an operating system like Linux, there is a lot of variation between Linux distributions.
