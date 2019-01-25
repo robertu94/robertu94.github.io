@@ -144,7 +144,8 @@ The functional capabilities of Python are best seen in the following features of
 + Easy to write Iterators.
 + Great library support for iterators, and higher-level programming.
 
-I would read the appropriate sections of the Python docs especially `itertools` and `functools`.
+I would read the appropriate sections of the Python docs especially the introduction to functional programming in python as well as the `itertools` and `functools` docs.
+
 
 
 One common question that comes up when considering generators versus list comprehensions is which to use.  Generally, you should prefer generators because they use less memory and can be converted to lists later if multiple passes or random access is required.  This [video is on Python 2, but shows why you should prefer generators over lists](https://youtu.be/07-K4LFhBMc)
