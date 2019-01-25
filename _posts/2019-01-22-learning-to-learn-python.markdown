@@ -80,7 +80,7 @@ In addition to the fantastic standard library, Python has a number of famous 3rd
 | bokeh                | plotting            |Web-first plotting library                 |
 | plotly               | plotting            |Interactive plotting library               |
 | beautiful soup       | scraping            |Sane HTML parsing                          |
-| scapy                | scraping            |Web Scraping Framework                     |
+| scrapy               | scraping            |Web Scraping Framework                     |
 | requests             | scaping/web requests|Vastly superior HTTP library               |
 | django               | web app             |opinionated easy to use CMS framework      |
 | flask                | web app             |Flexible web app framework                 |
