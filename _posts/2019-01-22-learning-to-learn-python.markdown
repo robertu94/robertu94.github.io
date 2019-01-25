@@ -16,13 +16,13 @@ The listing of topics here is arbitrary and represents the path that I took to l
 
 ## Beginning Python
 
-Everyone needs to start somewhere, but there are limited current, comprehensive, and free document that describe an overview for the language.
+Everyone needs to start somewhere, but there are limited, current, comprehensive, and free documents that describe an overview for the language.
 
 I would recommend in starting in one of two ways:
 
-1. Read ["Dive into Python 3" by Mark Pilgrim](https://www.diveinto.org/python3/).  It used to be that this book was all you needed to read to get started.  However the author of this book has since retired and Python has grown since version 3.0.  To supplement this reading, I would recommend reading up on the following newer topics from the [Python release notes](https://docs.python.org/whatsnew/):
-    1. Pathlib -- the newer and more user friendly file interface introduced in Python 3.4
-    2. f-Strings -- a newer way for writing formatted strings which cuts down on the verbosity
+1. Read ["Dive into Python 3" by Mark Pilgrim](https://www.diveinto.org/python3/).  It used to be that this book was all you needed to read to get started.  However the author of this book has since retired and Python has grown since version 3.0.  To supplement this reading, I would recommend reading up on the following newer topics from the [Python Release Notes](https://docs.python.org/whatsnew/):
+    1. Pathlib -- the newer and more user friendly file interface introduced in Python 3.4.
+    2. f-Strings -- a newer way for writing formatted strings which cuts down on the verbosity.
     3. Async-IO -- as of Python 3.5, Python developed a robust set of faculties for asynchronous programming.  While you probably won't start out writing async programs, know what they are and how they work will make reading them less surprising.
     4. Type Hints -- as of Python 3.5 Python now supports the ability to provide type information for arguments.  While the information is only a hint and is automatically ignored at runtime, it can be checked statically by tools.
 2. Read the ["Python Tutorial"](https://docs.python.org/tutorial) which is part of the standard documentation.  This resource is a bit terse for non-programmers, but provides a well written and more modern introduction to the language. 
