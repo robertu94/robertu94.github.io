@@ -16,7 +16,7 @@ The listing of topics here is arbitrary and represents the path that I took to l
 
 ## Beginning Python
 
-Every needs to start somewhere, but there are limited current, comprehensive, and free document that describe an overview for the language.
+Everyone needs to start somewhere, but there are limited current, comprehensive, and free document that describe an overview for the language.
 
 I would recommend in starting in one of two ways:
 
