@@ -70,28 +70,28 @@ Python's claim to fame is that it has one of the best "batteries included" stand
 
 In addition to the fantastic standard library, Python has a number of famous 3rd party libraries that are considered the best in class across all programming languages.  While I list these specifically later, I would be remiss in failing to mention the [NumFOCUS libraries](https://numfocus.org) which includes MatplotLib, NumPy, SciPy, Pandas, and others up front as some of the best open source (arguably overall) libraries for statistical analysis and numerical calculation that exist.  Unfortunately the quality of the documentation for these tools varies highly.  One alternative to strictly reading the documentation is to look at the unit-tests for the library.  Because of the builtin unit testing frameworks being quite good, Python libraries often have extensive test suites.
 
-| Name                 |Use                  |Description                                |
-|----------------------|---------------------|-------------------------------------------|
-| pandas               | data anlaysis       |Data analysis framework for tabular data   |
-| scipy                | data anlaysis       |Fast scientific functions                  |
-| numpy                | data anlaysis       |Fast numeric framework famous for arrays   |
-| matplotlib           | plotting            |Defacto plotting library for Python        |
-| seabourn             | plotting            |Ease of use layer for matplotlib           |
-| bokeh                | plotting            |Web-first plotting library                 |
-| plotly               | plotting            |Interactive plotting library               |
-| beautiful soup       | scraping            |Sane HTML parsing                          |
-| scrapy               | scraping            |Web Scraping Framework                     |
-| requests             | scaping/web requests|Vastly superior HTTP library               |
-| django               | web app             |opinionated easy to use CMS framework      |
-| flask                | web app             |Flexible web app framework                 |
-| selenium             | testing             |Automated web browser controller           |
-| psycog2              | database            |PostgreSQL bindings                        |
-| simpy                | simulation          |Simulation library                         |
-| mpi4py               | HPC                 |Distributed memory programming executor    |
-| tensorflow           | machine learning    |Faster but more complex machine learning   |
-| sklearn              | machine learning    |Easy to use but slower machine learning    |
-| networkx             | graphs              |Easy to use but slow graph library         |
-| networkit            | graphs              |Slightly harder to use but faster graphs   |
+| Name                 |Use                   |Description                                |
+|----------------------|----------------------|-------------------------------------------|
+| pandas               | data anlaysis        |Data analysis framework for tabular data   |
+| scipy                | data anlaysis        |Fast scientific functions                  |
+| numpy                | data anlaysis        |Fast numeric framework famous for arrays   |
+| matplotlib           | plotting             |Defacto plotting library for Python        |
+| seabourn             | plotting             |Ease of use layer for matplotlib           |
+| bokeh                | plotting             |Web-first plotting library                 |
+| plotly               | plotting             |Interactive plotting library               |
+| beautiful soup       | scraping             |Sane HTML parsing                          |
+| scrapy               | scraping             |Web Scraping Framework                     |
+| requests             | scraping/web requests|Vastly superior HTTP library               |
+| django               | web app              |opinionated easy to use CMS framework      |
+| flask                | web app              |Flexible web app framework                 |
+| selenium             | testing              |Automated web browser controller           |
+| psycog2              | database             |PostgreSQL bindings                        |
+| simpy                | simulation           |Simulation library                         |
+| mpi4py               | HPC                  |Distributed memory programming executor    |
+| tensorflow           | machine learning     |Faster but more complex machine learning   |
+| sklearn              | machine learning     |Easy to use but slower machine learning    |
+| networkx             | graphs               |Easy to use but slow graph library         |
+| networkit            | graphs               |Slightly harder to use but faster graphs   |
 
 
 ## Tools for developing Python
