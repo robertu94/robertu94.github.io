@@ -70,28 +70,28 @@ Python's claim to fame is that it has one of the best "batteries included" stand
 
 In addition to the fantastic standard library, Python has a number of famous 3rd party libraries that are considered the best in class across all programming languages.  While I list these specifically later, I would be remiss in failing to mention the [NumFOCUS libraries](https://numfocus.org) which includes MatplotLib, NumPy, SciPy, Pandas, and others up front as some of the best open source (arguably overall) libraries for statistical analysis and numerical calculation that exist.  Unfortunately the quality of the documentation for these tools varies highly.  One alternative to strictly reading the documentation is to look at the unit-tests for the library.  Because of the builtin unit testing frameworks being quite good, Python libraries often have extensive test suites.
 
-| Name                 | Use                                        |
-|----------------------| -------------------------------------------|
-| beautiful soup       | Sane HTML parsing                          |
-| networkx             | Easy to use but slow graph library         |
-| networkit            | Slightly harder to use but faster graphs   |
-| scapy                | Web Scraping Framework                     |
-| django               | opinionated easy to use CMS framework      |
-| selenium             | Automated web browser controller           |
-| pandas               | Data analysis framework for tabular data   |
-| scipy                | Fast scientific functions                  |
-| numpy                | Fast numeric framework famous for arrays   |
-| matplotlib           | Defacto plotting library for Python        |
-| seabourn             | Ease of use layer for matplotlib           |
-| bokeh                | Web-first plotting library                 |
-| plotly               | Interactive plotting library               |
-| requests             | Vastly superior HTTP library               |
-| flask                | Flexible web app framework                 |
-| psycog2              | PostgreSQL bindings                        |
-| simpy                | Simulation library                         |
-| mpi4py               | Distributed memory programming executor    |
-| tensorflow           | Faster but more complex machine learning   |
-| sklearn              | Easy to use but slower machine learning    |
+| Name                 |Use                  |Description                                |
+|----------------------|---------------------|-------------------------------------------|
+| pandas               | data anlaysis       |Data analysis framework for tabular data   |
+| scipy                | data anlaysis       |Fast scientific functions                  |
+| numpy                | data anlaysis       |Fast numeric framework famous for arrays   |
+| matplotlib           | plotting            |Defacto plotting library for Python        |
+| seabourn             | plotting            |Ease of use layer for matplotlib           |
+| bokeh                | plotting            |Web-first plotting library                 |
+| plotly               | plotting            |Interactive plotting library               |
+| beautiful soup       | scraping            |Sane HTML parsing                          |
+| scapy                | scraping            |Web Scraping Framework                     |
+| requests             | scaping/web requests|Vastly superior HTTP library               |
+| django               | web app             |opinionated easy to use CMS framework      |
+| flask                | web app             |Flexible web app framework                 |
+| selenium             | testing             |Automated web browser controller           |
+| psycog2              | database            |PostgreSQL bindings                        |
+| simpy                | simulation          |Simulation library                         |
+| mpi4py               | HPC                 |Distributed memory programming executor    |
+| tensorflow           | machine learning    |Faster but more complex machine learning   |
+| sklearn              | machine learning    |Easy to use but slower machine learning    |
+| networkx             | graphs              |Easy to use but slow graph library         |
+| networkit            | graphs              |Slightly harder to use but faster graphs   |
 
 
 ## Tools for developing Python
@@ -147,7 +147,7 @@ The functional capabilities of Python are best seen in the following features of
 I would read the appropriate sections of the Python docs especially `itertools` and `functools`.
 
 
-One common question that comes up when considering generators versus list comprehensions is which to use.  Generally, you should prefer generators because the use less memory and can be converted to lists later if multiple passes or random access is required.  This [video is on Python 2, but shows why you should prefer generators over lists](https://youtu.be/07-K4LFhBMc)
+One common question that comes up when considering generators versus list comprehensions is which to use.  Generally, you should prefer generators because they use less memory and can be converted to lists later if multiple passes or random access is required.  This [video is on Python 2, but shows why you should prefer generators over lists](https://youtu.be/07-K4LFhBMc)
 
 # Object Oriented Programming in Python
 
