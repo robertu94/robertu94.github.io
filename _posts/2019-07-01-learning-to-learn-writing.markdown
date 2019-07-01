@@ -12,7 +12,7 @@ Without communication, we would never be able to build upon the works of others 
 One of the most important -- and challenging -- arts within communication is writing.
 Writing is unique amongst commutative forms in its durability and portability.
 Once written, the words of the author can transcend even their death and travel places they never dreamed to tread.
-However writings portability and durability are the same feature that present its central challenge: With the author long gone, how can the he still communicate his intent?
+However writings portability and durability are the same feature that present its central challenge: With the author long gone, how can the he still communicate his or her intent?
 In this post, I ponder how I face these challenges and encourage others to do the same.
 
 In short, the best papers: write with a purpose, recognize every technical document is persuasive, do not neglect the importance of structure, and are written for the public.
@@ -26,12 +26,12 @@ For example, the purpose of these blog posts is to save me time.
 
 How can writing save time?
 From time to time, my classmates and others ask me questions.
-Often time the first and seconds time, I give a response, but by the time that I get the same question three times, I add the question to the list of topics for these posts.
+Often time the first and second time, I give a response, but by the time that I get the same question three times, I add the question to the list of topics for these posts.
 Then when the post is written, I can then give these posts to anyone else who inquires and use it as a starting place for discussion.
 
 Given this purpose, it informs how I write.
 I need to be comprehensive if I want the post to actually save me time; however if the posts are too long, they never will be read.
-The way that I attempt to make this compromise is by providing extensive references rather than the text itself.
+The way that I attempt to make this compromise is by providing extensive references rather than the inlining them into the text itself.
 That way the interested party can investigate only the topics of greatest interest, and the lackadaisical one can simply skim on.
 
 
@@ -64,7 +64,7 @@ These flaws, [called fallacies](https://plato.stanford.edu/entries/fallacies/#Co
 Identifying them in your writing and those of your sources preempts possible objections.
 
 What about the counter-claim that not every truth claim can be accessed by logic?
-While it is true that you may not be able to present a definitive logical argument for every situation, you can almost always make a case on the plurality of the evidence -- an inference to the best explanation.
+While it is true that you may not be able to present a definitive logical argument for every situation, you can almost always make a case on the plurality of the evidence -- an [inference to the best explanation](https://plato.stanford.edu/entries/abduction/).
 
 Second, well reasoned papers are easier to follow.
 A well reasoned paper, has a inherent structure -- namely its argument -- that makes it easier for the reader to follow.
@@ -86,7 +86,7 @@ Here are some common mistakes that I have seen:
 
 # Do not neglect the importance of structure
 
-Just as important as the logical structure, the physical structure is also key.
+Just as important as logical structure, physical structure is also key.
 The physical structure of writing should make easy for the reader to find what they care about.
 Making information easy to find takes many forms:
 
@@ -110,18 +110,19 @@ Putting the argument that the reader cares about first can help them find the in
 
 It can also mean the formatting and typesetting of a document.
 Headings, bold, and italics help reduce the homogeneity of your text giving the reader something to easily find their way back to if their eyes or mind drift.
-However, too much formatting can distract the reader with needless subdivisions.
-Remember the example of a book in which everything is highlighted; when everything is highlighted, nothing is effectively highlighted.
+However, too much formatting can distract the reader.
+Remember the example of a book in which everything is highlighted: when everything is highlighted, nothing is effectively highlighted.
 
-Structure includes grammar.  While perfect grammar is seldom necessary, careless grammar can be distracting -- or worse confusing.
-Everyone should have a grammatical reference; I recommend [Strunk and White's Elements of Style](http://www.gutenberg.org/ebooks/37134).
+Structure includes grammar.
+While perfect grammar is seldom necessary, careless grammar can be distracting -- or worse confusing.
+Everyone should have and use a grammatical reference; I recommend [Strunk and White's Elements of Style](http://www.gutenberg.org/ebooks/37134).
 
 Finally for longer texts, a good index, table of contents, and glossary can also make a difference.
 They allow a narrowly interested reader to jump directly to a topic of interest rather than having read everything.
 
 Do indexes still make sense in the age of electronic documents and search functionality?
 I think so, but the threshold for a good index has risen.
-No longer is it sufficent to identify the locations of key terms, indexes now should help the reader determine the passages where a topic is most directly addressed and where related topics are.
+No longer is it sufficient to identify the locations of key terms, indexes now should help the reader determine the passages where a topic is most directly addressed and where related topics are.
 For example:
 
 
@@ -153,6 +154,6 @@ This manifests itself in several concrete suggestions:
 + Avoid unnecessary notation and terminology. Notion and terminology are powerful in that they allow us to allow us to concisely represent a specific concept.  However, the average human brain can only [manage 7±2 things at a time](http://www.musanim.com/miller1956/).  Each term that the author introduces increases the required mental bandwidth to understand the paper.
 + If you use notation and terminology, use it consistently.  Inconsistent notation not only can pollute the brains name space for notation wasting one of the 7 scarce places for temporary storage, but it also can lead to ambiguities in your argument which lead to misunderstanding.
 + Consider the importance of abstractions.  Remember the brain has limited short term storage.  Abstractions allow the reader to fit multiple related items the same unit of working memory.  Good abstractions are concise, coherent, and extensible.  In my opinion, there is substantial overlap between creating good object-oriented designs and creating good abstractions.  I would read [the short article "Principles of OOD" by Robert Martin](http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod) on object oriented design for some of the principles to consider.
-+ Make your work self-contained. A key tool to make a paper self contained is to include background and related works.  A good background section allows the general public to have a sufficient understanding of your topic to understand your writing.  In contrast, related work exists exists to demonstrate the distinctiveness of a work relative to its competitors.
++ Make your work self-contained. A key tool to make a paper self contained is to include background and related works sections.  A good background section allows the general public to have a _sufficient_ understanding of your topic to understand your writing.  In contrast, related work exists exists to demonstrate the _distinctiveness_ of a work relative to its competitors.
 
 Hope this helps!
