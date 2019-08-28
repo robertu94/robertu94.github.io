@@ -25,3 +25,4 @@ github_username:  robertu94
 # Build settings
 markdown: kramdown
 theme: minima
+google_analytics: UA-146577621-1
