@@ -108,7 +108,8 @@ Due to the popularity of Python, there are a number of tools that exist to make 
 | mypy                   | Python Static Type                             |
 | iPython                | Friendly interactive shell                     |
 | JuPyter                | Notebook software commonly used for science    |
-| python-language-server | Implementation of the language server protocol |
+| python-language-server | Implementation of the language server protocol -- I pair this with vim for my development environment |
+| pycharm/spyder         | More fully featured alternative IDEs           |
 
 ## Other tools that work well with Python
 
