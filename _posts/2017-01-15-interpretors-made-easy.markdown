@@ -68,7 +68,7 @@ Here I pass a socket as input to flex and bison:
 
 ```c
 int client_fd = accept(...) /* arguments omitted for conciseness */
-FILE * socket_file = fdopen(client_fd, "r+");
+FILE * client_file = fdopen(client_fd, "r+");
 if(!client_file){
 	perror("failed to create file for socket");
 	exit(errno);
