@@ -106,7 +106,7 @@ Linux package managers are not universal between distributions -- in fact many d
 
 Even between Linux distributions that use the same package manager there can be differences.  For example, almost every distribution that I have ever used had a different name for the package containing the graphical version of the vim text editor.  These different names make it difficult to use packages even for the same package manager from a different distribution because the dependency listings have the wrong name for the corresponding dependencies on a different distribution.  And that doesn't even consider the possibility of differently choose default options for packages of software that can conflict.
 
-Some package managers support the ability to add third-party application sources.  The quality of these third-party packages can vary greatly.  Some such as [EPEL (Extra Packages for Enterprise Linux)](https://fedoraproject.org/wiki/EPEL) are very reliable, but others can fall out of date quickly, miss important security updates, be untested, or even worse contain malicious software.  If you choose to use them, use them with care.
+Some package managers support the ability to add third-party application sources.  The quality of these third-party packages can vary greatly.  Some such as [EPEL (Extra Packages for Enterprise Linux) for RedHat Enterprise Linux or CentOS](https://fedoraproject.org/wiki/EPEL) are very reliable, but others can fall out of date quickly, miss important security updates, be untested, or even worse contain malicious software.  If you choose to use them, use them with care.
 
 ### Container Package Managers
 
@@ -114,7 +114,7 @@ Recently there have been efforts to create package repositories that work across
 
 At time of writing there are 3 leading contenders for desktop applications: [flatpak](https://flathub.org/home), [snap](https://snapcraft.io/), and [appimage](https://appimage.org/).  Each has their own advantages and disadvantages which are changing daily.  Additionally not all distributions support all of these formats -- they may not have a new enough kernel or have the right kernel features enabled.  However, most distributions support them.
 
-Another alternative is to use software designed for packaging server software such as [Docker](https://hub.docker.com/).  Because docker was designed for server software, the default security options are so strict that it tends disallow things that desktop software needs to properly function.  However it can be an option for software with fewer permission requirements.
+Another alternative is to use software designed for packaging server software such as [Docker](https://hub.docker.com/) or [Podman](https://podman.io/).  Because docker was designed for server software, the default security options are so strict that it tends disallow things that desktop software needs to properly function.  However it can be an option for software with fewer permission requirements.
 
 ### Custom built software
 
@@ -150,10 +150,10 @@ The distributions that I recommend most often are:
 | Distribution            | Purpose                                                                       |
 |-------------------------|-------------------------------------------------------------------------------|
 | [Fedora Workstation](https://getfedora.org/)      | Daily use for users who are early adopters                                    |
-| [Ubuntu LTS](https://ubuntu.com/download/desktop)              | Daily use for users who prefer stablitiy                                      |
+| [Ubuntu LTS](https://ubuntu.com/download/desktop)              | Daily use for users who prefer stability                                      |
 | [Fedora Server](https://getfedora.org/)           | For a server with more modern software              |
 | [CentOS](https://www.centos.org/download/)                  | For a server that needs to run with minimal changes for 10 years              |
-| [ArchLinux](https://www.archlinux.org/)               | If you want bleeding edge software                                            |
+| [ArchLinux](https://www.archlinux.org/)               | If you want bleeding edge sometimes unstable software                                            |
 | [Gentoo](https://www.gentoo.org/)                  | If you have a highly customized workload that nothing else works for          |
 
 

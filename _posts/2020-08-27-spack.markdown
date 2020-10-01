@@ -1,0 +1,143 @@
+---
+layout: post
+title: "Spack: a Truly Useful Package Manager"
+date:   2020-08-27 8:00:00 -0500
+tags:
+- programming
+- spack
+- software development
+---
+
+So you are developing software, and you need the software to build for multiple difference machines, with different version of a library, or with just different compile time options.
+You can probably manage this by hand, but it very quickly gets out of hand.
+Spack is a package manager designed for high performance computing, but I would argue is more broadly useful for five reasons:
+
+1. It is explicitly designed to run as an unprivileged user. This makes it much easier to install software for personal use since you won't need sudo.
+2. It is almost trivial to create your own even private repositories, mirrors, and build caches.  This makes it useful for small teams who have their own specialized software or need to operate behind the firewall.
+3. It it allows for combinatorial package management.  This means that you can have multiple version of different packages all installed at the same time making it easier to try different combinations of versions.
+4. It doesn't make assumptions about compilers or preferred build options.  Like Gentoo, it allows for USE flags (called variants) that allow customization of installed packages allowing for more flexible builds.
+5. It allows for deterministic package management.  Users can simply inquire of Spack, what are all of the versions of all of the packages that this package transitively depends on, and can rebuild this set of packages on demand.
+
+It has radically transformed my work-flow and how I work and I think it will for you too.  This a quick guide on how to get started with Spack.
+
+# Getting Started Using Spack
+
+## Prerequisites
+
+Spack actually doesn't need that much to get started:
+
++ Python
++ A C/C++ tool-chain (doesn't even need to be very new)
++ A handful of very common archive management tools (i.e. tar, gzip, bzip2, xz, and zstd)
++ A few incredibly common development dependencies (i.e. bash, patch, git, curl)
+
+If you use a modern Linux distribution, you probably already have all of these installed.
+Refer to the Installation docs for [up to date information](https://spack.readthedocs.io/en/latest/getting_started.html)
+
+## Installing Spack
+
+Here is a short script that I use to get started with Spack:
+
+```bash
+#clone spack and the main repository
+git clone https://github.com/spack/spack
+source ./spack/share/spack/setup-env.sh
+source ./spack/share/spack/spack-completion.bash
+
+#clone and configure my personal repository of extra packages
+git clone https://github.com/robertu94/spack_packages robertu94_packages
+spack repo add ./robertu94_packages
+
+#tell spack to discover what I have installed
+spack compiler find
+spack external find
+```
+
+Some other things you might want to do:
+
++ Change the default number of cores used for builds
++ Change the default target architecture (native which is faster) to something more portable (i.e. x86\_64)
++ Set some global variants options for packages
++ Set up a mirror, build cache, or upstream instance -- methods for accelerating builds.
+
+You can find [how to do these things in the docs](https://spack.readthedocs.io/en/latest/configuration.html)
+
+# Understanding Combinatorial Versioning
+
+With Spack it is important understand the difference between installed and loaded packages.
+There can be many of the versions of the same package installed;
+however, only one of them may be loaded at any one time.
+
+Additionally, packages can differ not only by version number (i.e. 1.0, 2.1, or develop) but also by variants.
+Variants are "flags" that indicate that certain features should be enabled or disabled.
+Let's consider an example from my repository, libpressio.
+`libpressio` has several variants: `sz`, `zfp`, `mpi`, `libdistributed`, `lua`, etc...
+You can see a list of them with:
+
+```bash
+spack info libpressio
+```
+
+These variants control which plugins are built for libpressio out of the large array of different available plugins.
+So let's say you want to install libpressio with `sz` and `zfp`: the way to do that is:
+
+```bash
+spack install libpressio+sz+zfp
+```
+
+The `+` here refers to the variants that were explicitly enabled for this package not the dependency itself.
+There is also `~` which explicitly disables a variant.
+By default, the variants will be set to whatever the package maintainer thought was best.
+You can always override them in spack's configuration later.
+
+Ok, but what if you wanted to  build `SZ`'s random access mode with libpressio version 0.42.1?
+
+```bash
+spack install libpressio@0.42.1+sz+zfp ^sz+random_access
+```
+Here the `^` is the "depends upon" operator.
+This says build version 0.42.1 of libpressio with the sz and zfp variants, and when building `SZ`, build the version that has the `random_access` variant.
+
+When you are finally ready to use it, you can load it like so:
+
+```
+spack load libpressio@0.42.1
+```
+
+Or you can refer to it by its specific hash.
+
+A few other common important commands:
+
++ `spack list` shows the list of available software
++ `spack find` shows the list of installed software
++ `spack uninstall` un-installs a version of software
+
+
+# Creating Your Own Spack Packages
+
+Creating and editing your own software couldn't be easier.
+To create a new package simply call
+
+```bash
+spack create -n $package_name $url_to_archive
+```
+
+You can even pass a `-N $repo_name` to put it in your own personal repository
+
+To edit an existing package in your `$EDITOR`:
+
+```bash
+spack edit $package_name
+```
+
+Spack strongly prefers versions be checksumed, you can do this with:
+
+```bash
+spack checksum $package_name
+```
+
+For me, most of the time, the defaults were exactly what I needed.
+If you want to learn more, checkout the [official docs](https://spack.readthedocs.io/en/latest/getting_started.html)
+
+Spack is a great tool.
+I hope you found this to be useful!

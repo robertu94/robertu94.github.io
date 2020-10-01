@@ -22,6 +22,20 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://robertu94.github.io" # the base hostname & protocol for your site
 github_username:  robertu94
 
+author: Robert Underwood
+header_pages:
+    - about.md
+    - learning.md
+    - presentations.md
+
+collections:
+  learning:
+    output: true
+    permalink: /learning/:title
+  presentations:
+    output: true
+    permalink: /presentations/:title
+
 # Build settings
 markdown: kramdown
 theme: minima

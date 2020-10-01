@@ -126,14 +126,14 @@ No longer is it sufficient to identify the locations of key terms, indexes now s
 For example:
 
 
-````
+```
 tasks 1
     User 1
     Kernel 2,3
     OpenMP 27-30
     MPI 31-35
     Hadoop  70-72
-````
+```
 
 This index shows that tasks exist for users, the kernel, OpenMP, MPI, and Hadoop.
 Yes, the user could search for each of these terms independently, words like "user" are likely often used all over the document.
@@ -155,5 +155,26 @@ This manifests itself in several concrete suggestions:
 + If you use notation and terminology, use it consistently.  Inconsistent notation not only can pollute the brains name space for notation wasting one of the 7 scarce places for temporary storage, but it also can lead to ambiguities in your argument which lead to misunderstanding.
 + Consider the importance of abstractions.  Remember the brain has limited short term storage.  Abstractions allow the reader to fit multiple related items the same unit of working memory.  Good abstractions are concise, coherent, and extensible.  In my opinion, there is substantial overlap between creating good object-oriented designs and creating good abstractions.  I would read [the short article "Principles of OOD" by Robert Martin](http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod) on object oriented design for some of the principles to consider.
 + Make your work self-contained. A key tool to make a paper self contained is to include background and related works sections.  A good background section allows the general public to have a _sufficient_ understanding of your topic to understand your writing.  In contrast, related work exists exists to demonstrate the _distinctiveness_ of a work relative to its competitors.
+
+# Writing a Learning to Learn
+
+Let's look how I try to apply advice to write a "Learning to Learn" post.  Here is the outline that I start with when writing a learning to learn post for a technology:
+
+1. How do you get started?  This is where I highlight the resources I recommend for true beginners to the topic, and perhaps the field in general.
+2. What are the important tools and utilities to know about?  
+    1. What are the  most important Standard/Included features? Here I try to make recommendations about what parts of the technology are worth prioritizing learning
+    2. What are the important 3rd party libraries?  Most tools/technologies leave some aspects of their systems to 3rd parties to implement.  Here I try to summarize which 3rd part libraries/plugins one should encourage someone to adopt this technology or accomplish basic tasks left out of the standard functionality.
+    3. Tools that make using the technology better?  Here is where I summarize things that operate on the language or tool rather than extend it.  The classic example would be a debugger or a profiler for a programming language.  You likely won't use a debugger from the language itself, but it's an invaluable tool to learn to use it.
+    4. Tools made better by using this technology.  Some tools can be extended via use of a given technology.  A clear example of this would be python extensions for GDB.  Here I try to highlight some of these kinds of synergies.
+3. What are the important concepts?  Here I try to summarize the concepts that are so important, that I feel they are worth a paragraph or two of dedicated discussion.
+4. What topics should I read more about, but aren't really an introductory topic?  Here I try to list important topics that a beginner or intermediate user doesn't need to know to get started, but should learn to become more advanced.
+5. Where can I go for more information?  Lastly I try to highlight some resources that I use for more advanced or complete information on a topic.
+
+That doesn't mean that I stick exclusively to this outline.  For example, C++ doesn't have section 2.4 because in my opinion writing dynamically loaded library extensions isn't a feature most programmers are going to use, and is tricky to get write correctly.  I also feel free to add additional sections as I feel they are important.  For example the Linux post spends a lot of time discussing how to get software and choose a distribution rather than provide a general overview of how to use it.  That's because I'm not convinced the best way to get started learning Linux is going to remain stable long enough for this kind of post to remain useful.  Instead I try to point users to more important meta questions about how to adapt to changes and find new work flows.
+
+
+## Changelog
+
+August 2020 - Added section on writing a learning to learn
 
 Hope this helps!

@@ -1,4 +1,4 @@
-JEKYLL_VERSION=3.8
+JEKYLL_VERSION=pages
 build:
 	sudo docker run --rm \
 		--env JEKYLL_VERSION="$(JEKYLL_VERSION)" \

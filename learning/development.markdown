@@ -28,12 +28,12 @@ As components become available, their designs are tested individually and as par
 Finally, once the design is considered finished, it is released to the world.
 
 However if all we study is software engineering, we perhaps have missed the point.
-We loose sight of the development of the individual over time, their maturation in the discipline, and their self awareness of their abilities.
+We lose sight of the development of the individual over time, their maturation in the discipline, and their self awareness of their abilities.
 This is what I call software craftsmanship.
 
 Software craftmanship highlights the need for the development of the individual developer over time.
 As I use it, software craftmanship is the inherently personal processes of software engineering that transcend a project boundary.
-Software engineering more often focuses on a topic like task management as something that is share amongst a team.
+Software engineering more often focuses on a topic like task management as something that is shared amongst a team.
 Whereas, software craftsmanship is the self awareness of how an individual will progress through the task.
 Software engineering often looks at measures of performance across an organization.
 Whereas, software craftsmanship focuses inward as to how one can grow for the long term.
@@ -44,7 +44,7 @@ Their passion for their craft excites and inspires others to go forth in their e
 This post aims explain how I have learned the craft of software engineering using open source technologies.
 
 This post is the second in a series focused on using Linux to get work done.
-The [previous post]({% post_url 2019-08-25-learning-to-learn-linux %}) serves as an introduction to Linux for general use.
+The [previous post]({% link learning/linux.markdown %}) serves as an introduction to Linux for general use.
 If you have never used Linux before, you should read that article first.
 While this article is primarily aimed at new developers,
 I hope that some of the insights that I offer here will empower more experienced developers to get more done as well.
@@ -262,7 +262,7 @@ These concepts were first introduced in FreeBSD as "jails", and improved in Sola
 Yes, docker provides a substantially better interface for building and distributing containers than these existing technologies, but that doesn't mean it was first.
 
 Now how can one learn the most from source code or architectures written by someone else?
-I suggest that you read with a purpose; I've recorded some thoughts on this in [my post entitled "Learning to Learn: Reading"]({% post_url 2018-08-08-learn-to-learn-reading %})
+I suggest that you read with a purpose; I've recorded some thoughts on this in [my post entitled "Learning to Learn: Reading"]({% link learning/reading.markdown %})
 Here are some common questions that I ask when I am reading to understand a codebase:
 
 1. What are the major parts of the code base/architecture related to what I do?
@@ -596,8 +596,8 @@ In this section, I want talk about how to actually implement the software.
 
 Learning a specific language is out of scope for this article, but I recommend that you check out my posts on learning languages:
 
-+ [C++]({% post_url 2018-01-12-learning-to-learn-cpp %})
-+ [Python]({% post_url 2019-01-22-learning-to-learn-python %})
++ [C++]({% link learning/cpp.markdown %})
++ [Python]({% link learning/python.markdown %})
 
 
 ## Tactics vs Strategy
@@ -780,7 +780,7 @@ Unfortunately debuggers are less universal than text editors.
 I cannot just suggest one debugger that will work for every language even though `gdb` and `lldb` get close.
 As such, I intend to point you to some features that are important and useful to have in your debugger.
 
-+ Run configurations -- good debuggers allow you to allow you to save interesting sets of breakpoints/watchpoints and other settings in configuration files per project.  You should use the features to be able to quickly run repeatable tests with your debugger.
++ Run configurations/scripts -- good debuggers allow you to allow you to save interesting sets of breakpoints/watchpoints and other settings in configuration files per project.  You should use the features to be able to quickly run repeatable tests with your debugger.
 + Core Dumps -- While not as emphasized today, core dumps are a dump of memory from the execution of a process that is created when a process is killed by the operating system.  It is designed in such as way that all the key state is contained within the core-dump file making them invaluable for debugging problems from users.
 + Stop-hooks -- stop hooks are a powerful feature when combined with break points.  Stop hooks are arbitrary code that gets run when a breakpoint or watch point is triggered.  You can use it to quickly print out useful state when the debugger stops or to make decisions  about whether or not to a particular stop is interesting.
 + Watch points and conditional breakpoints -- Watchpoints allow you to pause execution when a particular region of memory is modified.  Conditional breakpoints are breakpoints that only actually stop when some condition is true.  Together, these tools give a lot of power to control when to stop execution.
@@ -805,7 +805,7 @@ You'll thank me later.
 
 ### Profilers
 
-Profilers are typically lightweight tools that measure where the execution time of a program is being spent.
+Profilers are typically "lightweight" tools that measure where the execution time of a program is being spent.
 
 One common problem across these tools is how to get a meaningful stack-traces.
 Oftentimes, this comes down to two issues: including debugging symbols and not clobbering the frame pointer.
@@ -830,13 +830,15 @@ There are a number of tools for this, the ones I use are:
 
 |Tool                               |What it does                                                                                |
 |-----------------------------------|--------------------------------------------------------------------------------------------|
+|[FlameGraphs][FlameGraphs]         | A set of Perl scripts that create SVG flame graphs which show hot spots in the application |
+|KCacheGrind                        | An iterative tool that shows annotated call graphs                                         |
 |Google Chrome's `chorme://tracing` | Interactive tool that can zoom in and out of complex and parallel traces                   |
-|FlameGraphs                        | A set of Perl scripts that create SVG flame graphs which show hot spots in the application |
-|KCacheGrind                        | An iterative tool that shows annotated call graphs                                        |
 
 
 
 To find more information, I would highly recommend Brandon Greg's [page on Linux introspection](http://www.brendangregg.com/linuxperf.html) which lists a host of other tools to get the information you need during runtime.
+
+[FlameGraphs]: https://github.com/brendangregg/FlameGraph
 
 ### Build Systems
 
@@ -1052,7 +1054,7 @@ Many of these well-known interfaces are standardized under XDG-Desktop services.
 Linux has a number of infrastructure services that are available to use to build your software.
 A [great list of services and tools is available on the Arch Linux Viki](https://wiki.archlinux.org/index.php/List_of_applications).
 There are probably several implementations of any particular supporting service that you need.
-If you need help choosing between the services I recommend you checkout the corresponding section on choosing a Linux distribution of my [learning to learn Linux post]({% post_url 2019-08-25-learning-to-learn-linux %}#choosing-a-distribution) since there are many similarities between choosing a distribution and choosing a particular implementation of a service.
+If you need help choosing between the services I recommend you checkout the corresponding section on choosing a Linux distribution of my [learning to learn Linux post]({% link learning/linux.markdown %}#choosing-a-distribution) since there are many similarities between choosing a distribution and choosing a particular implementation of a service.
 
 ### Traditional Package Formats
 
@@ -1102,4 +1104,9 @@ It takes consistent practice and effort to better your skills.
 I hope this article was helpful in helping you consider where you can improve and showing some ways to improve.
 Please let me know if you have any feedback.
 
+
+## Change Log
+
++ August 2020 - Added links to flame graphs.
++ March 2020 - Initial Version
 

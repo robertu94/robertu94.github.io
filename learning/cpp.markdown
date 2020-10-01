@@ -37,18 +37,21 @@ I would at least know about the following core objects in the standard library o
 | `<algoritm>`      | generally useful functions                                                  |
 | unique_ptr        | pointers that are the only reference to an object in memory                 |
 | shared_ptr        | pointers that automatically count references                                |
+| format            | a typesafe printf-like alterative to iostreams                              |
+| array             | a statically allocated array with handy bindings                            |
 | vector            | a dynamically resizing array                                                |
 | map               | key value store, often implemented as a red-black tree                      |
 | unordered_map     | key value store, often implemented as a hash table                          |
 | set               | key store, often implemented as a red-black tree                            |
 | unordered_set     | key store, often implemented as a hash table                                |
-| Iterator Concepts | simplifies accessing members of a collection                                |
-| ostream           | output to file, string, or stdout                                           |
-| istream           | input from file, string, stdin                                              |
+| Iterator Concepts/Ranges | simplifies accessing members of a collection                                |
 | string            | dynamically resizing character data                                         |
+| span              | a nonowning view into an existing container                                 |
 | string_view       | a non-owning reference to character data                                    |
 | tuple             | a generic version of a struct useful for generic programming                |
 | list              | a doublely linked list                                                      |
+| ostream           | output to file, string, or stdout                                           |
+| istream           | input from file, string, stdin                                              |
 | exception         | indicates extra-ordinary circumstances                                      |
 
 ## Build Systems and the C++ Ecosystem
@@ -61,28 +64,37 @@ For this section, read what each class of tool does; then use it as a reference 
 | ---------------               | ------------                | -------------------------------------------              |
 | Backend Builder               | Ninja                       | Much faster than Make                                    |
 | Backend Builder               | Make                        | Incredibly common on Unix platforms                      |
+| Backend Builder               | Bear                        | Generates `compile-commands.json` files for other projects |
 | Build System                  | Meson                       | Easy to use, Very fast                                   |
 | Build System                  | CMake                       | More easy to use                                         |
 | Build System                  | Autotools                   | Works on esoteric platforms where other choke            |
+| Compile Cache                 | ccache                      | Dramatically speeds up incremental builds                |
+| Distributed Builds            | icecc/icecream              | Spread builds out to a server of faster machines         |
 | Code Formatting               | clang-format                | Easy, Highly customizeable, sane defaults                |
 | Compilers                     | clang                       | Better Error messages, clang/llvm Ecosystem              |
 | Compilers                     | GCC `g++`                   | Currently still faster, more common                      |
+| IDE Integratin                | clangd                      | Clang based IDE integration shows warnings and advice    |
 | Debugger                      | lldb                        | Highly programmable, handles templates well, easy to use |
 | Debugger                      | gdb                         | The standard debugger, esoteric interface                |
+| Debugger                      | templight                   | Specialized debugger for compile time C++ code           |
+| Debugger                      | metashell                   | An older, ease of use tool built atop templight          |
 | Indexing                      | Exhuberant Ctags            | The de facto tool for this job                           |
 | Linting                       | clang-tidy                  | Most extensive and "correct" linter                      |
-| Profiling                     | perf                        | Linux Specific, Extreemly robust, easy to use            |
-| Searching                     | ag                          | insanely fast, sane defaults, not syntactic senstive     |
-| Searching                     | clang-query                 | Slow, symantic senstive                                  |
-| Searching                     | grep                        | Common, pretty fast, not symantic senstive               |
+| Profiling                     | perf                        | Linux Specific, Extremely robust, easy to use            |
+| Searching                     | ag/ripgrep                  | insanely fast, sane defaults, not syntactic sensitive    |
+| Searching                     | clang-query                 | Slow, semantic sensitive                                 |
+| Searching                     | grep                        | Common, pretty fast, not semantic sensitive              |
 | Tracer                        | ltrace                      | Trace shared library calls                               |
 | Tracer                        | strace                      | Trace system calls                                       |
-| Tracer                        | dtrace                      | Trace/Profile kernel and elsewhere, not widely availble  |
+| Tracer                        | dtrace                      | Trace/Profile kernel and elsewhere, not widely available |
+| Tracer                        | llvm-xray                   | Tracer with similar design principles to dtrace, but requires recompilation and is more available |
 | Leak Checking                 | Leak Sanitizer              | locate various memory leaks in programs                  |
 | Undefined Behavior Checking   | Address Sanitizer           | locate various memory misuses in programs                |
 | Undefined Behavior Checking   | Memory Sanitizer            | locate uninitialized reads in programs                   |
 | Undefined Behavior Checking   | UndefinedBehavior Sanitizer | locate other undefined behavior in programs              |
 | Undefined Behavior Checking   | Thread Sanitizer            | locate data races in programs                            |
+| Package Manager               | Spack                       | Package manager focused on HPC; Similar to PIP           |
+| Package Manager               | VcPkg/Connan/Wraptool       | C++ centric package managers; you miliage may very depending your usecase  |
 
 You'll also eventually decide that you need/want some libraries to get useful work done.
 This post would be remiss if I didn't mention a few cross cutting libraries.
@@ -93,18 +105,34 @@ This post would be remiss if I didn't mention a few cross cutting libraries.
 
 Here is a list of other libraries that I have used and would recommend.
 
-| Purpose                 | Library            | Why                                                      |
-| ---------------         | ------------       | -------------------------------------------              |
-| Unit Testing            | Google Test        | Very common testing tool, easy to use                    |
-| Benchmarking            | Google Benchmark   | Very common benchmarking tool, easy to use               |
-| Networking              | Boost.ASIO         | De facto C++ native networking library                   |
-| Networking              | sys/socket.h       | Still works, arguably simpler than ASIO                  |
-| Graphs                  | Boost.Graph        | Tons of standard graph algorithms and structures         |
-| Date Math               | date.h             | Incredibly fast, easy to use                             |
-| JSON/XML Parsing        | Boost.PropertyTree | Easy to use                                              |
-| Distributed Programming | HPX                | A different take on HPC; I would argue easier to use     |
-| Distributed Programming | Boost.MPI          | More native than standard MPI; fewer interfaces          |
-| Distributed Programming | OpenMPI            | Very flexible                                            |
+| Purpose                 | Library            | Why                                                       |
+| ---------------         | ------------       | -------------------------------------------               |
+| Commandline parsing     | getopt             | Very common command line parser, very portable, not pretty|
+| Unit Testing            | Google Test        | Very common testing tool, easy to use                     |
+| Benchmarking            | Google Benchmark   | Very common benchmarking tool, easy to use                |
+| Networking              | Protobuf/gRPC      | Networking Server/Communication framework                 |
+| Networking              | Boost.ASIO         | De facto C++ native networking library                    |
+| Networking              | sys/socket.h       | Still works, arguably simpler than ASIO                   |
+| Graphs                  | Boost.Graph        | Tons of standard graph algorithms and structures          |
+| Date Math               | date.h             | Incredibly fast, easy to use; now in the standard library |
+| JSON/XML Parsing        | Boost.PropertyTree | Easy to use                                               |
+| Distributed Programming | HPX                | A different take on HPC; I would argue easier to use      |
+| Distributed Programming | Boost.MPI          | More native than standard MPI; fewer interfaces           |
+| Distributed Programming | OpenMPI            | Very flexible                                             |
+
+## Profiling and Speeding up C++ builds
+
+C++ can take a long time to build especially when your code is really template heavy.
+First just adopt ccache, it will dramatically speed things up for you for incremental builds.
+
+Here is how I profile C++ builds.
+First if you are using `ninja`, you can clean your build, delete your `.ninja_log` file, and run your build.
+This will populate this file with a log of the build process.
+Next, You can extract timings for the build using [this ninja stats script written in AWK](https://github.com/ninja-build/ninja/issues/1080#issuecomment-255436851`).
+Once you've narrowed down your search to a few files, you can use clang's `-ftime-trace` to get a detailed view of what is taking so long to compile/instantiate.
+See [The Blog post "time-trace: timeline / flame chart profiler for Clang"](https://aras-p.info/blog/2019/01/16/time-trace-timeline-flame-chart-profiler-for-Clang/) for more information about how to use these traces.
+
+Once you've made as many changes to your problematic structures and functions as you can, you may further reduce build times by using "precompiled headers" and "unity builds".  Precompiled headers work by serializing the compilers internal state so that the parsing phase of C++ can be skipped.  Unity builds reduce the time required to instantiate identical headers by grouping source files for compilation.  These both are not without their drawbacks for tooling which relies on source file names such as clangd, but I am hopeful that both of these techniques will be obviated with C++20 modules while improving the tooling situation.  However, at time of writing, C++20 modules are not yet completely implemented by most major compilers.
 
 ## Object-Oriented C++
 
@@ -129,6 +157,9 @@ For this section, the ordering is especially important, the later items are quit
 2.	Curiously Recurring Template Pattern - while discussed in the Vandevoorde book, I found the article, ["Polymorphic Clones in Modern C++"](https://www.fluentcpp.com/2017/09/08/make-polymorphic-copy-modern-cpp/) by Jonathan Boccara a much more practical example of where this may be used.
 3.	"Modern C++ Design: Generic Programming and Design Patterns Applied" by Andrei Alexandrescu - I listed this in the object-oriented section, but this book opened my eyes the possibilities of C++ templates and generic programming in general.
 
+
+If you can't figure out why a particular template won't compile, consider using templight or metashell.
+
 ## Functional C++
 
 This is an evolving category of C++.  As such, I expect these to be much more in the coming years.
@@ -146,6 +177,8 @@ When you've read most of the above, and are still looking to improve, I use the 
 1.	CPPCon - the yearly C++ developers conference.  Filled with thought provoking talks and most are on YouTube.
 2.	Read llvm's `libtooling`, clang's `libC++` or Google's `abseil` source code to see clear examples of well-written C++ code.
 3.	Read the C++ Standard - it's not for the feint of heart.  The final version is behind a pay-wall, but the drafts are not.  Read this if you want to understand some of the deeper behaviors of C++.
+4. C++Weekly - A video podcast that overviews different aspects of C++ in bite size chunks.
+5. CPP Cast - An audio podcast that covers upcoming C++ news
 
 # Suggestions to Learn the language
 
@@ -155,3 +188,8 @@ I have two key suggestions to learn the language:
 2.	Expand your subset as needed: choose a series of small projects that motivate why you want to learn various aspects of the language.  This will help you practice and remember what you've learned.
 
 I hope you find this useful.  Until next time!
+
+## Change Notes
+
++ 2020 - Added section on build profiling, updated tools, library components to learn, and further resources
++ 2018 - Initial version

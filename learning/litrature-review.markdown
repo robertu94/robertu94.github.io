@@ -29,7 +29,7 @@ Broadly speaking, I think effectively studying a new topic involves several step
 4. Record, Organize, and Categorize  -- How can I remember what I've learned?
 5. Focus and Refine Your Reading List, Update the Research Question(s) -- What should I look at next?
 
-If you are thinking this looks similar to the PQRST approach that I mentioned in the [Learning to Learn Reading post]({% post_url 2018-08-08-learn-to-learn-reading %}), it does, but I think there are some different aspects to studying multiple works rather than just one that warrant studying this further.
+If you are thinking this looks similar to the PQRST approach that I mentioned in the [Learning to Learn Reading post]({% link learning/reading.markdown %}), it does, but I think there are some different aspects to studying multiple works rather than just one that warrant studying this further.
 For example, in doing a comprehensive study, doing comparisons and contrasts are more important.
 Most works by a single author will present a single point of view on a topic -- or at the very least favor a particular perspective.
 However by reading works by multiple authors, you can expose subtleties that wouldn't appear if you just reviewed one topic.
