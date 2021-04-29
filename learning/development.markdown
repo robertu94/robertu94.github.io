@@ -351,7 +351,7 @@ In every software engineering class that I have ever taken, you would hear about
 You can see an example of it below:
 
 {% capture vandv_src %}
-http://localhost:8000/static/posts/software_engineering/verification_and_validation.png
+{{site_url}}/static/posts/software_engineering/verification_and_validation.png
 {% endcapture %}
 {% include figure.html  src=vandv_src description='Verification and Validation V Model Diagram. In the V Model, the tasks of software engineering are placed in order of occurrence along a V shape.' caption='Verification and Validation V Model, CC-BY 3.0: Kevin Forsberg and Hal Mooz' %}
 
@@ -373,7 +373,7 @@ It won't take you too long.
 
 Here is an example from a paper that I published for FRaZ -- a compressor framework that I developed while at Argonne National Laboratory:
 
-![The diagram is divided in to 3 groups boxes arranged vertically: "Users", "FRaZ" and "Compressors".  There are arrows running from top to bottom.  In the "Users" there are a number of names of scientific applications in yellow indicating software written by others.  The FRaZ section is in light green representing we contributed the design to link these components together.  In this box there are a few smaller boxes in Green which denotes software we wrote, and some in yellow representing dependencies.  There is a note in green attached to one of the dependencies indicating we made a small change to a component written by someone else.  On the bottom are the three compressors that we can use in yellow.](http://localhost:8000/static/posts/software_engineering/diagram_example.png)
+![The diagram is divided in to 3 groups boxes arranged vertically: "Users", "FRaZ" and "Compressors".  There are arrows running from top to bottom.  In the "Users" there are a number of names of scientific applications in yellow indicating software written by others.  The FRaZ section is in light green representing we contributed the design to link these components together.  In this box there are a few smaller boxes in Green which denotes software we wrote, and some in yellow representing dependencies.  There is a note in green attached to one of the dependencies indicating we made a small change to a component written by someone else.  On the bottom are the three compressors that we can use in yellow.]({{site_url}}/static/posts/software_engineering/diagram_example.png)
 
 Does this diagram show everything we did in the system?
 No.
