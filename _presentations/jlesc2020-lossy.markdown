@@ -8,6 +8,3 @@ description: >
 acknowledgments: This talk consists of research by Robert Underwood, Sheng Di, Jon C. Calhoun, and Franck Cappello
 nolinks: true
 ...
-<section class="slide level2">
-
-</section>

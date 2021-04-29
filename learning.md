@@ -14,8 +14,8 @@ Lastly, if you find the articles insufficient in some way, please [email me](mai
 
 + [Reading]({% link learning/reading.markdown %}): how to get the most out of technical documents
 + [Studying]({% link learning/litrature-review.markdown %}): how to go about learning new topics
-+ [Intake]({% link learning/intake.markdown %}"): how to stay up to date on current topics
-+ [Writing]({% link learning/writing.markdown %}"): how to summarize topics for others to learn
++ [Intake]({% link learning/intake.markdown %}): how to stay up to date on current topics
++ [Writing]({% link learning/writing.markdown %}): how to summarize topics for others to learn
 
 ## Process
 
