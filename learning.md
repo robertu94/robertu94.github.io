@@ -21,6 +21,7 @@ Lastly, if you find the articles insufficient in some way, please [email me](mai
 
 + [Linux]({% link learning/linux.markdown %}) how to get started with learning and using Linux
 + [Software Development]({% link learning/development.markdown %}) how to approach writing a software project using Linux
++ [HPC]({% link learning/hpc.markdown %}) how to write software for High Performance Computing
 
 ## Programming Languages
 
