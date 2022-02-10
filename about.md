@@ -4,15 +4,16 @@ title: About Me
 permalink: /about/
 ---
 
-I am a PhD Candidate at Clemson University studying Computer Science.
-
+I am a Post-Doctoral Appointee at Argonne National Laboratory under Franck Cappello, Sheng Di and Bogdan Nicolae.
 My particular **research interests** are lossy compression, distributed systems, and operating systems.
-I am currently working with the [Data Intensive Computing Environments (DICE) Lab][dice] and [Fault Tolerant HPC Lab (FTHPC)][fthpc] studying error bounded lossy compression under my adviors Dr. Amy Apon, Dr. Jon C. Calhoun, and Dr. Franck Cappello.
 
 Academics
 ---------
 
 You can find my full CV [here][cv].
+
+I earned my PhD at Clemson University studying Computer Science in December 2021.
+I am previously worked with the [Data Intensive Computing Environments (DICE) Lab][dice] and [Fault Tolerant HPC Lab (FTHPC)][fthpc] studying error bounded lossy compression under my adviors Dr. Amy Apon, Dr. Jon C. Calhoun, and Dr. Franck Cappello.
 
 My **publications** can be found on my Google Scholar page [here][googlescholar].
 
