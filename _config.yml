@@ -27,6 +27,7 @@ header_pages:
     - about.md
     - learning.md
     - presentations.md
+    - guides.markdown
 
 collections:
   learning:
@@ -35,6 +36,9 @@ collections:
   presentations:
     output: true
     permalink: /presentations/:title
+  guides:
+    output: true
+    permalink: /guides/:title
 
 # Build settings
 markdown: kramdown
