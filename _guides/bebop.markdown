@@ -53,7 +53,7 @@ packages:
     buildable: false
   openmpi:
     externals:
-      - spec: openmpi@4.1.2~cuda~cxx~cxx_exceptions~java~memchecker+pmi+pmix~sqlite3~static~thread_multiple~wrapper-rpath
+      - spec: openmpi@4.1.2~cuda~cxx~cxx_exceptions~java~memchecker+pmi~sqlite3~static~thread_multiple~wrapper-rpath
         fabrics=ofi,psm2 schedulers=slurm
         modules: [openmpi/4.1.2]
     buildable: false
