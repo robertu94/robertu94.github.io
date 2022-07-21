@@ -53,8 +53,7 @@ packages:
     buildable: false
   openmpi:
     externals:
-      - spec: openmpi@4.1.2~cuda~cxx~cxx_exceptions~java~memchecker+pmi~sqlite3~static~thread_multiple~wrapper-rpath
-        fabrics=ofi,psm2 schedulers=slurm
+      - spec: openmpi@4.1.2~cuda~cxx~cxx_exceptions~java~memchecker+pmi~sqlite3~static~thread_multiple~wrapper-rpath fabrics=ofi,psm2 schedulers=slurm
         modules: [openmpi/4.1.2]
     buildable: false
 ```
@@ -79,14 +78,14 @@ compilers:
 - compiler:
     spec: gcc@9.2.0
     paths:
-      cc: /blues/gpfs/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc
-      cxx: /blues/gpfs/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gc
-      f77: /blues/gpfs/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gc
-      fc: /blues/gpfs/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc
+      cc: /blues/gpfs/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-9.2.0-pkmzczt/bin/gcc
+      cxx: /blues/gpfs/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-9.2.0-pkmzczt/bin/g++
+      f77: /blues/gpfs/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-9.2.0-pkmzczt/bin/gfortran
+      fc: /blues/gpfs/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-9.2.0-pkmzczt/bin/gfortran
     flags: {}
     operating_system: centos7
     target: x86_64
-    modules: [gcc/9.2.0-pkmzczt ]
+    modules: []
     environment: {}
     extra_rpaths: []
 ```
