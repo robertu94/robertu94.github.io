@@ -12,11 +12,16 @@ Put the following in your `.bashrc`
 use_build() {
   if hostname | grep bebop &>/dev/null; then
       echo "loading bebop spack"
-      module load gcc/9.2.0-pkmzczt
-      module load openmpi/4.1.2
+      module load gcc/10.2.0-z53hda3
+      module load intel-mpi/2019.10.317-qn674hj
+      module load intel-mkl/2020.4.304
       source $HOME/git/spack-bebop/share/spack/setup-env.sh
       source $HOME/git/spack-bebop/share/spack/spack-completion.bash
+      export clustername=bebop
   fi
+  #other LCRC Machines
+  export SPACK_USER_CONFIG_PATH="$HOME/.spack/$clustername"
+  export SPACK_USER_CACHE_PATH="$SPACK_USER_CONFIG_PATH
 }
 ```
 
@@ -40,7 +45,7 @@ First create `packages.yaml` at `~/git/spack-bebop/etc/spack/packages.yaml` with
 ```yaml
 packages:
   all:
-    providers: 
+    providers:
       blas: [intel-mkl]
       lapack: [intel-mkl]
       fftw-api: [intel-mkl]
@@ -59,10 +64,10 @@ After that create `compilers.yaml` at `~/git/spack-bebop/etc/spack/compilers.yam
 ```yaml
 compilers:
 - compiler:
-    spec: gcc@10.2.0                             
-    paths:                                       
-      cc: /gpfs/fs1/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-10.2.0-z53hda3/bin/gcc     
-      cxx: /gpfs/fs1/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-10.2.0-z53hda3/bin/g++    
+    spec: gcc@10.2.0
+    paths:
+      cc: /gpfs/fs1/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-10.2.0-z53hda3/bin/gcc
+      cxx: /gpfs/fs1/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-10.2.0-z53hda3/bin/g++
       f77: /gpfs/fs1/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-10.2.0-z53hda3/bin/gfortran
       fc: /gpfs/fs1/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-10.2.0-z53hda3/bin/gfortran
     flags: {}
