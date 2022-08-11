@@ -46,15 +46,11 @@ packages:
       fftw-api: [intel-mkl]
       scalapack: [intel-mkl]
       mkl: [intel-mkl]
+      mpi: [intel-mpi]
   openssl:
     externals:
     - spec: openssl@1.0.2k-fips
       prefix: /usr
-    buildable: false
-  openmpi:
-    externals:
-      - spec: openmpi@4.1.2~cuda~cxx~cxx_exceptions~java~memchecker+pmi~sqlite3~static~thread_multiple~wrapper-rpath fabrics=ofi,psm2 schedulers=slurm
-        modules: [openmpi/4.1.2]
     buildable: false
 ```
 
@@ -63,29 +59,16 @@ After that create `compilers.yaml` at `~/git/spack-bebop/etc/spack/compilers.yam
 ```yaml
 compilers:
 - compiler:
-    spec: gcc@4.8.5
-    paths:
-      cc: /usr/bin/gcc
-      cxx: /usr/bin/g++
-      f77: /usr/bin/gfortran
-      fc: /usr/bin/gfortran
+    spec: gcc@10.2.0                             
+    paths:                                       
+      cc: /gpfs/fs1/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-10.2.0-z53hda3/bin/gcc     
+      cxx: /gpfs/fs1/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-10.2.0-z53hda3/bin/g++    
+      f77: /gpfs/fs1/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-10.2.0-z53hda3/bin/gfortran
+      fc: /gpfs/fs1/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-10.2.0-z53hda3/bin/gfortran
     flags: {}
     operating_system: centos7
     target: x86_64
-    modules: []
-    environment: {}
-    extra_rpaths: []
-- compiler:
-    spec: gcc@9.2.0
-    paths:
-      cc: /blues/gpfs/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-9.2.0-pkmzczt/bin/gcc
-      cxx: /blues/gpfs/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-9.2.0-pkmzczt/bin/g++
-      f77: /blues/gpfs/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-9.2.0-pkmzczt/bin/gfortran
-      fc: /blues/gpfs/software/centos7/spack-latest/opt/spack/linux-centos7-x86_64/gcc-6.5.0/gcc-9.2.0-pkmzczt/bin/gfortran
-    flags: {}
-    operating_system: centos7
-    target: x86_64
-    modules: []
+    modules: [gcc/10.2.0-z53hda3]
     environment: {}
     extra_rpaths: []
 ```
@@ -97,7 +80,7 @@ For the longer version see the guide on [configuring spack]({% link _guides/spac
 # What makes this machine special?
 
 1. We prefer intel-mkl for blas/lapack because of the Intel CPUs
-2. We use openssl and mpi from the sytstem to avoid configuring them
+2. We use openssl and mpi from the system to avoid configuring them
 3. We load a new compiler from a module because the default is ancient
 4. Spack shares a home filesystem with other machines like `swing`  these
    machines are completely different hardware wise and use different module
@@ -108,3 +91,4 @@ For the longer version see the guide on [configuring spack]({% link _guides/spac
 # Changelog
 
 + 2022-07-19 created this document
++ 2022-08-11 updated to use Intel-MPI
