@@ -83,7 +83,7 @@ packages:
     buildable: false
 ```
 
-After that create `compilers.yaml` at `~/.spakc/cooley/linux/compilers.yaml` with:
+After that create `compilers.yaml` at `~/.spack/cooley/linux/compilers.yaml` with:
 
 ```yaml
 compilers:

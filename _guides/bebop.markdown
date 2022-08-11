@@ -40,7 +40,7 @@ spack repo add ~/git/robertu94_packages
 
 
 
-First create `packages.yaml` at `~/git/spack-bebop/etc/spack/packages.yaml` with:
+First create `packages.yaml` at `~/.spack/bebop/packages.yaml` with:
 
 ```yaml
 packages:
@@ -59,7 +59,7 @@ packages:
     buildable: false
 ```
 
-After that create `compilers.yaml` at `~/git/spack-bebop/etc/spack/compilers.yaml` with:
+After that create `compilers.yaml` at `~/.spack/bebop/linux/compilers.yaml` with:
 
 ```yaml
 compilers:
@@ -90,7 +90,7 @@ For the longer version see the guide on [configuring spack]({% link _guides/spac
 4. Spack shares a home filesystem with other machines like `swing`  these
    machines are completely different hardware wise and use different module
    systems.  The load function loads a copy of spack specifically for Bebop and uses
-   a separate spark instance for other machines.  We use spack's `site` scope
+   a separate spark instance for other machines.  We use spack's `SPACK_USER_CONFIG_PATH` 
    to keep these cleanly separate.
 
 # Changelog
