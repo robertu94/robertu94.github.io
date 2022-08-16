@@ -34,12 +34,12 @@ Then run
 mkdir -p ~/git
 git clone https://github.com/spack/spack git/spack-theta
 git clone https://github.com/robertu94/spack_packages git/robertu94_packages
-git clone https://github.com/mochi-hpc/mochi-spack-packages
+git clone https://github.com/mochi-hpc/mochi-spack-packages git/mochi-spack-packages
 source ~/.bashrc
 use_build
 spack compiler find
 
-# for extra packages like libpressio
+# for extra packages like libpressio and thallium
 spack repo add ~/git/robertu94_packages
 spack repo add ~/git/mochi-spack-packages
 ```
@@ -198,6 +198,10 @@ For the longer version see the guide on [configuring spack]({% link _guides/spac
    systems.  The load function loads a copy of spack specifically for Cooley and uses
    a separate spark instance for other machines.  We use spack's
    `SPACK_USER_CONFIG_PATH` variable to keep these cleanly separate.
+6. Theta is a cray machine, so needs some cray special sauce like the
+   PrgEnv-gnu and CRAYPE_LINK_TYPE=dynamic to behave more sanely.
+7. Very often you will want to include `--attr enable-ssh=1` in your COBALT flags to enable
+   TCP access to the nodes (i.e. SSH)
 
 # Changelog
 
