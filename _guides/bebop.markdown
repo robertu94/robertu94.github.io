@@ -21,7 +21,7 @@ use_build() {
   fi
   #other LCRC Machines
   export SPACK_USER_CONFIG_PATH="$HOME/.spack/$clustername"
-  export SPACK_USER_CACHE_PATH="$SPACK_USER_CONFIG_PATH
+  export SPACK_USER_CACHE_PATH="$SPACK_USER_CONFIG_PATH"
 }
 ```
 
