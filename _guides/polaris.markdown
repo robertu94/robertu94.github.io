@@ -1,5 +1,5 @@
 ---
-title: "Spack on Theta"
+title: "Spack on Polaris"
 layout: post
 date: 2022-07-19
 ...
