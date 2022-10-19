@@ -1,4 +1,4 @@
-—--
+---
 layout: post
 title:  “Suggestions for the Design of Computational Experiments”
 date:   2022-10-18 08:00:00 -0500

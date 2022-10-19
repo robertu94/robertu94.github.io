@@ -27,7 +27,7 @@ header_pages:
     - about.md
     - learning.md
     - presentations.md
-    - guides.markdown
+    - guides.md
 
 collections:
   learning:
