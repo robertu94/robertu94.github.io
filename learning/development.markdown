@@ -643,6 +643,33 @@ However within that, there has been research on the ordering use to construct th
 In general, these approaches create a dependency graph of the system then order the implementation of the software components in topological order of the resulting directed acyclic graph.
 They may have some weighting assigned based on the importance of the system, but that roughly the all work the same.
 
+## Comments
+
+Nearly every programming language has a feature to include comments within the body of the source code. Additionally, tools like Git allow developers to associate comments with changes that they introduced to their source code. However, just because it is possible to comment, does not mean that a comment is the most appropriate way to communicate the message contained  in the comment. 
+
+Comments are most appropriate when:
+
+1. The code would otherwise be completely opaque — for example most “lock free” using weakly consistent atomic featuring atom is or distributed synchronization code where the use of locks is distributed to several functions
+2. To document interfaces especially when it documents pre or post conditions that are not easy to express in code with functions like assert. For example that the code requires a pointer to be “registered” with some other call first, or that the function “frees” the memory associated with its input
+3. To provide macro level context of why code was written and what makes it different from other code that came before
+4. To mark TODOs for the code
+5. When the code serves as a personal reference or a teaching tool when it makes the code self-contained or to emphasize a subtle point. 
+
+I tend to favor a lighter comment style. A comment can be seen in some cases as a code smell indicating that the APIs and functions involved doesn’t reflect the intent of the code. A developer favoring this style of comments would use variable and function names to show intent rather than comments. Note that this works best when functions are small and describe a single intent.
+
+Maybe that changes if the code is truely arcane (a regex, shell code, forth, awk, Perl, some Haskell for a C programmer, and TeX all come to mind) maybe this changes, and documentation is sparse to non-existent.
+
+However it’s worth knowing in every windows IDE I’ve ever used you just hover unfamiliar APIs like VirtualAllocEX and the IDE summarizes either the call and it’s arguments. If your comment shows up on hover, you don’t need to add it.
+
+I write comments while learning new APIs.  I keep a running journal of code like this, and even have a directory on my machine for code like this called `play` (Thank you Dr. Malloy) for this code.  It also has a place in teaching examples.  When I was first learning Perl and Haskell, it annoyed me how terse some of the code was without any comments, and it wasn’t until I found a book that had comments like this that I finally got it.  
+
+When thinking about whether and how to comment consider:
+
+1. Tools can do a lot for you (even tools like Vim), and you should think about if you are duplicating their effort. 
+2. Good comments like code need to be updated and maintained with the code around them; is this comment worth the cost to maintain it in addition to the code?.  Saying `close` closes a file in a comment is probably obvious and updating the comment is probably more effort than it’s worth, but I would not have guessed that VirtualAllocEx could allocate memory in another process.   As a primarily a linux/unix dev, I appreciated this comment pointing out this huge possible foot-gun in the Windows API.  
+3. Git commit messages can not only serve as a place to keep important context about why a change was made, but also a high level summary of what is going on within a change. Reading through a large set of small changes is still challenging without some high level context of what was changed and why. In the note taking world this is called progressive summarization and is powerful in helping you review critical information quickly. 
+
+
 ## Tools
 
 A key part of learning to be a software craftsman is learning how to make the most out of your tools.
@@ -1107,6 +1134,8 @@ Please let me know if you have any feedback.
 
 ## Change Log
 
++ October 2022 - Added section on comments
 + August 2020 - Added links to flame graphs.
 + March 2020 - Initial Version
+ 
 
