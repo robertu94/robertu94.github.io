@@ -13,7 +13,7 @@ So you want to do empirical computer science? Doing good science is difficult. I
 
 Another of the most important questions to ask is, “What are you trying to measure and what could it tell you?”. The latter part about what it could tell you is essential because it helps protect you from spurious conclusions that weren’t central when designing your system. Answering this pair of questions will often require you to clearly specify a model of your system and understand or at least have an educated guess about how your system works. Once you have answered that question (at least for now; you’ll often have to revise it with new data), my hope is that this document can give you some pointers on how to most efficiently and confidently answer your question.
 
-#Systems Modeling
+# Systems Modeling
 
 The process of science begins with a hypothesis — a testable statement about the state or behavior of a system. Constructing a rigorous hypothesis requires a description of your system under test. The description is almost certain underdetermative of the total behavior of a system. It has been said that a model that is just as complex as the real system is just the real system. By design, models omit aspects of the systems they describe because these simplifications allow us to reason about the underlying behaviors we actually care about.
 
@@ -126,7 +126,7 @@ As an aside: sigsegv or its cousins sigfpe and sigbus are often implemented as c
 
 *Parsing code often doesn’t benefit as much from parallelism so don’t worry about this upfront*. Serial execution is a good enough place to start. An exception to this is where your data is a large tensor in which case parallel HDF5 is your friend for scalable IO performance. 
 
-## Writing plotting/ analysis code
+## Writing plotting/analysis code
 
 *Choose a language which has mature tools for this.* Unless you are doing sophisticated 3D graphics where libraries like VTK or OpenGL or Vulcan are required, you can accomplish a lot more a lot faster with libraries in Python (Seaborn/Matplotlib) or Julia (Makie/ Plots.jl). C++ is not the best tool for every job.
 
