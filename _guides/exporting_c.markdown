@@ -197,7 +197,7 @@ Once you have a header for your API that uses only C compatible functions, simpl
 
 
 #ifdef __cplusplus
-extern "C"
+extern "C" {
 #endif
 
 // all functions here are C accessible
