@@ -82,7 +82,9 @@ for _, approach in product(range(replicates), approaches):
 ```
 
 
-Code like this can be easily parallelized and distributed using something like a MPI4Py MPICommPool (python) or libdistributed work queue (c++).  The C++ equivalent of product is `std::views::cartesian_product` or range-v3’s `cartesian_product`.
+Code like this can be easily parallelized and distributed using something like a MPI4Py MPICommExecutor (python) or libdistributed work queue (c++).  The C++ equivalent of product is `std::views::cartesian_product` or range-v3’s `cartesian_product`.
+
+
 
 *Know how to accurately measure things*. Measuring fine grained timing can be a nuanced process. First, for sub-millisecond timings, the clock resolution can matter. Second, not all clocks are monotonic. Third, some clocks have high measurement overhead for the first three cases in c++ you generally want the `std::chrono::steady_clock` in Python the equivalent is `time.perf_counter_ns` . Fourth, your compiler may optimize away your benchmark unless you force it to keep it (Google Benchmark has a function called `benchmark::DoNotOptimize`) which generally does the right thing). Fifth, other processes may interfere with your measurement (especially print statements) so avoid doing expensive operations during your benchmark timings. Lastly not all clocks can measure all processes, for example the C++ clock functions cannot measure the timing of Cuda operations accurately because they cannot observe device state.
 
@@ -108,6 +110,90 @@ Code like this can be easily parallelized and distributed using something like a
 
 As an aside: sigsegv or its cousins sigfpe and sigbus are often implemented as catch-able signal but the mechanisms for recovering from it in standard C/C++ fully and correctly are limited or non-existent. Even if you think you can recover correctly from these signals don’t; you probably shouldn’t and should let the entire C runtime restart instead. What is easier and arguably better is to use another program (ie bash/python scripts) to handle this particular fault boundary. 
 
+
+Here is an example that tries to implement as much of this as possible:
+
+```python
+#!/usr/bin/env python
+from mpi4py.futures import MPICommExecutor, as_completed
+from itertools import product
+from csv import DictWriter, DictReader
+from time import perf_counter_ns
+
+
+def do_experiment(args):
+    starttime = perf_counter_ns()
+    replicate, approach = args
+    if replicate == 3:
+        # example error
+        raise RuntimeError("bad error happened here!")
+
+    # do the actual experiment here, then put results in a dict
+    # including a starttime and endtime can really help you debug things
+    ex_results = {
+        "result1": replicate * 2,
+        "result2": replicate,
+        "starttime": starttime,
+        "endtime": perf_counter_ns()
+    }
+    return ex_results
+
+
+FIELDS = ["approach", "replicate", "starttime", "endtime", "result1", "result2", "err"]
+approaches = [1, 2, 3]
+replicates = 5
+futures = []
+in_checkpoint = set()
+tasks = list(product(range(replicates), approaches))
+fut_to_task = {}
+
+with MPICommExecutor() as pool:
+    # only the root mpi rank enters this if-statement
+    # the other processes will be workers
+    if pool is not None:
+        # check our results file to skip all results that are already successful
+        try:
+            with open("output_file.csv") as checkpoint_file:
+                reader = DictReader(checkpoint_file, FIELDS)
+                for row in reader:
+                    if row['err'] == "":
+                        in_checkpoint.add((int(row['replicate']), int(row['approach'])))
+            exists = True
+        except FileNotFoundError:
+            exists = False
+            pass
+
+        # start all of the tasks we care about
+        for task in tasks:
+            if task not in in_checkpoint:
+                fut = pool.submit(do_experiment, task)
+                futures.append(fut)
+                fut_to_task[fut] = task
+
+        # write results as we find them
+        with open("output_file.csv", "a" if exists else "w") as outfile:
+            writer = DictWriter(outfile, FIELDS)
+            if not exists:
+                writer.writeheader()
+            for fut in as_completed(futures):
+                try:
+                    result = fut.result()
+                    task = fut_to_task[fut]
+                    print("task ", task, "completed successfully")
+                    result["err"] = ""
+                    result["replicate"] = task[0]
+                    result["approach"] = task[1]
+                    writer.writerow(result)
+                except Exception as ex:
+                    result = {}
+                    task = fut_to_task[fut]
+                    print("task ", task, "failed")
+                    result["err"] = str(ex)
+                    result["replicate"] = task[0]
+                    result["approach"] = task[1]
+                    writer.writerow(result)
+```
+
 ## Writing parsing code
 
 *When parsing the results of experiments it is often helpful to do so in ways that are machine parse-able*. While you almost certainly could write a domain specific language that often isn’t the best use of your time or resources. Sticking to a few well established formats can tremendously simplify the task ahead of you.
@@ -126,6 +212,9 @@ As an aside: sigsegv or its cousins sigfpe and sigbus are often implemented as c
 
 *Parsing code often doesn’t benefit as much from parallelism so don’t worry about this upfront*. Serial execution is a good enough place to start. An exception to this is where your data is a large tensor in which case parallel HDF5 is your friend for scalable IO performance. 
 
+
+Since the previous example used csv and wrote to a dedicated file, we don't even have to write the parsing code, we can just use `pandas.read_csv`
+
 ## Writing plotting/analysis code
 
 *Choose a language which has mature tools for this.* Unless you are doing sophisticated 3D graphics where libraries like VTK or OpenGL or Vulcan are required, you can accomplish a lot more a lot faster with libraries in Python (Seaborn/Matplotlib) or Julia (Makie/ Plots.jl). C++ is not the best tool for every job.
@@ -133,3 +222,32 @@ As an aside: sigsegv or its cousins sigfpe and sigbus are often implemented as c
 *Separate plotting/analysis from parsing parsing the log files*.  Often one of these tasks will take much longer than you’d expect. By separating these tasks, you can work with the clean data more iteration and quickly drill in on a plot that does what you want. 
 
 *Prefer vector graphics for 2D plots*. Vector graphics automatically scale to arbitrary resolution because they are described as a series of equations rather than a “map” of colors. In many plotting libraries this is as simple as choosing an eps or svg format output. 
+
+
+A simple script that plots the runtime for each might look like this:
+
+```python
+import pandas as pd
+import seaborn as sns
+df = pd.read_csv("output_file.csv")
+df['runtime'] = df['endtime'] - df['starttime']
+
+
+# understand what kinds of errors occured
+errs = df[df.err.notnull()]
+print(errs.err.value_counts())
+
+# filter out results with errors
+success = df[df.err.isna()]
+
+# plot the timings
+sns.set(rc={"figure.figsize": (10, 7.5)})
+sns.set_theme(context="talk", style="whitegrid")
+fig = sns.barplot(x="approach", y="runtime", data=success)
+fig.get_figure().savefig("runtime.eps")
+```
+
+
+# Changelog
+
++ 2022-10-18 -- initial version
