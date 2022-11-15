@@ -29,3 +29,7 @@ Lastly, if you find the articles insufficient in some way, please [email me](mai
 + [C++]({% link learning/cpp.markdown %}) how to learn C++, a low-level systems language that helps you get the most out of your hardware
 + [Python]({% link learning/python.markdown %}) how to learn Python, a high-level programming language aimed at developer productivity
 
+## Tools
+
++ [CMake]({% link learning/cmake.markdown %}) the defacto C++ build system
+

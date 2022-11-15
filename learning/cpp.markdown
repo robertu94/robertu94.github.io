@@ -96,6 +96,9 @@ For this section, read what each class of tool does; then use it as a reference 
 | Package Manager               | Spack                       | Package manager focused on HPC; Similar to PIP           |
 | Package Manager               | VcPkg/Connan/Wraptool       | C++ centric package managers; you miliage may very depending your usecase  |
 
+I've recently added a learning to learn document for [CMake]({% link learning/cmake.markdown %})
+
+
 You'll also eventually decide that you need/want some libraries to get useful work done.
 This post would be remiss if I didn't mention a few cross cutting libraries.
 
