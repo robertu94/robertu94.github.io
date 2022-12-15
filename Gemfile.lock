@@ -261,7 +261,6 @@ DEPENDENCIES
   jekyll-remote-theme
   jekyll-seo-tag
   jekyll-sitemap
-  minima
   webrick
 
 RUBY VERSION

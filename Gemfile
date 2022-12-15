@@ -17,7 +17,6 @@ group :jekyll_plugins do
   gem 'jekyll-sitemap'
   gem 'jekyll-seo-tag'
 end
-gem "minima"
 gem "webrick"
 
 # If you want to use GitHub Pages, remove the "gem "jekyll"" above and
