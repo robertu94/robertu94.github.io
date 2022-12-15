@@ -42,8 +42,7 @@ collections:
 
 # Build settings
 markdown: kramdown
-  # _config.yml
-remote_theme: jekyll/minima
 plugins:
 - jekyll-remote-theme
+remote_theme: jekyll/minima
 google_analytics: G-9KQE44SX6K
