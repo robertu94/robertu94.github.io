@@ -1,0 +1,66 @@
+baseURL = 'http://robertu94.github.io/'
+languageCode = 'en-us'
+title = 'systems++'
+theme = "PaperMod"
+
+email = "rr.underwood94@gmail.com"
+googleAnalytics = "G-9KQE44SX6K"
+
+minify = true
+pygmentsUseClasses = true
+uglyURLs = true
+
+
+
+
+
+[permalinks]
+  posts = '/:year/:month/:day/:title/'
+
+
+[markup.tableOfContents]
+endLevel = 3
+ordered = false
+startLevel = 1
+
+[markup.highlight]
+guessSyntax = true
+
+[params]
+env = "production" # to enable google analytics, opengraph, twitter-cards and schema.
+title = "Systems++"
+description = """\
+    Thoughts and ramblings of a student of computer science.\
+    This site will focus on computer systems design, programming, and tricks I learn along the way."""
+keywords = ["Blog", "Learning", "Guides", "HowTo"]
+author = "Robert Underwood"
+DateFormat = "January 2, 2006"
+defaultTheme = "auto" # dark, light
+disableThemeToggle = false
+
+ShowShareButtons = false
+ShowReadingTime = true
+ShowPostNavLinks = true
+ShowBreadCrumbs = true
+ShowCodeCopyButtons = false
+ShowWordCount = true
+ShowRssButtonInSectionTermList = true
+UseHugoToc = true
+disableSpecial1stPost = false
+disableScrollToTop = false
+comments = false
+hidemeta = false
+hideSummary = false
+showtoc = true
+tocopen = false
+mainSections = ["posts"]
+[params.analytics.google]
+SiteVerificationTag = "G-9KQE44SX6K"
+
+[menu]
+main = [
+    {identifier = "about", name = "About Me", url= "/about.html" },
+    {identifier = "learning", name = "Learning To Learn", url= "/learning.html" },
+    {identifier = "presentations", name = "Presentations", url= "/presentations.html" },
+    {identifier = "guides", name = "Guides", url= "/guides.html" },
+]
