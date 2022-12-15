@@ -1,0 +1,195 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>How to add a dependency in CMake | systems++</title>
+<meta name=keywords content>
+<meta name=description content="tl;dr Most of the time simply use find_package, set CMAKE_PREFIX_PATH to include the path specified in CMAKE_INSTALL_PREFIX when the package was installed like so:
+find_package(std_compat REQUIRED)target_link_libraries(my_library PUBLIC std_compat::std_compat)Tools like spack will set CMAKE_PREFIX_PATH for you. Otherwise specify it using an envionment variable or with a -D flag to cmake.
+How to add the dependency Adding a dependency in CMake is pretty straight forward, but depends on where it is coming from.">
+<meta name=author content="Robert Underwood">
+<link rel=canonical href=http://robertu94.github.io/guides/cmake_deps.html>
+<meta name=google-site-verification content="G-9KQE44SX6K">
+<link crossorigin=anonymous href=/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.baa4f2053c75d0009e9309aae8f8a8959f5e0372e88f80cdf2951a9533d71ce2.js integrity="sha256-uqTyBTx10ACekwmq6PiolZ9eA3Loj4DN8pUalTPXHOI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=http://robertu94.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=http://robertu94.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=http://robertu94.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=http://robertu94.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=http://robertu94.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KQE44SX6K"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9KQE44SX6K',{anonymize_ip:!1})}</script>
+<meta property="og:title" content="How to add a dependency in CMake">
+<meta property="og:description" content="tl;dr Most of the time simply use find_package, set CMAKE_PREFIX_PATH to include the path specified in CMAKE_INSTALL_PREFIX when the package was installed like so:
+find_package(std_compat REQUIRED)target_link_libraries(my_library PUBLIC std_compat::std_compat)Tools like spack will set CMAKE_PREFIX_PATH for you. Otherwise specify it using an envionment variable or with a -D flag to cmake.
+How to add the dependency Adding a dependency in CMake is pretty straight forward, but depends on where it is coming from.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://robertu94.github.io/guides/cmake_deps.html"><meta property="article:section" content="guides">
+<meta property="article:published_time" content="2022-10-19T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-10-19T00:00:00+00:00"><meta property="og:site_name" content="Systems++">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="How to add a dependency in CMake">
+<meta name=twitter:description content="tl;dr Most of the time simply use find_package, set CMAKE_PREFIX_PATH to include the path specified in CMAKE_INSTALL_PREFIX when the package was installed like so:
+find_package(std_compat REQUIRED)target_link_libraries(my_library PUBLIC std_compat::std_compat)Tools like spack will set CMAKE_PREFIX_PATH for you. Otherwise specify it using an envionment variable or with a -D flag to cmake.
+How to add the dependency Adding a dependency in CMake is pretty straight forward, but depends on where it is coming from.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"How to add a dependency in CMake","item":"http://robertu94.github.io/guides/cmake_deps.html"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"How to add a dependency in CMake","name":"How to add a dependency in CMake","description":"tl;dr Most of the time simply use find_package, set CMAKE_PREFIX_PATH to include the path specified in CMAKE_INSTALL_PREFIX when the package was installed like so:\nfind_package(std_compat REQUIRED)target_link_libraries(my_library PUBLIC std_compat::std_compat)Tools like spack will set CMAKE_PREFIX_PATH for you. Otherwise specify it using an envionment variable or with a -D flag to cmake.\nHow to add the dependency Adding a dependency in CMake is pretty straight forward, but depends on where it is coming from.","keywords":[],"articleBody":"tl;dr Most of the time simply use find_package, set CMAKE_PREFIX_PATH to include the path specified in CMAKE_INSTALL_PREFIX when the package was installed like so:\nfind_package(std_compat REQUIRED)target_link_libraries(my_library PUBLIC std_compat::std_compat)Tools like spack will set CMAKE_PREFIX_PATH for you. Otherwise specify it using an envionment variable or with a -D flag to cmake.\nHow to add the dependency Adding a dependency in CMake is pretty straight forward, but depends on where it is coming from. You should do the first one that is applicable.\n If a library is defined in the same cmake file or one in a parent directory, you can use it directly. If a library is defined in some other cmake project, you often import it with find_package If a library has a pkg-config, you should use pkg_search_module to import it. If a library has a find command such as llvm-config or Tensorflow’s you can create an imported target, use execute_process to get the flags, and use the SHELL: prefix for target_compile_options and or target_link_options to set the build options If a library has none of these, locate the library with find_library and header with find_file then create a imported target.  Public vs Private If the thing you are building is a library, generally choose PUBLIC unless it you are writing a header only library in which case choose INTERFACE.\nIf the thing you are building is an executable, choose PRIVATE.\nYou can also choose PRIVATE if none of the headers you link to are in the transitive closure of any of your public header files.\nWhat is the name to pass to find_package and target_link_libraries If it is one of the built-ins (i.e. MPI/OpenMP), check the CMake docs.\nIf it comes from a user-defined package, look for a directory called cmake installed with the package. In there should be a file called ...Targets.cmake where the ... is some name. The text before Targets.cmake is the entry to pass to find_package. In this file is a list of expectedTargets which will contain the names the package exports.\nImporting PkgConfig libraries find_package(PkgConfig REQUIRED)pkg_search_module(ZSTD IMPORTED_TARGET GLOBAL libzstd)target_link_libraries(my_library PUBLIC PkgConfig::ZSTD)There isn’t anything sacred about ZSTD as the name here. It can be replaced with another name that makes sense. The libzstd bit is what pkg-config looks for. IMPORTED_TARGET GLOBAL makes things “modern” allowing you to just add a target_link_library command to add the include flags. pkg-config --list-all |grep $name_of_package can help you find package config files.\nImporting libraries with a find tool Example using Tensorflow:\nfind_package(Python REQUIRED)execute_process(COMMAND \"${Python_EXECUTABLE}\" \"-c\" \"import tensorflow as tf; print(*tf.sysconfig.get_compile_flags())\" OUTPUT_VARIABLE TENSORFLOW_COMPILE_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)execute_process(COMMAND \"${Python_EXECUTABLE}\" \"-c\" \"import tensorflow as tf; print(*tf.sysconfig.get_link_flags())\" OUTPUT_VARIABLE TENSORFLOW_LINK_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)target_link_options(my_library PUBLIC SHELL:${TENSORFLOW_LINK_FLAGS} )target_compile_options(my_library PUBLIC SHELL:${TENSORFLOW_COMPILE_FLAGS} )Transitive Dependencies tl;dr, add the find_package or similar commands to FooConfig.cmake.in file you wrote for each PUBLIC, INTERFACE or IMPORTED dependency that you add. This isn’t required for PRIVATE dependencies. Or LibPressioTools for an example with several optional dependencies.\nSee the docs for more details\nUsing find_library find_program and find_file Avoid this if possible.\nfind_library(CUFile_LIBRARY cufile PATHS ${CUDAToolkit_LIBRARY_DIR} REQUIRED)find_file(CUFile_HEADER cufile.h PATHS ${CUDAToolkit_INCLUDE_DIR} REQUIRED)# After CMake 3.20, prefer `cmake_path` instead because it doesn't access the filesystem get_filename_component(CUFile_HEADER_DIR \"${CUFile_HEADER}\" DIRECTORY)# it's probably better to create an IMPORTED library here than to just add them all to the library I want to link # cuFile to, but CUDA::cuda_driver and CUDA::cuda_rt are link # dependencies for cufile that I found in the documentation target_link_libraries(libpressio PRIVATE CUDA::cuda_driver CUDA::cudart ${CUFile_LIBRARY})target_include_directories(libpressio PRIVATE ${CUFile_HEADER_DIR})These often need to be exported differently. See the docs for best practices to export these\n","wordCount":"579","inLanguage":"en","datePublished":"2022-10-19T00:00:00Z","dateModified":"2022-10-19T00:00:00Z","author":{"@type":"Person","name":"Robert Underwood"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://robertu94.github.io/guides/cmake_deps.html"},"publisher":{"@type":"Organization","name":"systems++","logo":{"@type":"ImageObject","url":"http://robertu94.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=http://robertu94.github.io/ accesskey=h title="systems++ (Alt + H)">systems++</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=http://robertu94.github.io/about.html title="About Me">
+<span>About Me</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/guides.html title=Guides>
+<span>Guides</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/learning.html title="Learning To Learn">
+<span>Learning To Learn</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/presentations.html title=Presentations>
+<span>Presentations</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=http://robertu94.github.io/>Home</a></div>
+<h1 class=post-title>
+How to add a dependency in CMake
+</h1>
+<div class=post-meta><span title="2022-10-19 00:00:00 +0000 UTC">October 19, 2022</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;579 words&nbsp;·&nbsp;Robert Underwood
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>Table of Contents</span>
+</summary>
+<div class=inner><nav id=TableOfContents>
+<ul>
+<li><a href=#tldr>tl;dr</a></li>
+<li><a href=#how-to-add-the-dependency>How to add the dependency</a></li>
+<li><a href=#public-vs-private>Public vs Private</a></li>
+<li><a href=#what-is-the-name-to-pass-to-find_package-and-target_link_libraries>What is the name to pass to <code>find_package</code> and <code>target_link_libraries</code></a></li>
+<li><a href=#importing-pkgconfig-libraries>Importing PkgConfig libraries</a></li>
+<li><a href=#importing-libraries-with-a-find-tool>Importing libraries with a find tool</a></li>
+<li><a href=#transitive-dependencies>Transitive Dependencies</a></li>
+<li><a href=#using-find_library-find_program-and-find_file>Using <code>find_library</code> <code>find_program</code> and <code>find_file</code></a></li>
+</ul>
+</nav>
+</div>
+</details>
+</div>
+<div class=post-content><h1 id=tldr>tl;dr<a hidden class=anchor aria-hidden=true href=#tldr>#</a></h1>
+<p>Most of the time simply use <code>find_package</code>, set <code>CMAKE_PREFIX_PATH</code> to include the path specified in <code>CMAKE_INSTALL_PREFIX</code> when the package was installed like so:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cmake data-lang=cmake><span class=nb>find_package</span><span class=p>(</span><span class=s>std_compat</span> <span class=s>REQUIRED</span><span class=p>)</span><span class=err>
+</span><span class=err></span><span class=nb>target_link_libraries</span><span class=p>(</span><span class=s>my_library</span> <span class=s>PUBLIC</span> <span class=s>std_compat::std_compat</span><span class=p>)</span><span class=err>
+</span></code></pre></div><p>Tools like <code>spack</code> will set <code>CMAKE_PREFIX_PATH</code> for you. Otherwise specify it using an envionment variable or with a <code>-D</code> flag to cmake.</p>
+<h1 id=how-to-add-the-dependency>How to add the dependency<a hidden class=anchor aria-hidden=true href=#how-to-add-the-dependency>#</a></h1>
+<p>Adding a dependency in CMake is pretty straight forward, but depends on where it is coming from. You should do the first one that is applicable.</p>
+<ol>
+<li>If a library is defined in the same cmake file or one in a parent directory, you can use it directly.</li>
+<li>If a library is defined in some other cmake project, you often import it with <code>find_package</code></li>
+<li>If a library has a pkg-config, you should use <code>pkg_search_module</code> to import it.</li>
+<li>If a library has a find command such as <code>llvm-config</code> or Tensorflow&rsquo;s you can create an imported target, use <code>execute_process</code> to get the flags, and use the <code>SHELL:</code> prefix for <code>target_compile_options</code> and or <code>target_link_options</code> to set the build options</li>
+<li>If a library has none of these, locate the library with <code>find_library</code> and header with <code>find_file</code> then create a imported target.</li>
+</ol>
+<h1 id=public-vs-private>Public vs Private<a hidden class=anchor aria-hidden=true href=#public-vs-private>#</a></h1>
+<p>If the thing you are building is a library, generally choose <code>PUBLIC</code> unless it you are writing a header only library in which case choose <code>INTERFACE</code>.</p>
+<p>If the thing you are building is an executable, choose <code>PRIVATE</code>.</p>
+<p>You can also choose <code>PRIVATE</code> if none of the headers you link to are in the transitive closure of any of your public header files.</p>
+<h1 id=what-is-the-name-to-pass-to-find_package-and-target_link_libraries>What is the name to pass to <code>find_package</code> and <code>target_link_libraries</code><a hidden class=anchor aria-hidden=true href=#what-is-the-name-to-pass-to-find_package-and-target_link_libraries>#</a></h1>
+<p>If it is one of the built-ins (i.e. MPI/OpenMP), check the CMake docs.</p>
+<p>If it comes from a user-defined package, look for a directory called <code>cmake</code> installed with the package. In there should be a file called <code>...Targets.cmake</code> where the <code>...</code> is some name. The text before <code>Targets.cmake</code> is the entry to pass to <code>find_package</code>. In this file is a list of <code>expectedTargets</code> which will contain the names the package exports.</p>
+<h1 id=importing-pkgconfig-libraries>Importing PkgConfig libraries<a hidden class=anchor aria-hidden=true href=#importing-pkgconfig-libraries>#</a></h1>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cmake data-lang=cmake><span class=nb>find_package</span><span class=p>(</span><span class=s>PkgConfig</span> <span class=s>REQUIRED</span><span class=p>)</span><span class=err>
+</span><span class=err></span><span class=nb>pkg_search_module</span><span class=p>(</span><span class=s>ZSTD</span> <span class=s>IMPORTED_TARGET</span> <span class=s>GLOBAL</span> <span class=s>libzstd</span><span class=p>)</span><span class=err>
+</span><span class=err></span><span class=nb>target_link_libraries</span><span class=p>(</span><span class=s>my_library</span> <span class=s>PUBLIC</span> <span class=s>PkgConfig::ZSTD</span><span class=p>)</span><span class=err>
+</span></code></pre></div><p>There isn&rsquo;t anything sacred about <code>ZSTD</code> as the name here. It can be replaced with another name that makes sense.
+The <code>libzstd</code> bit is what pkg-config looks for.
+<code>IMPORTED_TARGET GLOBAL</code> makes things &ldquo;modern&rdquo; allowing you to just add a <code>target_link_library</code> command to add the include flags.
+<code>pkg-config --list-all |grep $name_of_package</code> can help you find package config files.</p>
+<h1 id=importing-libraries-with-a-find-tool>Importing libraries with a find tool<a hidden class=anchor aria-hidden=true href=#importing-libraries-with-a-find-tool>#</a></h1>
+<p>Example using Tensorflow:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cmake data-lang=cmake><span class=nb>find_package</span><span class=p>(</span><span class=s>Python</span> <span class=s>REQUIRED</span><span class=p>)</span><span class=err>
+</span><span class=err></span><span class=nb>execute_process</span><span class=p>(</span><span class=s>COMMAND</span> <span class=s2>&#34;${Python_EXECUTABLE}&#34;</span> <span class=s2>&#34;-c&#34;</span> <span class=s2>&#34;import tensorflow as tf; print(*tf.sysconfig.get_compile_flags())&#34;</span>
+  <span class=s>OUTPUT_VARIABLE</span> <span class=s>TENSORFLOW_COMPILE_FLAGS</span>
+	<span class=s>OUTPUT_STRIP_TRAILING_WHITESPACE</span><span class=p>)</span><span class=err>
+</span><span class=err></span><span class=nb>execute_process</span><span class=p>(</span><span class=s>COMMAND</span> <span class=s2>&#34;${Python_EXECUTABLE}&#34;</span> <span class=s2>&#34;-c&#34;</span> <span class=s2>&#34;import tensorflow as tf; print(*tf.sysconfig.get_link_flags())&#34;</span>
+  <span class=s>OUTPUT_VARIABLE</span> <span class=s>TENSORFLOW_LINK_FLAGS</span>
+	<span class=s>OUTPUT_STRIP_TRAILING_WHITESPACE</span><span class=p>)</span><span class=err>
+</span><span class=err></span><span class=nb>target_link_options</span><span class=p>(</span><span class=s>my_library</span> <span class=s>PUBLIC</span>
+  <span class=s>SHELL:</span><span class=o>${</span><span class=nv>TENSORFLOW_LINK_FLAGS</span><span class=o>}</span>
+  <span class=p>)</span><span class=err>
+</span><span class=err></span><span class=nb>target_compile_options</span><span class=p>(</span><span class=s>my_library</span> <span class=s>PUBLIC</span>
+  <span class=s>SHELL:</span><span class=o>${</span><span class=nv>TENSORFLOW_COMPILE_FLAGS</span><span class=o>}</span>
+  <span class=p>)</span><span class=err>
+</span></code></pre></div><h1 id=transitive-dependencies>Transitive Dependencies<a hidden class=anchor aria-hidden=true href=#transitive-dependencies>#</a></h1>
+<p>tl;dr, add the find_package or similar commands to <code>FooConfig.cmake.in</code> file
+you wrote for each <code>PUBLIC</code>, <code>INTERFACE</code> or <code>IMPORTED</code> dependency that you add.
+This isn&rsquo;t required for <code>PRIVATE</code> dependencies. Or
+<a href=https://github.com/robertu94/pressio-tools/blob/f2bc306102845cdf8a4a1602b9bf1091db5c2e04/LibPressioToolsConfig.cmake.in#L8-L35>LibPressioTools</a>
+for an example with several optional dependencies.</p>
+<p><a href=https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html>See the docs for more details</a></p>
+<h1 id=using-find_library-find_program-and-find_file>Using <code>find_library</code> <code>find_program</code> and <code>find_file</code><a hidden class=anchor aria-hidden=true href=#using-find_library-find_program-and-find_file>#</a></h1>
+<p>Avoid this if possible.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cmake data-lang=cmake><span class=nb>find_library</span><span class=p>(</span><span class=s>CUFile_LIBRARY</span> <span class=s>cufile</span> <span class=s>PATHS</span> <span class=o>${</span><span class=nv>CUDAToolkit_LIBRARY_DIR</span><span class=o>}</span> <span class=s>REQUIRED</span><span class=p>)</span><span class=err>
+</span><span class=err></span><span class=nb>find_file</span><span class=p>(</span><span class=s>CUFile_HEADER</span> <span class=s>cufile.h</span> <span class=s>PATHS</span> <span class=o>${</span><span class=nv>CUDAToolkit_INCLUDE_DIR</span><span class=o>}</span> <span class=s>REQUIRED</span><span class=p>)</span><span class=err>
+</span><span class=err>
+</span><span class=err></span><span class=c># After CMake 3.20, prefer `cmake_path` instead because it doesn&#39;t access the filesystem
+</span><span class=c></span><span class=nb>get_filename_component</span><span class=p>(</span><span class=s>CUFile_HEADER_DIR</span> <span class=s2>&#34;${CUFile_HEADER}&#34;</span> <span class=s>DIRECTORY</span><span class=p>)</span><span class=err>
+</span><span class=err>
+</span><span class=err></span><span class=c># it&#39;s probably better to create an IMPORTED library here than to just add them all to the library I want to link
+</span><span class=c># cuFile to, but CUDA::cuda_driver and CUDA::cuda_rt are link # dependencies for cufile that I found in the documentation
+</span><span class=c></span><span class=err>
+</span><span class=err></span><span class=nb>target_link_libraries</span><span class=p>(</span><span class=s>libpressio</span> <span class=s>PRIVATE</span> <span class=s>CUDA::cuda_driver</span> <span class=s>CUDA::cudart</span> <span class=o>${</span><span class=nv>CUFile_LIBRARY</span><span class=o>}</span><span class=p>)</span><span class=err>
+</span><span class=err></span><span class=nb>target_include_directories</span><span class=p>(</span><span class=s>libpressio</span> <span class=s>PRIVATE</span> <span class=o>${</span><span class=nv>CUFile_HEADER_DIR</span><span class=o>}</span><span class=p>)</span><span class=err>
+</span></code></pre></div><p>These often need to be exported differently. <a href=https://cmake.org/cmake/help/latest/manual/cmake-developer.7.html#find-modules>See the docs for best practices to export these</a></p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+</ul>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2022 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>

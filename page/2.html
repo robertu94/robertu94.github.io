@@ -1,0 +1,215 @@
+<!doctype html><html lang=en dir=auto>
+<head>
+<meta name=generator content="Hugo 0.91.2"><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>systems++</title>
+<meta name=keywords content="Blog,Learning,Guides,HowTo">
+<meta name=description content="Thoughts and ramblings of a student of computer science.This site will focus on computer systems design, programming, and tricks I learn along the way.">
+<meta name=author content="Robert Underwood">
+<link rel=canonical href=http://robertu94.github.io/>
+<meta name=google-site-verification content="G-9KQE44SX6K">
+<link crossorigin=anonymous href=/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as=style>
+<link rel=icon href=http://robertu94.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=http://robertu94.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=http://robertu94.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=http://robertu94.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=http://robertu94.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<link rel=alternate type=application/rss+xml href=http://robertu94.github.io/index.xml>
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KQE44SX6K"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9KQE44SX6K',{anonymize_ip:!1})}</script>
+<meta property="og:title" content="systems++">
+<meta property="og:description" content="Thoughts and ramblings of a student of computer science.This site will focus on computer systems design, programming, and tricks I learn along the way.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="http://robertu94.github.io/"><meta property="og:site_name" content="Systems++">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="systems++">
+<meta name=twitter:description content="Thoughts and ramblings of a student of computer science.This site will focus on computer systems design, programming, and tricks I learn along the way.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"Organization","name":"systems++","url":"http://robertu94.github.io/","description":"Thoughts and ramblings of a student of computer science.This site will focus on computer systems design, programming, and tricks I learn along the way.","thumbnailUrl":"http://robertu94.github.io/favicon.ico","sameAs":[]}</script>
+</head>
+<body class=list id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=http://robertu94.github.io/ accesskey=h title="systems++ (Alt + H)">systems++</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=http://robertu94.github.io/about.html title="About Me">
+<span>About Me</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/guides.html title=Guides>
+<span>Guides</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/learning.html title="Learning To Learn">
+<span>Learning To Learn</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/presentations.html title=Presentations>
+<span>Presentations</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-entry>
+<header class=entry-header>
+<h2>Life with Libtooling
+</h2>
+</header>
+<div class=entry-content>
+<p>Over the last two months, I spent a significant amount of time using Clang’s libtooling. Libtooling is a great way to quickly develop tools to analyze and modify large quantizes of C++. In this article, I share some lessons learned working with libtooling.
+Beware the Stability Guarantees. The biggest problem with libtooling is that it has very few if any Stability guarantees. When I was learning libtooling, I watched Peter Goldsborough’s video excellent “clang-useful: Building useful tools with LLVM and clang for fun and profit”....</p>
+</div>
+<footer class=entry-footer><span title="2017-12-10 11:21:00 -0500 -0500">December 10, 2017</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;873 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Life with Libtooling" href=http://robertu94.github.io/2017/12/10/life-with-libtooling.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
+<h2>Design of A Matrix loading Library
+</h2>
+</header>
+<div class=entry-content>
+<p>Ever notice that every matrix and graph library seems to have a different interface for constructing matrices? Also notice that each only only supports some subset of common matrix formats? With a little help from the Adapter and Builder design patterns we can actually solve this problem.
+Design Overview In this design, we have 2 main actors: Parser andBuilder as well as their implementations ParserImpl and BuilderImpl. It allows us to write code like this in c++:...</p>
+</div>
+<footer class=entry-footer><span title="2017-09-23 07:00:00 -0500 -0500">September 23, 2017</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;796 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Design of A Matrix loading Library" href=http://robertu94.github.io/2017/09/23/design-of-a-matrix-loading-library.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
+<h2>Qt is for more than just GUIs
+</h2>
+</header>
+<div class=entry-content>
+<p>When most people think of Qt, I imagine that they think about the Graphical User Interface components. But Qt has a variety of other components beyond just being a GUI framework. In this post, I highlight some of what I find to be the more interesting features.
+Object Communication via Signals and Slots One of the coolest features of Qt is its very clean implementation of signals and slots. Signals and slots are a means of communicating information (called signals) between objects via special callbacks (called slots)....</p>
+</div>
+<footer class=entry-footer><span title="2017-05-23 10:58:14 -0500 -0500">May 23, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;616 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Qt is for more than just GUIs" href=http://robertu94.github.io/2017/05/23/qt-is-for-more-than-just-guis.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
+<h2>Pluggable Authentication With PAM
+</h2>
+</header>
+<div class=entry-content>
+<p>Authentication and authorization is one of foundational aspects of any security system. However writing an authentication and authorization system can be anything but: There are complex, ever-changing requirements, not to mention differences for differing interfaces it can quickly become daunting. However, there already exists a system on Linux and Unix that allows for dynamic and complex authentication: PAM.
+PAM Modules and Authentication Types Fundamentally, PAM is a collection of modules that provide several methods....</p>
+</div>
+<footer class=entry-footer><span title="2017-05-14 10:58:14 -0500 -0500">May 14, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;444 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Pluggable Authentication With PAM" href=http://robertu94.github.io/2017/05/14/pluggable-authentication-with-pam.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
+<h2>Resource Acquisition is Initialization and SDL
+</h2>
+</header>
+<div class=entry-content>
+<p>Recently, I was working on a project for 2D Game Development where I had to use SDL 2.0. SDL 2.0 is a family of media libraries designed for writing cross platform games in C. However it can be difficult to remember where various resources are allocated and deallocated. Resource Acquisition is Initialization (RAII) is a common pattern in C++ programming that solves this problem. So I wrote a series of wrappers for SDL 2....</p>
+</div>
+<footer class=entry-footer><span title="2017-05-08 05:30:14 -0500 -0500">May 8, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;564 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Resource Acquisition is Initialization and SDL" href=http://robertu94.github.io/2017/05/08/resource-acquisition-is-initialization-and-sdl.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
+<h2>Smart Pool
+</h2>
+</header>
+<div class=entry-content>
+<p>Object Pools are a commonly used pattern used in operating systems, game, and high performance computing development. However just as it can be easy to forget to return a pointer to memory, it can be easy to forget to return the memory to the pool. In this article, I layout a class that I recently used to automatically manage memory from a pool.
+The template pool class has 4 parts: an onEmpty policy, an allocation policy, a reset policy, and an object proxy....</p>
+</div>
+<footer class=entry-footer><span title="2017-04-30 09:58:14 -0500 -0500">April 30, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;581 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Smart Pool" href=http://robertu94.github.io/2017/04/30/smart-pool.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
+<h2>Surprisingly Functional
+</h2>
+</header>
+<div class=entry-content>
+<p>Functional programming is a surprisingly useful programming paradigm. The best aspects of functional programming have this odd habit of showing in places you would never expect.
+The Shell and Endomorphisms Arguably one of the most powerful features of the Unix shell is the pipe. It is one of the core building blocks of the Unix philosophy of many small tools working together each doing one thing well. However, long before Unix, the idea of the endomorphisms was developed....</p>
+</div>
+<footer class=entry-footer><span title="2017-02-23 08:38:14 -0500 -0500">February 23, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;632 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Surprisingly Functional" href=http://robertu94.github.io/2017/02/23/surprisingly-functional.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
+<h2>Faster than light
+</h2>
+</header>
+<div class=entry-content>
+<p>Ansible is probably my favorite provisioning and configuration management tool. Its syntax is concise, expressive, and elegant. Unlike other tools in its category, it has excellent documentation with working examples and intuitive naming. Learning it use it effectively can help you be a more productive developer.
+Speeding Up Ansible Anyone that has used ansible for more than a few hosts with more than a few tasks knows that by default it can be really slow....</p>
+</div>
+<footer class=entry-footer><span title="2017-01-29 10:06:14 -0500 -0500">January 29, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;580 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Faster than light" href=http://robertu94.github.io/2017/01/29/faster-than-light.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
+<h2>LLVM Tooling for C++
+</h2>
+</header>
+<div class=entry-content>
+<p>C++ is a both a fantastic language and a mess. It supports at least 4 programming paradigms (procedural, functional, object-oriented, template meta-programming). In some senses, many languages give you one great way to do things: C++ gives you every way and trusts you to use them well. With this flexibility comes problems that C++ seems to have beyond what other languages experience. Therefore, having effective tooling to develop and use C++ is essential....</p>
+</div>
+<footer class=entry-footer><span title="2017-01-22 18:58:14 -0500 -0500">January 22, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;627 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to LLVM Tooling for C++" href=http://robertu94.github.io/2017/01/22/llvm-tooling-for-c-.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
+<h2>Interpreters Made Easy
+</h2>
+</header>
+<div class=entry-content>
+<p>The Interpreter pattern from the “Design Patterns: Elements of Reusable Object Oriented Software” can potentially be a very powerful pattern. It allows you to use a domain specific language to represent a complex computational situation. However, writing interpreters in practice can be tricky and time consuming. It really helps to know something about some fundamental parsing algorithms and techniques.
+The most naive approach to writing an interpret involves manually matching each possible next phrase and creating an if else soup to match each possible outcome....</p>
+</div>
+<footer class=entry-footer><span title="2017-01-15 10:14:14 -0500 -0500">January 15, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;580 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Interpreters Made Easy" href=http://robertu94.github.io/2017/01/15/interpreters-made-easy.html></a>
+</article>
+<footer class=page-footer>
+<nav class=pagination>
+<a class=prev href=http://robertu94.github.io/>
+«&nbsp;Prev&nbsp;
+</a>
+<a class=next href=http://robertu94.github.io/page/3.html>Next&nbsp;&nbsp;»
+</a>
+</nav>
+</footer>
+</main>
+<footer class=footer>
+<span>&copy; 2022 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>

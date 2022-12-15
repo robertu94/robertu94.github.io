@@ -1,0 +1,507 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>Learning to Learn: Python | systems++</title>
+<meta name=keywords content="Learning to Learn,Programming,Python">
+<meta name=description content="Python is a relatively simple language compared to others such as C++. Despite its simplicity, Python really shines because of its robust standard library, extensive 3rd party library ecosystem (especially for statistics and data analysis), and intuitiveness. This post tracks my process of learning how to program well in Python.
+Order of Topics The listing of topics here is arbitrary and represents the path that I took to learn Python roughly organized by topic.">
+<meta name=author content="Robert Underwood">
+<link rel=canonical href=http://robertu94.github.io/learning/python.html>
+<meta name=google-site-verification content="G-9KQE44SX6K">
+<link crossorigin=anonymous href=/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.baa4f2053c75d0009e9309aae8f8a8959f5e0372e88f80cdf2951a9533d71ce2.js integrity="sha256-uqTyBTx10ACekwmq6PiolZ9eA3Loj4DN8pUalTPXHOI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=http://robertu94.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=http://robertu94.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=http://robertu94.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=http://robertu94.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=http://robertu94.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KQE44SX6K"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9KQE44SX6K',{anonymize_ip:!1})}</script>
+<meta property="og:title" content="Learning to Learn: Python">
+<meta property="og:description" content="Python is a relatively simple language compared to others such as C++. Despite its simplicity, Python really shines because of its robust standard library, extensive 3rd party library ecosystem (especially for statistics and data analysis), and intuitiveness. This post tracks my process of learning how to program well in Python.
+Order of Topics The listing of topics here is arbitrary and represents the path that I took to learn Python roughly organized by topic.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://robertu94.github.io/learning/python.html"><meta property="article:section" content="learning">
+<meta property="article:published_time" content="2019-01-23T08:00:00-05:00">
+<meta property="article:modified_time" content="2019-01-23T08:00:00-05:00"><meta property="og:site_name" content="Systems++">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Learning to Learn: Python">
+<meta name=twitter:description content="Python is a relatively simple language compared to others such as C++. Despite its simplicity, Python really shines because of its robust standard library, extensive 3rd party library ecosystem (especially for statistics and data analysis), and intuitiveness. This post tracks my process of learning how to program well in Python.
+Order of Topics The listing of topics here is arbitrary and represents the path that I took to learn Python roughly organized by topic.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Learning to Learn: Python","item":"http://robertu94.github.io/learning/python.html"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Learning to Learn: Python","name":"Learning to Learn: Python","description":"Python is a relatively simple language compared to others such as C++. Despite its simplicity, Python really shines because of its robust standard library, extensive 3rd party library ecosystem (especially for statistics and data analysis), and intuitiveness. This post tracks my process of learning how to program well in Python.\nOrder of Topics The listing of topics here is arbitrary and represents the path that I took to learn Python roughly organized by topic.","keywords":["Learning to Learn","Programming","Python"],"articleBody":"Python is a relatively simple language compared to others such as C++. Despite its simplicity, Python really shines because of its robust standard library, extensive 3rd party library ecosystem (especially for statistics and data analysis), and intuitiveness. This post tracks my process of learning how to program well in Python.\nOrder of Topics The listing of topics here is arbitrary and represents the path that I took to learn Python roughly organized by topic. My advice is that with Python you choose topics that are useful to you and focus on them.\nBeginning Python Everyone needs to start somewhere, but there are limited, current, comprehensive, and free documents that describe an overview for the language.\nI would recommend in starting in one of two ways:\n Read “Dive into Python 3” by Mark Pilgrim. It used to be that this book was all you needed to read to get started. However the author of this book has since retired and Python has grown since version 3.0. To supplement this reading, I would recommend reading up on the following newer topics from the Python Release Notes:  Pathlib – the newer and more user friendly file interface introduced in Python 3.4. f-Strings – a newer way for writing formatted strings which cuts down on the verbosity. Async-IO – as of Python 3.5, Python developed a robust set of faculties for asynchronous programming. While you probably won’t start out writing async programs, know what they are and how they work will make reading them less surprising. Type Hints – as of Python 3.5 Python now supports the ability to provide type information for arguments. While the information is only a hint and is automatically ignored at runtime, it can be checked statically by tools.   Read the “Python Tutorial” which is part of the standard documentation. This resource is a bit terse for non-programmers, but provides a well written and more modern introduction to the language.  I also would read “The Zen of Python” by Tim Peters. You can find it by typing import this in a Python interpreter. It is poem that describes some of the design philosophy about Python. Keep these lines in mind as you watch and read the following items in this post.\nI would also watch these videos by Raymond Hettinger who is one of the Python Core Developers that overview the design philosophy around Python:\n Transforming Code into Beautiful Idiomatic Beyond PEP8 – Best Practices for Beautiful Intelligible Code  Tooling and Libraries Python is famous for the set of libraries and tools that it supports and that are built using it. In this section I give a limited overview of the libraries and tools that I use most often.\nStandard Library Python’s claim to fame is that it has one of the best “batteries included” standard libraries. Learning to use it well is essential to any budding Python programmer. For these tools, I reccomend the web documentation on docs.python.org. These docs are written in such a way so that they can be read as introduction rather than using the help() method which is intended to be a reference. Here are some of the parts of the standard library that I use most.\n   Name Use     datetime Parsing, formatting, and calculating dates   collections A set of useful data structures   random A robust but easy to use random numbers   pathlib Modern, easy to use filesystems library   os OS generic facilitates   sqlite3 Built-in SQLite support   csv CSV parsing   json JSON parsing   logging A robust easy to use logging library   argparse All but the most complex command line parsing   threading Spawning and using threads   multiprocessing Spawning and using multiple processes   concurrent.futures Modern futures based multithreaded/process   subprocess Run other programs and get their results   asyncio Asynchronous IO library   typing Type hint support   itertools Tools for working with iterators   functools Tools for higher level functions   unittest Built-in unit testing framework.   doctest. Another unit testing framework that uses doc strings    3rd Party Libraries In addition to the fantastic standard library, Python has a number of famous 3rd party libraries that are considered the best in class across all programming languages. While I list these specifically later, I would be remiss in failing to mention the NumFOCUS libraries which includes MatplotLib, NumPy, SciPy, Pandas, and others up front as some of the best open source (arguably overall) libraries for statistical analysis and numerical calculation that exist. Unfortunately the quality of the documentation for these tools varies highly. One alternative to strictly reading the documentation is to look at the unit-tests for the library. Because of the builtin unit testing frameworks being quite good, Python libraries often have extensive test suites.\n   Name Use Description     pandas data anlaysis Data analysis framework for tabular data   scipy data anlaysis Fast scientific functions   numpy data anlaysis Fast numeric framework famous for arrays   matplotlib plotting Defacto plotting library for Python   seabourn plotting Ease of use layer for matplotlib   bokeh plotting Web-first plotting library   plotly plotting Interactive plotting library   beautiful soup scraping Sane HTML parsing   scrapy scraping Web Scraping Framework   requests scraping/web requests Vastly superior HTTP library   django web app opinionated easy to use CMS framework   flask web app Flexible web app framework   selenium testing Automated web browser controller   psycog2 database PostgreSQL bindings   simpy simulation Simulation library   mpi4py HPC Distributed memory programming executor   tensorflow machine learning Faster but more complex machine learning   sklearn machine learning Easy to use but slower machine learning   networkx graphs Easy to use but slow graph library   networkit graphs Slightly harder to use but faster graphs    Tools for developing Python Due to the popularity of Python, there are a number of tools that exist to make it easier to work with. A number of these tools have great documentation. There is one key exception which is setuputils. For setuputils I would read this guide on packaging Python libraries.\n   Name Use     pdb Python debugger   pip Tool for installing packaged libraries   setuputils Python library/tool for packaging libraries   flake8 Linter for Python that respects PEP 8   jedi Code completion for Python   mypy Python Static Type   iPython Friendly interactive shell   JuPyter Notebook software commonly used for science   python-language-server Implementation of the language server protocol – I pair this with vim for my development environment   pycharm/spyder More fully featured alternative IDEs    Other tools that work well with Python Another reason to learn Python is be able to use it as part of other tools. Most of the time, the libraries are fairly straight forward to use and to learn to use with good project level documentation. Generally speaking these tools come in one of two flavors, applications that are written in Python and are easy to extend and those that are written in C/C++ and need a wrapper library.\n   name purpose     gdb well supported native executable debugger   lldb easy to use native executable debugger   ansible easy to use system orchestration tool   saltstack more “Pythonic” system orchestration tool    GDB and LLDB are C/C++ applications that use a wrapper library. There are two good tools for doing generating Python bindings for lower level C/C++ applications:\n swig – easy to use, but can have significant overhead for some applications. Supports other languages. boost::Python – harder to use, but lower overhead  Both have extensive examples of how to get started with these tools online and pretty good project documentation. The biggest hiccup that people find when they go to use these tools is that they require the use of the development libraries for Python which are often installed separately from the Python interpreter.\nGenerally, the strategy that is recommended for using these tools is to create a class or module that exposes the functionality you would like to configure from Python and applying these tools to just that module. Then as an added benefit, you have a façade for your library to make it easier to use in the lower level library.\nWatch this video from CppCon that describes why you may want to do this and how to do it well.\nFunctional Programming in Python One common misconception about Python is that it is primarily object oriented programming language. Rather, Python is primarily a functional language that supports object orientation where it makes sense. In functional programming, programmers avoid the use of state and have so called “higher level programming” faculties that accept functions and return functions. You should watch this video on why object oriented Python is overused.\nThe functional capabilities of Python are best seen in the following features of the language:\n Functions as first class types. List, Generator, and Dictionary Comprehensions. Easy to write Iterators. Great library support for iterators, and higher-level programming.  I would read the appropriate sections of the Python docs especially the introduction to functional programming in python as well as the itertools and functools docs.\nOne common question that comes up when considering generators versus list comprehensions is which to use. Generally, you should prefer generators because they use less memory and can be converted to lists later if multiple passes or random access is required. This video is on Python 2, but shows why you should prefer generators over lists\nObject Oriented Programming in Python That said, Objects in Python are not considered second class citizens. If you have not read the key text on Object Oriented design [Design Patterns Elements of Reusable Software](Python’s Class Development Toolkit https://youtu.be/HTLu2DFOdTg) you should read that first. It explains why you would want to use object oriented design in the first place. However much of what is in this book is a language feature of Python. I would read this site which shows that many of the classical patterns of Object Oriented design are just features of Python. I would also watch/read the following resources to better understand object oriented Python:\n Python’s Class Development Toolkit which provides a high level overview of how to write good classes in Python. Super Considered Super! this video overviews Python’s multiple inheritance model and how to use it effectively.  Other helpful topics There are a number of other useful topics that I would commend to your consideration when you have finished reading about the topics above.\n Coroutines/Asynchronous Programming are a really easy way to write iterators and are an easy way to abstract asyncronous programming in Python in general. Read the standard library docs on AsyncIO to get an overview of why and how to use these. Decorators are a great way to do aspect oriented programming in Python. I would read this paper on decorators and I would read about how Flask uses them to get the high points. Metaclasses are a powerful way to change how classes are constructed. If you are in doubt if you need meta-classes you probably don’t need them. However they are how Django built their Model class and how much of the standard library is built. I would read this Stack Overflow answer about how they work  if you need to learn how to use them. Performance Python generally is slower than compiled languages such as C/C++. You can look into tools like embedded C/C++ modules, cython, pypy, or numbra if things are too slow. Understanding profiling tools is also helpful consider watching this video as a starting place. Parallel and Distributed Programming Python has some of the best parallel and distributed programming features out there. I would read/watch the following resources:  Read the docs for multiprocess and theading in the standard library. They describe the executor abstraction which is core to parallel and distributed programming in Python. Watch this video from Raymond Hettinger on parallel programming which describes some common pitfalls and tools for parallel programming. mpi4py documentation – mpi4py is a Python binding for openmpi, but providing substantial ease of use benefits. If you want to run on a HPC cluster, mpi4py is the way to do it.    What’s Next Once you’ve done the above, I would consider the following resources for father reading:\n PyCon – PyCon is a set of related conferences about Python programming. Some of the keynotes and presentations are quite well done. Many are posted online. Read the standard library code for some advanced examples of good Python code. As a reminder, Python code is almost always distributed as source code which means you can read it. Read the Python Enhancement Proposals (PEPs) to get an idea about where the language is going.  Suggestions to Learn the Language I have one key suggestion to learning Python:\n Pick a project that is useful you: Python has libraries for almost everything. Some much better than others. I would suggest picking a project then do some quick research about what libraries people use to do that kind of work. Refuse the temptation to write C in Python. Python has great functional and object oriented facilities use them. After you have written the code, re-write it after watching videos like the ones from Raymond Hettinger or considering the Zen of Python. This will help you understand Pythonic style more and write more natural code.  Hope this helps!\n","wordCount":"2157","inLanguage":"en","datePublished":"2019-01-23T08:00:00-05:00","dateModified":"2019-01-23T08:00:00-05:00","author":{"@type":"Person","name":"Robert Underwood"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://robertu94.github.io/learning/python.html"},"publisher":{"@type":"Organization","name":"systems++","logo":{"@type":"ImageObject","url":"http://robertu94.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=http://robertu94.github.io/ accesskey=h title="systems++ (Alt + H)">systems++</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=http://robertu94.github.io/about.html title="About Me">
+<span>About Me</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/guides.html title=Guides>
+<span>Guides</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/learning.html title="Learning To Learn">
+<span>Learning To Learn</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/presentations.html title=Presentations>
+<span>Presentations</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=http://robertu94.github.io/>Home</a></div>
+<h1 class=post-title>
+Learning to Learn: Python
+</h1>
+<div class=post-meta><span title="2019-01-23 08:00:00 -0500 -0500">January 23, 2019</span>&nbsp;·&nbsp;11 min&nbsp;·&nbsp;2157 words&nbsp;·&nbsp;Robert Underwood
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>Table of Contents</span>
+</summary>
+<div class=inner><nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#order-of-topics>Order of Topics</a></li>
+<li><a href=#beginning-python>Beginning Python</a></li>
+</ul>
+</li>
+<li><a href=#tooling-and-libraries>Tooling and Libraries</a>
+<ul>
+<li><a href=#standard-library>Standard Library</a></li>
+<li><a href=#3rd-party-libraries>3rd Party Libraries</a></li>
+<li><a href=#tools-for-developing-python>Tools for developing Python</a></li>
+<li><a href=#other-tools-that-work-well-with-python>Other tools that work well with Python</a></li>
+</ul>
+</li>
+<li><a href=#functional-programming-in-python>Functional Programming in Python</a></li>
+<li><a href=#object-oriented-programming-in-python>Object Oriented Programming in Python</a></li>
+<li><a href=#other-helpful-topics>Other helpful topics</a></li>
+<li><a href=#whats-next>What&rsquo;s Next</a></li>
+<li><a href=#suggestions-to-learn-the-language>Suggestions to Learn the Language</a></li>
+</ul>
+</nav>
+</div>
+</details>
+</div>
+<div class=post-content><p>Python is a relatively simple language compared to others such as C++. Despite its simplicity, Python really shines because of its robust standard library, extensive 3rd party library ecosystem (especially for statistics and data analysis), and intuitiveness. This post tracks my process of learning how to program well in Python.</p>
+<h2 id=order-of-topics>Order of Topics<a hidden class=anchor aria-hidden=true href=#order-of-topics>#</a></h2>
+<p>The listing of topics here is arbitrary and represents the path that I took to learn Python roughly organized by topic. My advice is that with Python you choose topics that are useful to you and focus on them.</p>
+<h2 id=beginning-python>Beginning Python<a hidden class=anchor aria-hidden=true href=#beginning-python>#</a></h2>
+<p>Everyone needs to start somewhere, but there are limited, current, comprehensive, and free documents that describe an overview for the language.</p>
+<p>I would recommend in starting in one of two ways:</p>
+<ol>
+<li>Read <a href=https://www.diveinto.org/python3/>&ldquo;Dive into Python 3&rdquo; by Mark Pilgrim</a>. It used to be that this book was all you needed to read to get started. However the author of this book has since retired and Python has grown since version 3.0. To supplement this reading, I would recommend reading up on the following newer topics from the <a href=https://docs.python.org/whatsnew/>Python Release Notes</a>:
+<ol>
+<li>Pathlib &ndash; the newer and more user friendly file interface introduced in Python 3.4.</li>
+<li>f-Strings &ndash; a newer way for writing formatted strings which cuts down on the verbosity.</li>
+<li>Async-IO &ndash; as of Python 3.5, Python developed a robust set of faculties for asynchronous programming. While you probably won&rsquo;t start out writing async programs, know what they are and how they work will make reading them less surprising.</li>
+<li>Type Hints &ndash; as of Python 3.5 Python now supports the ability to provide type information for arguments. While the information is only a hint and is automatically ignored at runtime, it can be checked statically by tools.</li>
+</ol>
+</li>
+<li>Read the <a href=https://docs.python.org/tutorial>&ldquo;Python Tutorial&rdquo;</a> which is part of the standard documentation. This resource is a bit terse for non-programmers, but provides a well written and more modern introduction to the language.</li>
+</ol>
+<p>I also would read &ldquo;The Zen of Python&rdquo; by Tim Peters. You can find it by typing <code>import this</code> in a Python interpreter. It is poem that describes some of the design philosophy about Python. Keep these lines in mind as you watch and read the following items in this post.</p>
+<p>I would also watch these videos by Raymond Hettinger who is one of the Python Core Developers that overview the design philosophy around Python:</p>
+<ul>
+<li><a href=https://youtu.be/OSGv2VnC0go>Transforming Code into Beautiful Idiomatic</a></li>
+<li><a href=https://youtu.be/wf-BqAjZb8M>Beyond PEP8 &ndash; Best Practices for Beautiful Intelligible Code</a></li>
+</ul>
+<h1 id=tooling-and-libraries>Tooling and Libraries<a hidden class=anchor aria-hidden=true href=#tooling-and-libraries>#</a></h1>
+<p>Python is famous for the set of libraries and tools that it supports and that are built using it. In this section I give a limited overview of the libraries and tools that I use most often.</p>
+<h2 id=standard-library>Standard Library<a hidden class=anchor aria-hidden=true href=#standard-library>#</a></h2>
+<p>Python&rsquo;s claim to fame is that it has one of the best &ldquo;batteries included&rdquo; standard libraries. Learning to use it well is essential to any budding Python programmer. For these tools, I reccomend the web documentation on <a href=https://docs.python.org/library>docs.python.org</a>. These docs are written in such a way so that they can be read as introduction rather than using the <code>help()</code> method which is intended to be a reference. Here are some of the parts of the standard library that I use most.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>datetime</td>
+<td>Parsing, formatting, and calculating dates</td>
+</tr>
+<tr>
+<td>collections</td>
+<td>A set of useful data structures</td>
+</tr>
+<tr>
+<td>random</td>
+<td>A robust but easy to use random numbers</td>
+</tr>
+<tr>
+<td>pathlib</td>
+<td>Modern, easy to use filesystems library</td>
+</tr>
+<tr>
+<td>os</td>
+<td>OS generic facilitates</td>
+</tr>
+<tr>
+<td>sqlite3</td>
+<td>Built-in SQLite support</td>
+</tr>
+<tr>
+<td>csv</td>
+<td>CSV parsing</td>
+</tr>
+<tr>
+<td>json</td>
+<td>JSON parsing</td>
+</tr>
+<tr>
+<td>logging</td>
+<td>A robust easy to use logging library</td>
+</tr>
+<tr>
+<td>argparse</td>
+<td>All but the most complex command line parsing</td>
+</tr>
+<tr>
+<td>threading</td>
+<td>Spawning and using threads</td>
+</tr>
+<tr>
+<td>multiprocessing</td>
+<td>Spawning and using multiple processes</td>
+</tr>
+<tr>
+<td>concurrent.futures</td>
+<td>Modern futures based multithreaded/process</td>
+</tr>
+<tr>
+<td>subprocess</td>
+<td>Run other programs and get their results</td>
+</tr>
+<tr>
+<td>asyncio</td>
+<td>Asynchronous IO library</td>
+</tr>
+<tr>
+<td>typing</td>
+<td>Type hint support</td>
+</tr>
+<tr>
+<td>itertools</td>
+<td>Tools for working with iterators</td>
+</tr>
+<tr>
+<td>functools</td>
+<td>Tools for higher level functions</td>
+</tr>
+<tr>
+<td>unittest</td>
+<td>Built-in unit testing framework.</td>
+</tr>
+<tr>
+<td>doctest.</td>
+<td>Another unit testing framework that uses doc strings</td>
+</tr>
+</tbody>
+</table>
+<h2 id=3rd-party-libraries>3rd Party Libraries<a hidden class=anchor aria-hidden=true href=#3rd-party-libraries>#</a></h2>
+<p>In addition to the fantastic standard library, Python has a number of famous 3rd party libraries that are considered the best in class across all programming languages. While I list these specifically later, I would be remiss in failing to mention the <a href=https://numfocus.org>NumFOCUS libraries</a> which includes MatplotLib, NumPy, SciPy, Pandas, and others up front as some of the best open source (arguably overall) libraries for statistical analysis and numerical calculation that exist. Unfortunately the quality of the documentation for these tools varies highly. One alternative to strictly reading the documentation is to look at the unit-tests for the library. Because of the builtin unit testing frameworks being quite good, Python libraries often have extensive test suites.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Use</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pandas</td>
+<td>data anlaysis</td>
+<td>Data analysis framework for tabular data</td>
+</tr>
+<tr>
+<td>scipy</td>
+<td>data anlaysis</td>
+<td>Fast scientific functions</td>
+</tr>
+<tr>
+<td>numpy</td>
+<td>data anlaysis</td>
+<td>Fast numeric framework famous for arrays</td>
+</tr>
+<tr>
+<td>matplotlib</td>
+<td>plotting</td>
+<td>Defacto plotting library for Python</td>
+</tr>
+<tr>
+<td>seabourn</td>
+<td>plotting</td>
+<td>Ease of use layer for matplotlib</td>
+</tr>
+<tr>
+<td>bokeh</td>
+<td>plotting</td>
+<td>Web-first plotting library</td>
+</tr>
+<tr>
+<td>plotly</td>
+<td>plotting</td>
+<td>Interactive plotting library</td>
+</tr>
+<tr>
+<td>beautiful soup</td>
+<td>scraping</td>
+<td>Sane HTML parsing</td>
+</tr>
+<tr>
+<td>scrapy</td>
+<td>scraping</td>
+<td>Web Scraping Framework</td>
+</tr>
+<tr>
+<td>requests</td>
+<td>scraping/web requests</td>
+<td>Vastly superior HTTP library</td>
+</tr>
+<tr>
+<td>django</td>
+<td>web app</td>
+<td>opinionated easy to use CMS framework</td>
+</tr>
+<tr>
+<td>flask</td>
+<td>web app</td>
+<td>Flexible web app framework</td>
+</tr>
+<tr>
+<td>selenium</td>
+<td>testing</td>
+<td>Automated web browser controller</td>
+</tr>
+<tr>
+<td>psycog2</td>
+<td>database</td>
+<td>PostgreSQL bindings</td>
+</tr>
+<tr>
+<td>simpy</td>
+<td>simulation</td>
+<td>Simulation library</td>
+</tr>
+<tr>
+<td>mpi4py</td>
+<td>HPC</td>
+<td>Distributed memory programming executor</td>
+</tr>
+<tr>
+<td>tensorflow</td>
+<td>machine learning</td>
+<td>Faster but more complex machine learning</td>
+</tr>
+<tr>
+<td>sklearn</td>
+<td>machine learning</td>
+<td>Easy to use but slower machine learning</td>
+</tr>
+<tr>
+<td>networkx</td>
+<td>graphs</td>
+<td>Easy to use but slow graph library</td>
+</tr>
+<tr>
+<td>networkit</td>
+<td>graphs</td>
+<td>Slightly harder to use but faster graphs</td>
+</tr>
+</tbody>
+</table>
+<h2 id=tools-for-developing-python>Tools for developing Python<a hidden class=anchor aria-hidden=true href=#tools-for-developing-python>#</a></h2>
+<p>Due to the popularity of Python, there are a number of tools that exist to make it easier to work with. A number of these tools have great documentation. There is one key exception which is <code>setuputils</code>. For <code>setuputils</code> I would read <a href=https://packaging.python.org/guides/distributing-packages-using-setuptools/>this guide on packaging Python libraries</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pdb</td>
+<td>Python debugger</td>
+</tr>
+<tr>
+<td>pip</td>
+<td>Tool for installing packaged libraries</td>
+</tr>
+<tr>
+<td>setuputils</td>
+<td>Python library/tool for packaging libraries</td>
+</tr>
+<tr>
+<td>flake8</td>
+<td>Linter for Python that respects PEP 8</td>
+</tr>
+<tr>
+<td>jedi</td>
+<td>Code completion for Python</td>
+</tr>
+<tr>
+<td>mypy</td>
+<td>Python Static Type</td>
+</tr>
+<tr>
+<td>iPython</td>
+<td>Friendly interactive shell</td>
+</tr>
+<tr>
+<td>JuPyter</td>
+<td>Notebook software commonly used for science</td>
+</tr>
+<tr>
+<td>python-language-server</td>
+<td>Implementation of the language server protocol &ndash; I pair this with vim for my development environment</td>
+</tr>
+<tr>
+<td>pycharm/spyder</td>
+<td>More fully featured alternative IDEs</td>
+</tr>
+</tbody>
+</table>
+<h2 id=other-tools-that-work-well-with-python>Other tools that work well with Python<a hidden class=anchor aria-hidden=true href=#other-tools-that-work-well-with-python>#</a></h2>
+<p>Another reason to learn Python is be able to use it as part of other tools. Most of the time, the libraries are fairly straight forward to use and to learn to use with good project level documentation. Generally speaking these tools come in one of two flavors, applications that are written in Python and are easy to extend and those that are written in C/C++ and need a wrapper library.</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gdb</td>
+<td>well supported native executable debugger</td>
+</tr>
+<tr>
+<td>lldb</td>
+<td>easy to use native executable debugger</td>
+</tr>
+<tr>
+<td>ansible</td>
+<td>easy to use system orchestration tool</td>
+</tr>
+<tr>
+<td>saltstack</td>
+<td>more &ldquo;Pythonic&rdquo; system orchestration tool</td>
+</tr>
+</tbody>
+</table>
+<p>GDB and LLDB are C/C++ applications that use a wrapper library.
+There are two good tools for doing generating Python bindings for lower level C/C++ applications:</p>
+<ul>
+<li><code>swig</code> &ndash; easy to use, but can have significant overhead for some applications. Supports other languages.</li>
+<li><code>boost::Python</code> &ndash; harder to use, but lower overhead</li>
+</ul>
+<p>Both have extensive examples of how to get started with these tools online and pretty good project documentation. The biggest hiccup that people find when they go to use these tools is that they require the use of the development libraries for Python which are often installed separately from the Python interpreter.</p>
+<p>Generally, the strategy that is recommended for using these tools is to create a class or module that exposes the functionality you would like to configure from Python and applying these tools to just that module. Then as an added benefit, you have a façade for your library to make it easier to use in the lower level library.</p>
+<p>Watch this <a href=https://youtu.be/za0_FiMqjKE>video from CppCon</a> that describes why you may want to do this and how to do it well.</p>
+<h1 id=functional-programming-in-python>Functional Programming in Python<a hidden class=anchor aria-hidden=true href=#functional-programming-in-python>#</a></h1>
+<p>One common misconception about Python is that it is primarily object oriented programming language. Rather, Python is primarily a functional language that supports object orientation where it makes sense. In functional programming, programmers avoid the use of state and have so called &ldquo;higher level programming&rdquo; faculties that accept functions and return functions. You should watch this <a href=https://youtu.be/o9pEzgHorH0>video on why object oriented Python is overused</a>.</p>
+<p>The functional capabilities of Python are best seen in the following features of the language:</p>
+<ul>
+<li>Functions as first class types.</li>
+<li>List, Generator, and Dictionary Comprehensions.</li>
+<li>Easy to write Iterators.</li>
+<li>Great library support for iterators, and higher-level programming.</li>
+</ul>
+<p>I would read the appropriate sections of the Python docs especially the introduction to functional programming in python as well as the <code>itertools</code> and <code>functools</code> docs.</p>
+<p>One common question that comes up when considering generators versus list comprehensions is which to use. Generally, you should prefer generators because they use less memory and can be converted to lists later if multiple passes or random access is required. This <a href=https://youtu.be/07-K4LFhBMc>video is on Python 2, but shows why you should prefer generators over lists</a></p>
+<h1 id=object-oriented-programming-in-python>Object Oriented Programming in Python<a hidden class=anchor aria-hidden=true href=#object-oriented-programming-in-python>#</a></h1>
+<p>That said, Objects in Python are not considered second class citizens. If you have not read the key text on Object Oriented design [Design Patterns Elements of Reusable Software](Python&rsquo;s Class Development Toolkit <a href=https://youtu.be/HTLu2DFOdTg>https://youtu.be/HTLu2DFOdTg</a>) you should read that first. It explains why you would want to use object oriented design in the first place. However much of what is in this book is a language feature of Python. I would <a href=https://python-patterns.guide/>read this site</a> which shows that many of the classical patterns of Object Oriented design are just features of Python. I would also watch/read the following resources to better understand object oriented Python:</p>
+<ul>
+<li><a href=https://youtu.be/HTLu2DFOdTg>Python&rsquo;s Class Development Toolkit</a> which provides a high level overview of how to write good classes in Python.</li>
+<li><a href=https://youtu.be/EiOglTERPEo>Super Considered Super!</a> this video overviews Python&rsquo;s multiple inheritance model and how to use it effectively.</li>
+</ul>
+<h1 id=other-helpful-topics>Other helpful topics<a hidden class=anchor aria-hidden=true href=#other-helpful-topics>#</a></h1>
+<p>There are a number of other useful topics that I would commend to your consideration when you have finished reading about the topics above.</p>
+<ul>
+<li><strong>Coroutines/Asynchronous Programming</strong> are a really easy way to write iterators and are an easy way to abstract asyncronous programming in Python in general. Read the standard library docs on AsyncIO to get an overview of why and how to use these.</li>
+<li><strong>Decorators</strong> are a great way to do aspect oriented programming in Python. I would read this <a href=https://realpython.com/primer-on-python-decorators/>paper on decorators</a> and I would read about how Flask uses them to get the high points.</li>
+<li><strong>Metaclasses</strong> are a powerful way to change how classes are constructed. If you are in doubt if you need meta-classes you probably don&rsquo;t need them. However they are how Django built their <code>Model</code> class and how much of the standard library is built. I would read this <a href=https://stackoverflow.com/a/6581949>Stack Overflow answer about how they work </a> if you need to learn how to use them.</li>
+<li><strong>Performance</strong> Python generally is slower than compiled languages such as C/C++. You can look into tools like embedded C/C++ modules, cython, pypy, or numbra if things are too slow. Understanding profiling tools is also helpful consider <a href=https://youtu.be/yrRqNzJTBjk>watching this video</a> as a starting place.</li>
+<li><strong>Parallel and Distributed Programming</strong> Python has some of the best parallel and distributed programming features out there. I would read/watch the following resources:
+<ul>
+<li>Read the docs for <code>multiprocess</code> and <code>theading</code> in the standard library. They describe the executor abstraction which is core to parallel and distributed programming in Python.</li>
+<li>Watch this <a href=https://youtu.be/9zinZmE3Ogk>video from Raymond Hettinger on parallel programming</a> which describes some common pitfalls and tools for parallel programming.</li>
+<li><code>mpi4py</code> documentation &ndash; <code>mpi4py</code> is a Python binding for openmpi, but providing substantial ease of use benefits. If you want to run on a HPC cluster, <code>mpi4py</code> is the way to do it.</li>
+</ul>
+</li>
+</ul>
+<h1 id=whats-next>What&rsquo;s Next<a hidden class=anchor aria-hidden=true href=#whats-next>#</a></h1>
+<p>Once you&rsquo;ve done the above, I would consider the following resources for father reading:</p>
+<ul>
+<li>PyCon &ndash; PyCon is a set of related conferences about Python programming. Some of the keynotes and presentations are quite well done. Many are posted online.</li>
+<li>Read the standard library code for some advanced examples of good Python code. As a reminder, Python code is almost always distributed as source code which means you can read it.</li>
+<li>Read the Python Enhancement Proposals (PEPs) to get an idea about where the language is going.</li>
+</ul>
+<h1 id=suggestions-to-learn-the-language>Suggestions to Learn the Language<a hidden class=anchor aria-hidden=true href=#suggestions-to-learn-the-language>#</a></h1>
+<p>I have one key suggestion to learning Python:</p>
+<ol>
+<li>Pick a project that is useful you: Python has libraries for almost everything. Some much better than others. I would suggest picking a project then do some quick research about what libraries people use to do that kind of work.</li>
+<li>Refuse the temptation to write C in Python. Python has great functional and object oriented facilities use them.</li>
+<li>After you have written the code, re-write it after watching videos like the ones from Raymond Hettinger or considering the Zen of Python. This will help you understand Pythonic style more and write more natural code.</li>
+</ol>
+<p>Hope this helps!</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=http://robertu94.github.io/tags/learning-to-learn.html>Learning to Learn</a></li>
+<li><a href=http://robertu94.github.io/tags/programming.html>Programming</a></li>
+<li><a href=http://robertu94.github.io/tags/python.html>Python</a></li>
+</ul>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2022 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>LLVM Tooling for C++ | systems++</title>
+<meta name=keywords content="C/C++,testing,programming">
+<meta name=description content="C++ is a both a fantastic language and a mess. It supports at least 4 programming paradigms (procedural, functional, object-oriented, template meta-programming). In some senses, many languages give you one great way to do things: C++ gives you every way and trusts you to use them well. With this flexibility comes problems that C++ seems to have beyond what other languages experience. Therefore, having effective tooling to develop and use C++ is essential.">
+<meta name=author content="Robert Underwood">
+<link rel=canonical href=http://robertu94.github.io/2017/01/22/llvm-tooling-for-c-.html>
+<meta name=google-site-verification content="G-9KQE44SX6K">
+<link crossorigin=anonymous href=/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.baa4f2053c75d0009e9309aae8f8a8959f5e0372e88f80cdf2951a9533d71ce2.js integrity="sha256-uqTyBTx10ACekwmq6PiolZ9eA3Loj4DN8pUalTPXHOI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=http://robertu94.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=http://robertu94.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=http://robertu94.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=http://robertu94.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=http://robertu94.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KQE44SX6K"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9KQE44SX6K',{anonymize_ip:!1})}</script>
+<meta property="og:title" content="LLVM Tooling for C++">
+<meta property="og:description" content="C++ is a both a fantastic language and a mess. It supports at least 4 programming paradigms (procedural, functional, object-oriented, template meta-programming). In some senses, many languages give you one great way to do things: C++ gives you every way and trusts you to use them well. With this flexibility comes problems that C++ seems to have beyond what other languages experience. Therefore, having effective tooling to develop and use C++ is essential.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://robertu94.github.io/2017/01/22/llvm-tooling-for-c-.html"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2017-01-22T18:58:14-05:00">
+<meta property="article:modified_time" content="2017-01-22T18:58:14-05:00"><meta property="og:site_name" content="Systems++">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="LLVM Tooling for C++">
+<meta name=twitter:description content="C++ is a both a fantastic language and a mess. It supports at least 4 programming paradigms (procedural, functional, object-oriented, template meta-programming). In some senses, many languages give you one great way to do things: C++ gives you every way and trusts you to use them well. With this flexibility comes problems that C++ seems to have beyond what other languages experience. Therefore, having effective tooling to develop and use C++ is essential.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"LLVM Tooling for C++","item":"http://robertu94.github.io/2017/01/22/llvm-tooling-for-c-.html"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"LLVM Tooling for C++","name":"LLVM Tooling for C\u002b\u002b","description":"C++ is a both a fantastic language and a mess. It supports at least 4 programming paradigms (procedural, functional, object-oriented, template meta-programming). In some senses, many languages give you one great way to do things: C++ gives you every way and trusts you to use them well. With this flexibility comes problems that C++ seems to have beyond what other languages experience. Therefore, having effective tooling to develop and use C++ is essential.","keywords":["C/C++","testing","programming"],"articleBody":"C++ is a both a fantastic language and a mess. It supports at least 4 programming paradigms (procedural, functional, object-oriented, template meta-programming). In some senses, many languages give you one great way to do things: C++ gives you every way and trusts you to use them well. With this flexibility comes problems that C++ seems to have beyond what other languages experience. Therefore, having effective tooling to develop and use C++ is essential.\nThe LLVM project is was designed to be a very modular compiler infrastructure. While it was designed to write compilers, the LLVM project has facilitated a variety of code analysis and source-to-source transition tools.\nGetting started Many LLVM based tools require a “compilation database” file in order to know what flags to pass to the compiler when extracting the abstract syntax tree. Generating this file by hand is a bit of a pain, but if you use CMake, it will generate the compilation database. Just add the following line to your CMakeLists.txt file\nset(CMAKE_EXPORT_COMPILE_COMMANDS ON)Code Quality Tools Of the various tools included, those that warn about code quality problems are probably the most useful. The LLVM code quality warnings are divided into 3 types:\n Errors and Warnings emitted by the compiler: these are almost always not desired behavior. Warnings emitted by the static analyzer: these are more often not desired behavior or are less reliable checks that have a higher false positive rate than those in the compiler. Warnings emitted by the clang-tidy: these are more subjective tests such as those regarding to a style guide or those that discourage c-based constructs in favor of c++ equivalents.  Since most are familiar with compiler warnings, I will focus on the latter two. The easiest way to run the static analyzer is via the scan-build utility: The scan-build utility instruments a build by modifying the CXX, CXXFLAGS, and other similar environment variables. One common stumbling block is that scan build will only instrument active builds. Therefore, if the file in question is “up to date” according to your build system, then scan build will not check that file. Just run a “clean” on the object files first:\nmake clean scan-build make Clang-tidy provides some additional advise about improving the quality of your code. Of particular use is the moderize-* checkers which advise on how to use c++11 constructs in existing code. Also useful are the cert-* checkers which look for common security vulnerabilities\n#list all avialible checks clang-tidy -checks=\"*\" -list-checks #run all checkers on all files clang-tidy -p /path/to/build/dir --checks=\"*\" *.cc #run just the moderize checks on all files clang-tidy -p /path/to/build/dir --checks=\"moderize-*\" *.cc It is also possible to write your own checks using AstMatchers\nOther Tools At the time of writing, general refactoring tools in LLVM are still in their infancy. There are two that are considerable farther along:\n clang-rename – rename a symbol from a fully qualified name or offset. Currently this tool only renames a symbols within a single translation unit which is useful enough, but leaves you wanting with large object oriented projects. clang-include-fixer – add missing includes from within the projects. This project requires a yaml database in addition the compile.json file. This file can be created using the run-find-all-symbols.py (which on Gentoo is installed into /usr/share/clang/run-find-all-symbols.py).  There are several other useful tools worth mentioning:\n clang-format a C++ code formatting tool. clang-query a tool to inspect the clang Ast that you can use in building a custom tool. lldb the llvm debugger which is considerably more script-able than GDB.  There are too may tools to cover in a single post. Check out the clang docs for a more complete listing. For further reading, I recommend the work of Eli Bendersky who has written several posts on LLVM and clang.\nHappy programming!\n","wordCount":"627","inLanguage":"en","datePublished":"2017-01-22T18:58:14-05:00","dateModified":"2017-01-22T18:58:14-05:00","author":{"@type":"Person","name":"Robert Underwood"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://robertu94.github.io/2017/01/22/llvm-tooling-for-c-.html"},"publisher":{"@type":"Organization","name":"systems++","logo":{"@type":"ImageObject","url":"http://robertu94.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=http://robertu94.github.io/ accesskey=h title="systems++ (Alt + H)">systems++</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=http://robertu94.github.io/about.html title="About Me">
+<span>About Me</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/guides.html title=Guides>
+<span>Guides</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/learning.html title="Learning To Learn">
+<span>Learning To Learn</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/presentations.html title=Presentations>
+<span>Presentations</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=http://robertu94.github.io/>Home</a></div>
+<h1 class=post-title>
+LLVM Tooling for C++
+</h1>
+<div class=post-meta><span title="2017-01-22 18:58:14 -0500 -0500">January 22, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;627 words&nbsp;·&nbsp;Robert Underwood
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>Table of Contents</span>
+</summary>
+<div class=inner><nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#getting-started>Getting started</a></li>
+<li><a href=#code-quality-tools>Code Quality Tools</a></li>
+<li><a href=#other-tools>Other Tools</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</details>
+</div>
+<div class=post-content><p>C++ is a both a fantastic language and a mess.
+It supports at least 4 programming paradigms (procedural, functional, object-oriented, template meta-programming).
+In some senses, many languages give you one great way to do things: C++ gives you every way and trusts you to use them well.
+With this flexibility comes problems that C++ seems to have beyond what other languages experience.
+Therefore, having effective tooling to develop and use C++ is essential.</p>
+<p>The LLVM project is was designed to be a very modular compiler infrastructure.
+While it was designed to write compilers, the <a href=http://llvm.org/>LLVM</a> project has facilitated a variety of code analysis and source-to-source transition tools.</p>
+<h2 id=getting-started>Getting started<a hidden class=anchor aria-hidden=true href=#getting-started>#</a></h2>
+<p>Many LLVM based tools require a <a href=http://eli.thegreenplace.net/2014/05/21/compilation-databases-for-clang-based-tools>&ldquo;compilation database&rdquo;</a> file in order to know what flags to pass to the compiler when extracting the abstract syntax tree.
+Generating this file by hand is a bit of a pain, but if you use <a href=https://cmake.org/>CMake</a>, it will generate the compilation database.
+Just add the following line to your <code>CMakeLists.txt</code> file</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cmake data-lang=cmake><span class=nb>set</span><span class=p>(</span><span class=s>CMAKE_EXPORT_COMPILE_COMMANDS</span> <span class=s>ON</span><span class=p>)</span><span class=err>
+</span></code></pre></div><h2 id=code-quality-tools>Code Quality Tools<a hidden class=anchor aria-hidden=true href=#code-quality-tools>#</a></h2>
+<p>Of the various tools included, those that warn about code quality problems are probably the most useful.
+The LLVM code quality warnings are divided into 3 types:</p>
+<ol>
+<li><strong>Errors and Warnings</strong> emitted by the <strong>compiler</strong>: these are almost always not desired behavior.</li>
+<li><strong>Warnings</strong> emitted by the <strong>static analyzer</strong>: these are more often not desired behavior or are less reliable checks that have a higher false positive rate than those in the compiler.</li>
+<li><strong>Warnings</strong> emitted by the <strong>clang-tidy</strong>: these are more subjective tests such as those regarding to a style guide or those that discourage c-based constructs in favor of c++ equivalents.</li>
+</ol>
+<p>Since most are familiar with compiler warnings, I will focus on the latter two.
+The easiest way to run the static analyzer is via the <code>scan-build</code> utility:
+The scan-build utility instruments a build by modifying the <code>CXX</code>, <code>CXXFLAGS</code>, and other similar environment variables.
+One common stumbling block is that scan build will only instrument active builds.
+Therefore, if the file in question is &ldquo;up to date&rdquo; according to your build system, then scan build will not check that file.
+Just run a &ldquo;clean&rdquo; on the object files first:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>make clean
+scan-build make
+</code></pre></div><p>Clang-tidy provides some additional advise about improving the quality of your code.
+Of particular use is the <code>moderize-*</code> checkers which advise on how to use <code>c++11</code> constructs in existing code.
+Also useful are the <code>cert-*</code> checkers which look for common security vulnerabilities</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1>#list all avialible checks</span>
+clang-tidy -checks<span class=o>=</span><span class=s2>&#34;*&#34;</span> -list-checks
+
+<span class=c1>#run all checkers on all files</span>
+clang-tidy -p /path/to/build/dir --checks<span class=o>=</span><span class=s2>&#34;*&#34;</span> *.cc 
+
+<span class=c1>#run just the moderize checks on all files</span>
+clang-tidy -p /path/to/build/dir --checks<span class=o>=</span><span class=s2>&#34;moderize-*&#34;</span> *.cc 
+</code></pre></div><p>It is also possible to write your own <a href=http://eli.thegreenplace.net/2014/07/29/ast-matchers-and-clang-refactoring-tools>checks using AstMatchers</a></p>
+<h2 id=other-tools>Other Tools<a hidden class=anchor aria-hidden=true href=#other-tools>#</a></h2>
+<p>At the time of writing, general refactoring tools in LLVM are still in their infancy.
+There are two that are considerable farther along:</p>
+<ul>
+<li><code>clang-rename</code> &ndash; rename a symbol from a fully qualified name or offset. Currently this tool only renames a symbols within a single translation unit which is useful enough, but leaves you wanting with large object oriented projects.</li>
+<li><code>clang-include-fixer</code> &ndash; add missing includes from within the projects. This project requires a yaml database in addition the compile.json file. This file can be created using the run-find-all-symbols.py (which on Gentoo is installed into /usr/share/clang/run-find-all-symbols.py).</li>
+</ul>
+<p>There are several other useful tools worth mentioning:</p>
+<ul>
+<li><code>clang-format</code> a C++ code formatting tool.</li>
+<li><code>clang-query</code> a tool to inspect the clang Ast that you can use in building a custom tool.</li>
+<li><code>lldb</code> the llvm debugger which is considerably more script-able than GDB.</li>
+</ul>
+<p>There are too may tools to cover in a single post.
+Check out the <a href=http://clang.llvm.org/docs/index.html>clang docs</a> for a more complete listing.
+For further reading, I recommend the work of <a href=http://eli.thegreenplace.net/>Eli Bendersky</a> who has written several posts on LLVM and clang.</p>
+<p>Happy programming!</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=http://robertu94.github.io/tags/c/c++.html>C/C++</a></li>
+<li><a href=http://robertu94.github.io/tags/testing.html>testing</a></li>
+<li><a href=http://robertu94.github.io/tags/programming.html>Programming</a></li>
+</ul>
+<nav class=paginav>
+<a class=prev href=http://robertu94.github.io/2017/01/29/faster-than-light.html>
+<span class=title>« Prev</span>
+<br>
+<span>Faster than light</span>
+</a>
+<a class=next href=http://robertu94.github.io/2017/01/15/interpreters-made-easy.html>
+<span class=title>Next »</span>
+<br>
+<span>Interpreters Made Easy</span>
+</a>
+</nav>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2022 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>

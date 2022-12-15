@@ -1,0 +1,177 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>Life with Libtooling | systems++</title>
+<meta name=keywords content="C++,programming">
+<meta name=description content="Over the last two months, I spent a significant amount of time using Clang&rsquo;s libtooling. Libtooling is a great way to quickly develop tools to analyze and modify large quantizes of C++. In this article, I share some lessons learned working with libtooling.
+Beware the Stability Guarantees. The biggest problem with libtooling is that it has very few if any Stability guarantees. When I was learning libtooling, I watched Peter Goldsborough&rsquo;s video excellent &ldquo;clang-useful: Building useful tools with LLVM and clang for fun and profit&rdquo;.">
+<meta name=author content="Robert Underwood">
+<link rel=canonical href=http://robertu94.github.io/2017/12/10/life-with-libtooling.html>
+<meta name=google-site-verification content="G-9KQE44SX6K">
+<link crossorigin=anonymous href=/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.baa4f2053c75d0009e9309aae8f8a8959f5e0372e88f80cdf2951a9533d71ce2.js integrity="sha256-uqTyBTx10ACekwmq6PiolZ9eA3Loj4DN8pUalTPXHOI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=http://robertu94.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=http://robertu94.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=http://robertu94.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=http://robertu94.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=http://robertu94.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KQE44SX6K"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9KQE44SX6K',{anonymize_ip:!1})}</script>
+<meta property="og:title" content="Life with Libtooling">
+<meta property="og:description" content="Over the last two months, I spent a significant amount of time using Clang&rsquo;s libtooling. Libtooling is a great way to quickly develop tools to analyze and modify large quantizes of C++. In this article, I share some lessons learned working with libtooling.
+Beware the Stability Guarantees. The biggest problem with libtooling is that it has very few if any Stability guarantees. When I was learning libtooling, I watched Peter Goldsborough&rsquo;s video excellent &ldquo;clang-useful: Building useful tools with LLVM and clang for fun and profit&rdquo;.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://robertu94.github.io/2017/12/10/life-with-libtooling.html"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2017-12-10T11:21:00-05:00">
+<meta property="article:modified_time" content="2017-12-10T11:21:00-05:00"><meta property="og:site_name" content="Systems++">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Life with Libtooling">
+<meta name=twitter:description content="Over the last two months, I spent a significant amount of time using Clang&rsquo;s libtooling. Libtooling is a great way to quickly develop tools to analyze and modify large quantizes of C++. In this article, I share some lessons learned working with libtooling.
+Beware the Stability Guarantees. The biggest problem with libtooling is that it has very few if any Stability guarantees. When I was learning libtooling, I watched Peter Goldsborough&rsquo;s video excellent &ldquo;clang-useful: Building useful tools with LLVM and clang for fun and profit&rdquo;.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Life with Libtooling","item":"http://robertu94.github.io/2017/12/10/life-with-libtooling.html"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Life with Libtooling","name":"Life with Libtooling","description":"Over the last two months, I spent a significant amount of time using Clang\u0026rsquo;s libtooling. Libtooling is a great way to quickly develop tools to analyze and modify large quantizes of C++. In this article, I share some lessons learned working with libtooling.\nBeware the Stability Guarantees. The biggest problem with libtooling is that it has very few if any Stability guarantees. When I was learning libtooling, I watched Peter Goldsborough\u0026rsquo;s video excellent \u0026ldquo;clang-useful: Building useful tools with LLVM and clang for fun and profit\u0026rdquo;.","keywords":["C++","programming"],"articleBody":"Over the last two months, I spent a significant amount of time using Clang’s libtooling. Libtooling is a great way to quickly develop tools to analyze and modify large quantizes of C++. In this article, I share some lessons learned working with libtooling.\nBeware the Stability Guarantees. The biggest problem with libtooling is that it has very few if any Stability guarantees. When I was learning libtooling, I watched Peter Goldsborough’s video excellent “clang-useful: Building useful tools with LLVM and clang for fun and profit”. The video was filmed in May of 2017, and by September 2017, the code samples no longer compiled on the latest Clang. The developers made one of the methods he overloaded non-virtual. It wasn’t super difficult to patch his code to make it compile, and Clang/LLVM explicitly warns that you should use libclang instead if you desire a stable interface.\nHowever, this makes it really difficult to learn the interfaces when they are constantly changing. Hopefully, after a few years, libtooling will become slightly more stable and adopt at least a 6 month stability guarantee, or perhaps some refactoring tools to update to the new interfaces such as what has suggested by Google’s project Abseil.\nLearning Libtooling is an Exercise in Code Reading For the most part Clang, LLVM, and Libtooling codebases are paragons of exceptional code. They are clear, use meaningful names consistently, public interfaces are documented. However, there are few unclear passages of code that I stumbled across (Clang 6.0):\n clang::SourceManager has several methods for getting locations: such as getSpellingLoc, getImmediateSpellingLoc, getExpansionLoc, getFileLoc, PresumedLoc. However it is not immediately clear what the difference between them. RecursiveASTVisitor contains some macro-processing black magic to generate the stub methods for each AST class. While you would be hard pressed to write a simpler implementation, it makes to very hard to know that you have written correct code. Additionally they choose not to make these methods virtual (presumably for performance reasons), so you can’t even use override to check correctness.  There is also some very high level documentation about the roughs aspects of libtooling usage. However, this documentation too leaves much to be desired:\n Some important features for writing tools aren’t discussed in the high level docs, such as SourceManager aren’t even mentioned. There isn’t even an attempt to describe the full grammar of C++. This makes it hard to determine if you have caught all the possible edges cases in the grammar which have a nasty habit of showing up large low-level codebases. The closest is the very useful, ASTMatchers Reference, but it still leaves a lot to figure out with the deep inheritance hierarchies in Clang.  The best reference for learning libtooling is the clang-tools-extra repository. Unlike the myriad of other examples on the Internet, these get updated whenever the libtooling API changes because they are managed by the upstream release. Some of these tools are fairly complex, and perhaps aren’t great starting places. Another essential tool is clang-query which allows you to dump the AST of programs that you may encounter.\nThe LLVM Support Library is Great For various reasons, I needed to compile and run my libtooling application on a CentOS 6 box. CentOS 6 uses GCC 4.4 which at the time of writing is ancient in terms of compilers (2009) before gcc (or libstdc++) had many C++11 features. Not only did it compile without user-visible ugly kludges, LLVM’s support library provides interfaces to provide useful C++ features like std::make_unique as llvm::make_unique even when std::make_unique isn’t available in your standard library which was useful when I went to use the code on an up-to-date Gentoo box with gcc 7.2.0.\nEven if you don’t have to support bizarre compiler versions, LLVM support library provides a large variety of useful data structures that I found useful such as llvm::BitVector\nFollow the Build Instructions LLVM and Clang recommend building your clang/llvm tools inside of an LLVM build tree. To me, this feels kind of gross, requiring users to download clang/llvm sources to build their applications even if they are already installed on your box for using clang. However, from this project I found this is truly for the best. It is surprising how many different locations distributions install Clang and LLVM libraries. Sometimes they don’t even install clang and LLVM libraries in the same directories. While it is doable, I found it to be much more trouble than its worth. For example, libtooling needs to lookup paths to clang/llvm headers during execution, it references them with a relative path installed at compile time. If the build is done out of source, you have to add a symlink so that your application can find the libraries. While you could just patch libtooling to respect the system location, I found this to be surprising difficult to locate where this setting was made, and gave up after two hours of searching. Just build your applications in tree, you’ll be much happier.\nConclusion All and all, I found libtooling to be very useful and despite the faults listed above reasonably easy to learn and use. I reccomend that you take a look at it if you need to write tools for C++. I hope you found this helpful. Until next time happy programming!\n","wordCount":"873","inLanguage":"en","datePublished":"2017-12-10T11:21:00-05:00","dateModified":"2017-12-10T11:21:00-05:00","author":{"@type":"Person","name":"Robert Underwood"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://robertu94.github.io/2017/12/10/life-with-libtooling.html"},"publisher":{"@type":"Organization","name":"systems++","logo":{"@type":"ImageObject","url":"http://robertu94.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=http://robertu94.github.io/ accesskey=h title="systems++ (Alt + H)">systems++</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=http://robertu94.github.io/about.html title="About Me">
+<span>About Me</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/guides.html title=Guides>
+<span>Guides</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/learning.html title="Learning To Learn">
+<span>Learning To Learn</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/presentations.html title=Presentations>
+<span>Presentations</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=http://robertu94.github.io/>Home</a></div>
+<h1 class=post-title>
+Life with Libtooling
+</h1>
+<div class=post-meta><span title="2017-12-10 11:21:00 -0500 -0500">December 10, 2017</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;873 words&nbsp;·&nbsp;Robert Underwood
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>Table of Contents</span>
+</summary>
+<div class=inner><nav id=TableOfContents>
+<ul>
+<li><a href=#beware-the-stability-guarantees>Beware the Stability Guarantees.</a></li>
+<li><a href=#learning-libtooling-is-an-exercise-in-code-reading>Learning Libtooling is an Exercise in Code Reading</a></li>
+<li><a href=#the-llvm-support-library-is-great>The LLVM Support Library is Great</a></li>
+<li><a href=#follow-the-build-instructions>Follow the Build Instructions</a></li>
+<li><a href=#conclusion>Conclusion</a></li>
+</ul>
+</nav>
+</div>
+</details>
+</div>
+<div class=post-content><p>Over the last two months, I spent a significant amount of time using Clang&rsquo;s libtooling.
+Libtooling is a great way to quickly develop tools to analyze and modify large quantizes of C++.
+In this article, I share some lessons learned working with libtooling.</p>
+<h1 id=beware-the-stability-guarantees>Beware the Stability Guarantees.<a hidden class=anchor aria-hidden=true href=#beware-the-stability-guarantees>#</a></h1>
+<p>The biggest problem with libtooling is that it has very few if any Stability guarantees.
+When I was learning libtooling, I watched Peter Goldsborough&rsquo;s video excellent <a href=https://youtu.be/E6i8jmiy8MY>&ldquo;clang-useful: Building useful tools with LLVM and clang for fun and profit&rdquo;</a>. The video was filmed in May of 2017, and by September 2017, the code samples no longer compiled on the latest Clang. The developers made one of the methods he overloaded non-virtual. It wasn&rsquo;t super difficult to patch his code to make it compile, and Clang/LLVM <a href=https://clang.llvm.org/docs/Tooling.html>explicitly warns</a> that you should use libclang instead if you desire a stable interface.</p>
+<p>However, this makes it really difficult to learn the interfaces when they are constantly changing. Hopefully, after a few years, libtooling will become slightly more stable and adopt at least a 6 month stability guarantee, or perhaps some refactoring tools to update to the new interfaces such as what has suggested by Google&rsquo;s project <a href=https://abseil.io/about/compatibility>Abseil</a>.</p>
+<h1 id=learning-libtooling-is-an-exercise-in-code-reading>Learning Libtooling is an Exercise in Code Reading<a hidden class=anchor aria-hidden=true href=#learning-libtooling-is-an-exercise-in-code-reading>#</a></h1>
+<p>For the most part Clang, LLVM, and Libtooling codebases are paragons of exceptional code.
+They are clear, use meaningful names consistently, public interfaces are documented.
+However, there are few unclear passages of code that I stumbled across (Clang 6.0):</p>
+<ul>
+<li><code>clang::SourceManager</code> has several methods for getting locations: such as <code>getSpellingLoc</code>, <code>getImmediateSpellingLoc</code>, <code>getExpansionLoc</code>, <code>getFileLoc</code>, <code>PresumedLoc</code>. However it is not immediately clear what the difference between them.</li>
+<li><code>RecursiveASTVisitor</code> contains some macro-processing black magic to generate the stub methods for each AST class. While you would be hard pressed to write a simpler implementation, it makes to very hard to know that you have written correct code. Additionally they choose not to make these methods virtual (presumably for performance reasons), so you can&rsquo;t even use <code>override</code> to check correctness.</li>
+</ul>
+<p>There is also some very high level documentation about the roughs aspects of libtooling usage.
+However, this documentation too leaves much to be desired:</p>
+<ul>
+<li>Some important features for writing tools aren&rsquo;t discussed in the high level docs, such as SourceManager <a href=https://clang.llvm.org/docs/LibTooling.html>aren&rsquo;t even mentioned</a>.</li>
+<li>There isn&rsquo;t even an attempt to describe the full grammar of C++. This makes it hard to determine if you have caught all the possible edges cases in the grammar which have a nasty habit of showing up large low-level codebases. The closest is the very useful, <a href=https://clang.llvm.org/docs/LibASTMatchersReference.html>ASTMatchers Reference</a>, but it still leaves a lot to figure out with the deep inheritance hierarchies in Clang.</li>
+</ul>
+<p>The best reference for learning libtooling is the <a href=https://github.com/llvm-mirror/clang-tools-extra>clang-tools-extra</a> repository.
+Unlike the myriad of other examples on the Internet, these get updated whenever the libtooling API changes because they are managed by the upstream release. Some of these tools are fairly complex, and perhaps aren&rsquo;t great starting places. Another essential tool is <code>clang-query</code> which allows you to dump the AST of programs that you may encounter.</p>
+<h1 id=the-llvm-support-library-is-great>The LLVM Support Library is Great<a hidden class=anchor aria-hidden=true href=#the-llvm-support-library-is-great>#</a></h1>
+<p>For various reasons, I needed to compile and run my libtooling application on a CentOS 6 box. CentOS 6 uses GCC 4.4 which at the time of writing is ancient in terms of compilers (2009) before gcc (or libstdc++) had many C++11 features. Not only did it compile without user-visible ugly kludges, LLVM&rsquo;s support library provides interfaces to provide useful C++ features like <code>std::make_unique</code> as <code>llvm::make_unique</code> even when <code>std::make_unique</code> isn&rsquo;t available in your standard library which was useful when I went to use the code on an up-to-date Gentoo box with gcc 7.2.0.</p>
+<p>Even if you don&rsquo;t have to support bizarre compiler versions, LLVM support library provides a large variety of useful data structures that I found useful such as <code>llvm::BitVector</code></p>
+<h1 id=follow-the-build-instructions>Follow the Build Instructions<a hidden class=anchor aria-hidden=true href=#follow-the-build-instructions>#</a></h1>
+<p>LLVM and Clang recommend building your clang/llvm tools inside of an LLVM build tree.
+To me, this feels kind of gross, requiring users to download clang/llvm sources to build their applications even if they are already installed on your box for using <code>clang</code>.
+However, from this project I found this is truly for the best.
+It is surprising how many different locations distributions install Clang and LLVM libraries.
+Sometimes they don&rsquo;t even install clang and LLVM libraries in the same directories.
+While it is doable, I found it to be much more trouble than its worth.
+For example, libtooling needs to lookup paths to clang/llvm headers during execution, it references them with a relative path installed at compile time.
+If the build is done out of source, you have to add a symlink so that your application can find the libraries.
+While you could just patch libtooling to respect the system location, I found this to be surprising difficult to locate where this setting was made, and gave up after two hours of searching.
+Just build your applications in tree, you&rsquo;ll be much happier.</p>
+<h1 id=conclusion>Conclusion<a hidden class=anchor aria-hidden=true href=#conclusion>#</a></h1>
+<p>All and all, I found libtooling to be very useful and despite the faults listed above reasonably easy to learn and use. I reccomend that you take a look at it if you need to write tools for C++. I hope you found this helpful. Until next time happy programming!</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=http://robertu94.github.io/tags/c++.html>C++</a></li>
+<li><a href=http://robertu94.github.io/tags/programming.html>Programming</a></li>
+</ul>
+<nav class=paginav>
+<a class=prev href=http://robertu94.github.io/2018/05/12/generic-cuda.html>
+<span class=title>« Prev</span>
+<br>
+<span>Generic Cuda</span>
+</a>
+<a class=next href=http://robertu94.github.io/2017/09/23/design-of-a-matrix-loading-library.html>
+<span class=title>Next »</span>
+<br>
+<span>Design of A Matrix loading Library</span>
+</a>
+</nav>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2022 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>

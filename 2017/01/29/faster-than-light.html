@@ -1,0 +1,200 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>Faster than light | systems++</title>
+<meta name=keywords content="ansible,parallel,programming">
+<meta name=description content="Ansible is probably my favorite provisioning and configuration management tool. Its syntax is concise, expressive, and elegant. Unlike other tools in its category, it has excellent documentation with working examples and intuitive naming. Learning it use it effectively can help you be a more productive developer.
+Speeding Up Ansible Anyone that has used ansible for more than a few hosts with more than a few tasks knows that by default it can be really slow.">
+<meta name=author content="Robert Underwood">
+<link rel=canonical href=http://robertu94.github.io/2017/01/29/faster-than-light.html>
+<meta name=google-site-verification content="G-9KQE44SX6K">
+<link crossorigin=anonymous href=/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.baa4f2053c75d0009e9309aae8f8a8959f5e0372e88f80cdf2951a9533d71ce2.js integrity="sha256-uqTyBTx10ACekwmq6PiolZ9eA3Loj4DN8pUalTPXHOI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=http://robertu94.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=http://robertu94.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=http://robertu94.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=http://robertu94.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=http://robertu94.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KQE44SX6K"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9KQE44SX6K',{anonymize_ip:!1})}</script>
+<meta property="og:title" content="Faster than light">
+<meta property="og:description" content="Ansible is probably my favorite provisioning and configuration management tool. Its syntax is concise, expressive, and elegant. Unlike other tools in its category, it has excellent documentation with working examples and intuitive naming. Learning it use it effectively can help you be a more productive developer.
+Speeding Up Ansible Anyone that has used ansible for more than a few hosts with more than a few tasks knows that by default it can be really slow.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://robertu94.github.io/2017/01/29/faster-than-light.html"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2017-01-29T10:06:14-05:00">
+<meta property="article:modified_time" content="2017-01-29T10:06:14-05:00"><meta property="og:site_name" content="Systems++">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Faster than light">
+<meta name=twitter:description content="Ansible is probably my favorite provisioning and configuration management tool. Its syntax is concise, expressive, and elegant. Unlike other tools in its category, it has excellent documentation with working examples and intuitive naming. Learning it use it effectively can help you be a more productive developer.
+Speeding Up Ansible Anyone that has used ansible for more than a few hosts with more than a few tasks knows that by default it can be really slow.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Faster than light","item":"http://robertu94.github.io/2017/01/29/faster-than-light.html"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Faster than light","name":"Faster than light","description":"Ansible is probably my favorite provisioning and configuration management tool. Its syntax is concise, expressive, and elegant. Unlike other tools in its category, it has excellent documentation with working examples and intuitive naming. Learning it use it effectively can help you be a more productive developer.\nSpeeding Up Ansible Anyone that has used ansible for more than a few hosts with more than a few tasks knows that by default it can be really slow.","keywords":["ansible","parallel","programming"],"articleBody":"Ansible is probably my favorite provisioning and configuration management tool. Its syntax is concise, expressive, and elegant. Unlike other tools in its category, it has excellent documentation with working examples and intuitive naming. Learning it use it effectively can help you be a more productive developer.\nSpeeding Up Ansible Anyone that has used ansible for more than a few hosts with more than a few tasks knows that by default it can be really slow. However with two simple options, you can dramatically improve the responsiveness of ansible playbooks without any other changes. For one set of playbooks that I wrote, these changes cut the run-time from an hour to 15 minutes.\nFirst is the number of forks. Forks controls how many hosts ansible will connect to at a time. So as not to overwhelm a small ansible master, the default is set to a measly 5 forks. Most of the time, the master is only responsible for doling out tasks to the slave nodes. And since most modern computers have at least 8 cores, you can easily increase this to a larger value. I use 25 on my 8 core machine.\nSecond, is ssh pipelining. Pipelining allows ansible, to reuse the same ssh connection for multiple actions which dramatically improves performance. However, it is not the default because there are a few old systems that do not support this configuration by default.\nTo enable both of these features, put the following in a file called ansible.cfg or in /etc/ansible/ansible.cfg\n[defaults] forks = 25 pipelining = True Don’t Repeat Yourself DRY or Don’t Repeat Yourself is a cornerstone of software design. For most of Ansible 1.X, there were several examples of often repeated stanzas that would appear in Ansible playbooks: The two most common were tags and become that allow you to run some subset of a playbook and to execute with elevated privileges respectfully. Ansible 2.0 introduced the concept of blocks. Blocks allow you to apply common options to a set of commands. For example, in Ansible 1.X:\n- name: install vim dnf: name=\"vim\" state=\"installed\" become: True tags: - install - name: update all packages dnf: name='*' state=latest become: True tags: - install Becomes:\n- block: - name: install vim dnf: name=\"vim\" state=\"installed\" - name: update all packages dnf: name='*' state=latest become: True tags: - install Don’t Re-run The Whole Playbook Suppose that almost all of your playbook runs correctly, but you hit the end, and there is one command that fails. Previously, you would either have to create a playbook with just that task/role, and re-run it or use tags for each action. Now you can simply use the --start-at-task=\"\" option to re-run just the commands you are interested in. There is one slight issue: If the name that you want to start at is based on a section conditional using a custom fact module, you need to ensure that the custom fact is run first.\nDon’t Wait On a Slow Host Another possible pain point for ansible is if one host in a set needs to do more work than the others. Ansible 2.X added the concept of strategies which control how a role is executed. One of these strategies is free which allows each host in the list to advances as through the play as quickly as possible. For plays that depend on other hosts in the managed group, be sure to use a wait_for command to ensure the servies you are expecting exists.\nHappy Programming!\n","wordCount":"580","inLanguage":"en","datePublished":"2017-01-29T10:06:14-05:00","dateModified":"2017-01-29T10:06:14-05:00","author":{"@type":"Person","name":"Robert Underwood"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://robertu94.github.io/2017/01/29/faster-than-light.html"},"publisher":{"@type":"Organization","name":"systems++","logo":{"@type":"ImageObject","url":"http://robertu94.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=http://robertu94.github.io/ accesskey=h title="systems++ (Alt + H)">systems++</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=http://robertu94.github.io/about.html title="About Me">
+<span>About Me</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/guides.html title=Guides>
+<span>Guides</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/learning.html title="Learning To Learn">
+<span>Learning To Learn</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/presentations.html title=Presentations>
+<span>Presentations</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=http://robertu94.github.io/>Home</a></div>
+<h1 class=post-title>
+Faster than light
+</h1>
+<div class=post-meta><span title="2017-01-29 10:06:14 -0500 -0500">January 29, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;580 words&nbsp;·&nbsp;Robert Underwood
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>Table of Contents</span>
+</summary>
+<div class=inner><nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#speeding-up-ansible>Speeding Up Ansible</a></li>
+<li><a href=#dont-repeat-yourself>Don&rsquo;t Repeat Yourself</a></li>
+<li><a href=#dont-re-run-the-whole-playbook>Don&rsquo;t Re-run The Whole Playbook</a></li>
+<li><a href=#dont-wait-on-a-slow-host>Don&rsquo;t Wait On a Slow Host</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</details>
+</div>
+<div class=post-content><p><a href=https://docs.ansible.com>Ansible</a> is probably my favorite provisioning and configuration management tool.
+Its syntax is concise, expressive, and elegant.
+Unlike other tools in its category, it has <a href=https://docs.ansible.com/ansible/playbooks_best_practices.html>excellent documentation</a> with working examples and intuitive naming.
+Learning it use it effectively can help you be a more productive developer.</p>
+<h2 id=speeding-up-ansible>Speeding Up Ansible<a hidden class=anchor aria-hidden=true href=#speeding-up-ansible>#</a></h2>
+<p>Anyone that has used ansible for more than a few hosts with more than a few tasks knows that by default it can be really slow.
+However with two simple options, you can dramatically improve the responsiveness of ansible playbooks without any other changes.
+For one set of playbooks that I wrote, these changes cut the run-time from an hour to 15 minutes.</p>
+<p>First is the number of forks.
+Forks controls how many hosts ansible will connect to at a time.
+So as not to overwhelm a small ansible master, the default is set to a measly 5 forks.
+Most of the time, the master is only responsible for doling out tasks to the slave nodes.
+And since most modern computers have at least 8 cores, you can easily increase this to a larger value.
+I use 25 on my 8 core machine.</p>
+<p>Second, is <a href=https://docs.ansible.com/ansible/intro_configuration.html#pipelining>ssh pipelining</a>.
+Pipelining allows ansible, to reuse the same ssh connection for multiple actions which dramatically improves performance.
+However, it is not the default because there are a few old systems that do not support this configuration by default.</p>
+<p>To enable both of these features, put the following in a file called <code>ansible.cfg</code> or in <code>/etc/ansible/ansible.cfg</code></p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-ini data-lang=ini><span class=k>[defaults]</span>
+<span class=na>forks</span> <span class=o>=</span> <span class=s>25</span>
+<span class=na>pipelining</span> <span class=o>=</span> <span class=s>True</span>
+</code></pre></div><h2 id=dont-repeat-yourself>Don&rsquo;t Repeat Yourself<a hidden class=anchor aria-hidden=true href=#dont-repeat-yourself>#</a></h2>
+<p>DRY or Don&rsquo;t Repeat Yourself is a cornerstone of software design.
+For most of Ansible 1.X, there were several examples of often repeated stanzas that would appear in Ansible playbooks:
+The two most common were <code>tags</code> and <code>become</code> that allow you to run some subset of a playbook and to execute with elevated privileges respectfully.
+Ansible 2.0 introduced the concept of <a href=https://docs.ansible.com/ansible/playbooks_blocks.html>blocks</a>.
+Blocks allow you to apply common options to a set of commands.
+For example, in Ansible 1.X:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>- name: install vim
+  dnf: name=&#34;vim&#34; state=&#34;installed&#34;
+  become: True
+  tags:
+   - install
+- name: update all packages
+  dnf: name=&#39;*&#39; state=latest
+  become: True
+  tags:
+   - install
+</code></pre></div><p>Becomes:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>- block:
+  - name: install vim
+    dnf: name=&#34;vim&#34; state=&#34;installed&#34;
+  - name: update all packages
+    dnf: name=&#39;*&#39; state=latest
+  become: True
+  tags:
+   - install
+</code></pre></div><h2 id=dont-re-run-the-whole-playbook>Don&rsquo;t Re-run The Whole Playbook<a hidden class=anchor aria-hidden=true href=#dont-re-run-the-whole-playbook>#</a></h2>
+<p>Suppose that almost all of your playbook runs correctly, but you hit the end, and there is one command that fails.
+Previously, you would either have to create a playbook with just that task/role, and re-run it or use tags for each action.
+Now you can simply use the <a href=https://docs.ansible.com/ansible/playbooks_startnstep.html#start-at-task><code>--start-at-task="&lt;name>"</code></a> option to re-run just the commands you are interested in.
+There is one slight issue: If the name that you want to start at is based on a section conditional using a custom fact module, you need to ensure that the custom fact is run first.</p>
+<h2 id=dont-wait-on-a-slow-host>Don&rsquo;t Wait On a Slow Host<a hidden class=anchor aria-hidden=true href=#dont-wait-on-a-slow-host>#</a></h2>
+<p>Another possible pain point for ansible is if one host in a set needs to do more work than the others.
+Ansible 2.X added the concept of <a href=https://docs.ansible.com/ansible/playbooks_strategies.html>strategies</a> which control how a role is executed.
+One of these strategies is <code>free</code> which allows each host in the list to advances as through the play as quickly as possible.
+For plays that depend on other hosts in the managed group, be sure to use a <code>wait_for</code> command to ensure the servies you are expecting exists.</p>
+<p>Happy Programming!</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=http://robertu94.github.io/tags/ansible.html>ansible</a></li>
+<li><a href=http://robertu94.github.io/tags/parallel.html>parallel</a></li>
+<li><a href=http://robertu94.github.io/tags/programming.html>Programming</a></li>
+</ul>
+<nav class=paginav>
+<a class=prev href=http://robertu94.github.io/2017/02/23/surprisingly-functional.html>
+<span class=title>« Prev</span>
+<br>
+<span>Surprisingly Functional</span>
+</a>
+<a class=next href=http://robertu94.github.io/2017/01/22/llvm-tooling-for-c-.html>
+<span class=title>Next »</span>
+<br>
+<span>LLVM Tooling for C++</span>
+</a>
+</nav>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2022 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>

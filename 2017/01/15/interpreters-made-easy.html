@@ -1,0 +1,193 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>Interpreters Made Easy | systems++</title>
+<meta name=keywords content="C/C++,flex/bison,programming">
+<meta name=description content="The Interpreter pattern from the &ldquo;Design Patterns: Elements of Reusable Object Oriented Software&rdquo; can potentially be a very powerful pattern. It allows you to use a domain specific language to represent a complex computational situation. However, writing interpreters in practice can be tricky and time consuming. It really helps to know something about some fundamental parsing algorithms and techniques.
+The most naive approach to writing an interpret involves manually matching each possible next phrase and creating an if else soup to match each possible outcome.">
+<meta name=author content="Robert Underwood">
+<link rel=canonical href=http://robertu94.github.io/2017/01/15/interpreters-made-easy.html>
+<meta name=google-site-verification content="G-9KQE44SX6K">
+<link crossorigin=anonymous href=/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.baa4f2053c75d0009e9309aae8f8a8959f5e0372e88f80cdf2951a9533d71ce2.js integrity="sha256-uqTyBTx10ACekwmq6PiolZ9eA3Loj4DN8pUalTPXHOI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=http://robertu94.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=http://robertu94.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=http://robertu94.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=http://robertu94.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=http://robertu94.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KQE44SX6K"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9KQE44SX6K',{anonymize_ip:!1})}</script>
+<meta property="og:title" content="Interpreters Made Easy">
+<meta property="og:description" content="The Interpreter pattern from the &ldquo;Design Patterns: Elements of Reusable Object Oriented Software&rdquo; can potentially be a very powerful pattern. It allows you to use a domain specific language to represent a complex computational situation. However, writing interpreters in practice can be tricky and time consuming. It really helps to know something about some fundamental parsing algorithms and techniques.
+The most naive approach to writing an interpret involves manually matching each possible next phrase and creating an if else soup to match each possible outcome.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://robertu94.github.io/2017/01/15/interpreters-made-easy.html"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2017-01-15T10:14:14-05:00">
+<meta property="article:modified_time" content="2017-01-15T10:14:14-05:00"><meta property="og:site_name" content="Systems++">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Interpreters Made Easy">
+<meta name=twitter:description content="The Interpreter pattern from the &ldquo;Design Patterns: Elements of Reusable Object Oriented Software&rdquo; can potentially be a very powerful pattern. It allows you to use a domain specific language to represent a complex computational situation. However, writing interpreters in practice can be tricky and time consuming. It really helps to know something about some fundamental parsing algorithms and techniques.
+The most naive approach to writing an interpret involves manually matching each possible next phrase and creating an if else soup to match each possible outcome.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Interpreters Made Easy","item":"http://robertu94.github.io/2017/01/15/interpreters-made-easy.html"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Interpreters Made Easy","name":"Interpreters Made Easy","description":"The Interpreter pattern from the \u0026ldquo;Design Patterns: Elements of Reusable Object Oriented Software\u0026rdquo; can potentially be a very powerful pattern. It allows you to use a domain specific language to represent a complex computational situation. However, writing interpreters in practice can be tricky and time consuming. It really helps to know something about some fundamental parsing algorithms and techniques.\nThe most naive approach to writing an interpret involves manually matching each possible next phrase and creating an if else soup to match each possible outcome.","keywords":["C/C++","flex/bison","programming"],"articleBody":"The Interpreter pattern from the “Design Patterns: Elements of Reusable Object Oriented Software” can potentially be a very powerful pattern. It allows you to use a domain specific language to represent a complex computational situation. However, writing interpreters in practice can be tricky and time consuming. It really helps to know something about some fundamental parsing algorithms and techniques.\nThe most naive approach to writing an interpret involves manually matching each possible next phrase and creating an if else soup to match each possible outcome. Although, doing string parsing in C or even C++ can be a real pain point in implementing interpreters. Often you result to character by character comparisons using methods like std::string::compare or strcmp\nHowever, it is often not necessary to write these scanning and parsing routines by hand. One way to generate this boilerplate code is to use tools such as flex and bison. Flex is a scanner generator; it handles the job of finding tokens in a corpus. Bison is a parser generator; it handles the job of assembling tokens into a semantic tree. Unlike most unix tools, the full manuals for Flex and Bison are not contained in the man pages. Instead, you will need to use the info utility to read how to use these tools.\nBy default, these flex and bison generate code that is suitable for a standalone executable. However, it is possible to embed flex and bison as part of a larger program. Using this facility you can write an interpreter with ease. Here are a few things to note when embedding parsers:\nGetting Output Normally, the entry point to bison parsers is the function int yyparse(void). This doesn’t provide a way to get access to data from the scanner or parser. But, if you use the %parse-param option in bison, you can change the arguments to yyparse to whatever you desire. Here, I get an integer via pointer to make the signature int yyparse(int * output):\n%parse-param { int * output } If you need to pass multiple arguments, you can either use a pointer to a struct, or you can pass multiple parameters like so: Note the second pair of braces, the effected functions are being generated like macros so you need both sets of braces.\n%parse-param { int * output } { void * more_output } Multiple Scanners and Parsers If you have multiple scanners and parsers in a program, it becomes important to name space them. Especially, if you use you put a scanner in a library that others might use. You can namespace all external facing bison functions using the %define api.prefix option. Here I rename yyparse() and friends with names like ab_parse():\n%define api.prefix {ab_} Embedding a Scanner and Parser Finally, here is an example of embedding a flex and bison scanner-parser into an application. Here I pass a socket as input to flex and bison:\nint client_fd = accept(...) /* arguments omitted for conciseness */ FILE * client_file = fdopen(client_fd, \"r+\"); if(!client_file){ perror(\"failed to create file for socket\"); exit(errno); } yyset_in(client_file); if(yyparse(\u0026value)==0){ /* the parse succeded and value is valid */ } else { /* the parse failed */ } It is even possible to use flex and bison in threaded applications. Getting this setup can be tricky and nuanced, but once setup it is pretty easy. Once we have this, we have everything that we need to write a threaded library that uses an embedded flex scanner and bison parser.\nHappy coding!\n","wordCount":"580","inLanguage":"en","datePublished":"2017-01-15T10:14:14-05:00","dateModified":"2017-01-15T10:14:14-05:00","author":{"@type":"Person","name":"Robert Underwood"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://robertu94.github.io/2017/01/15/interpreters-made-easy.html"},"publisher":{"@type":"Organization","name":"systems++","logo":{"@type":"ImageObject","url":"http://robertu94.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=http://robertu94.github.io/ accesskey=h title="systems++ (Alt + H)">systems++</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=http://robertu94.github.io/about.html title="About Me">
+<span>About Me</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/guides.html title=Guides>
+<span>Guides</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/learning.html title="Learning To Learn">
+<span>Learning To Learn</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/presentations.html title=Presentations>
+<span>Presentations</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=http://robertu94.github.io/>Home</a></div>
+<h1 class=post-title>
+Interpreters Made Easy
+</h1>
+<div class=post-meta><span title="2017-01-15 10:14:14 -0500 -0500">January 15, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;580 words&nbsp;·&nbsp;Robert Underwood
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>Table of Contents</span>
+</summary>
+<div class=inner><nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#getting-output>Getting Output</a></li>
+<li><a href=#multiple-scanners-and-parsers>Multiple Scanners and Parsers</a></li>
+<li><a href=#embedding-a-scanner-and-parser>Embedding a Scanner and Parser</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</details>
+</div>
+<div class=post-content><p>The Interpreter pattern from the <a href=https://en.wikipedia.org/wiki/Design_Patterns>&ldquo;Design Patterns: Elements of Reusable Object Oriented Software&rdquo;</a> can potentially be a very powerful pattern.
+It allows you to use a domain specific language to represent a complex computational situation.
+However, writing interpreters in practice can be tricky and time consuming.
+It really helps to know something about some fundamental parsing algorithms and techniques.</p>
+<p>The most naive approach to writing an interpret involves manually matching
+each possible next phrase and creating an if else soup to match each possible outcome.
+Although, doing string parsing in C or even C++ can be a real pain point in implementing interpreters.
+Often you result to character by character comparisons using methods like <code>std::string::compare</code> or <code>strcmp</code></p>
+<p>However, it is often not necessary to write these scanning and parsing routines by hand.
+One way to generate this boilerplate code is to use tools such as flex and bison.
+<a href=https://github.com/westes/flex>Flex</a> is a scanner generator; it handles the job of finding tokens in a corpus.
+<a href=https://www.gnu.org/software/bison>Bison</a> is a parser generator; it handles the job of assembling tokens into a semantic tree.
+Unlike most unix tools, the full manuals for Flex and Bison are not contained in the <code>man</code> pages.
+Instead, you will need to use the <code>info</code> utility to read how to use these tools.</p>
+<p>By default, these flex and bison generate code that is suitable for a standalone executable.
+However, it is possible to embed flex and bison as part of a larger program.
+Using this facility you can write an interpreter with ease.
+Here are a few things to note when embedding parsers:</p>
+<h2 id=getting-output>Getting Output<a hidden class=anchor aria-hidden=true href=#getting-output>#</a></h2>
+<p>Normally, the entry point to bison parsers is the function <code>int yyparse(void)</code>.
+This doesn&rsquo;t provide a way to get access to data from the scanner or parser.
+But, if you use the <code>%parse-param</code> option in bison, you can change the arguments to <code>yyparse</code> to whatever you desire.
+Here, I get an integer via pointer to make the signature <code>int yyparse(int * output)</code>:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>%parse-param { int * output }
+</code></pre></div><p>If you need to pass multiple arguments, you can either use a pointer to a struct, or you can pass multiple parameters like so:
+Note the second pair of braces, the effected functions are being generated like macros so you need both sets of braces.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>%parse-param { int * output } { void * more_output }
+</code></pre></div><h2 id=multiple-scanners-and-parsers>Multiple Scanners and Parsers<a hidden class=anchor aria-hidden=true href=#multiple-scanners-and-parsers>#</a></h2>
+<p>If you have multiple scanners and parsers in a program, it becomes important to name space them.
+Especially, if you use you put a scanner in a library that others might use.
+You can namespace all external facing bison functions using the <code>%define api.prefix</code> option.
+Here I rename <code>yyparse()</code> and friends with names like <code>ab_parse()</code>:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>%define api.prefix {ab_}
+</code></pre></div><h2 id=embedding-a-scanner-and-parser>Embedding a Scanner and Parser<a hidden class=anchor aria-hidden=true href=#embedding-a-scanner-and-parser>#</a></h2>
+<p>Finally, here is an example of embedding a flex and bison scanner-parser into an application.
+Here I pass a socket as input to flex and bison:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=kt>int</span> <span class=n>client_fd</span> <span class=o>=</span> <span class=n>accept</span><span class=p>(...)</span> <span class=cm>/* arguments omitted for conciseness */</span>
+<span class=n>FILE</span> <span class=o>*</span> <span class=n>client_file</span> <span class=o>=</span> <span class=n>fdopen</span><span class=p>(</span><span class=n>client_fd</span><span class=p>,</span> <span class=s>&#34;r+&#34;</span><span class=p>);</span>
+<span class=k>if</span><span class=p>(</span><span class=o>!</span><span class=n>client_file</span><span class=p>){</span>
+	<span class=n>perror</span><span class=p>(</span><span class=s>&#34;failed to create file for socket&#34;</span><span class=p>);</span>
+	<span class=n>exit</span><span class=p>(</span><span class=n>errno</span><span class=p>);</span>
+<span class=p>}</span>
+<span class=n>yyset_in</span><span class=p>(</span><span class=n>client_file</span><span class=p>);</span>
+<span class=k>if</span><span class=p>(</span><span class=n>yyparse</span><span class=p>(</span><span class=o>&amp;</span><span class=n>value</span><span class=p>)</span><span class=o>==</span><span class=mi>0</span><span class=p>){</span> 
+	<span class=cm>/* the parse succeded and value is valid */</span>
+<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+	<span class=cm>/* the parse failed */</span>
+<span class=p>}</span>
+</code></pre></div><p>It is even possible to <a href=https://stanislaw.github.io/2016/03/29/reentrant-parser-using-flex-and-bison.html>use flex and bison in threaded applications</a>.
+Getting this setup can be tricky and nuanced, but once setup it is pretty easy.
+Once we have this, we have everything that we need to write a threaded library that uses an embedded flex scanner and bison parser.</p>
+<p>Happy coding!</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=http://robertu94.github.io/tags/c/c++.html>C/C++</a></li>
+<li><a href=http://robertu94.github.io/tags/flex/bison.html>flex/bison</a></li>
+<li><a href=http://robertu94.github.io/tags/programming.html>Programming</a></li>
+</ul>
+<nav class=paginav>
+<a class=prev href=http://robertu94.github.io/2017/01/22/llvm-tooling-for-c-.html>
+<span class=title>« Prev</span>
+<br>
+<span>LLVM Tooling for C++</span>
+</a>
+<a class=next href=http://robertu94.github.io/2017/01/08/poor-mans-parallelism.html>
+<span class=title>Next »</span>
+<br>
+<span>Poor Man's Parallelism</span>
+</a>
+</nav>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2022 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>

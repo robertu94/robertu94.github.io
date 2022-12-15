@@ -1,0 +1,285 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>How to export a C API from a C++ code | systems++</title>
+<meta name=keywords content>
+<meta name=description content="tl;dr  define a version of your API using only C compatible types in a header Do NOT include a C++ header in the transitive set of headers make the header compatible with C and C++ using #ifdef __cplusplus and extern &#34;C&#34;  Why is this needed C++ is (mostly) a super set of C. If you want C++ to be callable from C, you need to stick to this subset for the declaring code and mark the functions as having a C ABI.">
+<meta name=author content="Robert Underwood">
+<link rel=canonical href=http://robertu94.github.io/guides/exporting_c.html>
+<meta name=google-site-verification content="G-9KQE44SX6K">
+<link crossorigin=anonymous href=/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.baa4f2053c75d0009e9309aae8f8a8959f5e0372e88f80cdf2951a9533d71ce2.js integrity="sha256-uqTyBTx10ACekwmq6PiolZ9eA3Loj4DN8pUalTPXHOI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=http://robertu94.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=http://robertu94.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=http://robertu94.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=http://robertu94.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=http://robertu94.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KQE44SX6K"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9KQE44SX6K',{anonymize_ip:!1})}</script>
+<meta property="og:title" content="How to export a C API from a C++ code">
+<meta property="og:description" content="tl;dr  define a version of your API using only C compatible types in a header Do NOT include a C++ header in the transitive set of headers make the header compatible with C and C++ using #ifdef __cplusplus and extern &#34;C&#34;  Why is this needed C++ is (mostly) a super set of C. If you want C++ to be callable from C, you need to stick to this subset for the declaring code and mark the functions as having a C ABI.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://robertu94.github.io/guides/exporting_c.html"><meta property="article:section" content="guides">
+<meta property="article:published_time" content="2022-10-24T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-10-24T00:00:00+00:00"><meta property="og:site_name" content="Systems++">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="How to export a C API from a C++ code">
+<meta name=twitter:description content="tl;dr  define a version of your API using only C compatible types in a header Do NOT include a C++ header in the transitive set of headers make the header compatible with C and C++ using #ifdef __cplusplus and extern &#34;C&#34;  Why is this needed C++ is (mostly) a super set of C. If you want C++ to be callable from C, you need to stick to this subset for the declaring code and mark the functions as having a C ABI.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"How to export a C API from a C++ code","item":"http://robertu94.github.io/guides/exporting_c.html"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"How to export a C API from a C++ code","name":"How to export a C API from a C\u002b\u002b code","description":"tl;dr  define a version of your API using only C compatible types in a header Do NOT include a C++ header in the transitive set of headers make the header compatible with C and C++ using #ifdef __cplusplus and extern \u0026quot;C\u0026quot;  Why is this needed C++ is (mostly) a super set of C. If you want C++ to be callable from C, you need to stick to this subset for the declaring code and mark the functions as having a C ABI.","keywords":[],"articleBody":"tl;dr  define a version of your API using only C compatible types in a header Do NOT include a C++ header in the transitive set of headers make the header compatible with C and C++ using #ifdef __cplusplus and extern \"C\"  Why is this needed C++ is (mostly) a super set of C. If you want C++ to be callable from C, you need to stick to this subset for the declaring code and mark the functions as having a C ABI. C++ by default includes type information in its ABI (to allow things like templates and overloads) Using extern \"C\" turns this off and defaults back to C-style the user provided name.\nHow to remove C++ from your API Depends on what you are trying to remove.\nUsing void* A common pattern is to use a type enum + a void pointer. For example:\ntemplate class T T sum(std::vectorT const\u0026 vec) { return std::accumulate(vec.begin(), vec.end(), 0, std::plus{}); } Could become\ntypedef enum { int32_dtype, int64_dtype //other types are possible } dtype; double sum_c(void const* data, dtype type, size_t n); in the header file, and in the implementation file:\ndouble sum_c(void const* data, dtype type, size_t n) { switch(type) { case int32_dtype: { const int32_t* begin = static_castint32_t const*data; const int32_t* end = begin + n; return sum(std::vectorint32_t(begin,end)); } // ... other implementations  } } Using #define Another powerful (but error prone) option is to use C’s pre-processor.\n#define sum_definition(type) \\ type sum_##type(type const*, size_t n); #define sum_impl(type) \\ extern \"C\" type sum_##type(type const* v, size_t n) { \\ type const * begin = static_cast(data); \\ type const * end = begin + n; \\ return sum(std::vector(begin,end)); \\ } Then the user can put sum_definition(my_numeric_type) to add new types that they defined, and instantiate their own implementations as needed with sum_impl(my_numeric_type). Note many pre-processors will allow the second macro in a C header since the code isn’t type checked until the macro is expanded.\nIt is also pretty common to have code like this in a header\nsum_definition(float) sum_definition(double) sum_definition(int) // continue for more types And this in an implementation\nsum_impl(float) sum_impl(double) sum_impl(int) // continue for more types Using vtable structs Another option is to define a set of function pointers that implement the same idea:\n//header typedef struct { my_numeric_type* (zero*)(); my_numeric_type* (add*)(struct my_numeric_type*, struct my_numeric_type*); my_numeric_type* (free*)(struct my_numeric_type*); } my_numeric_vtable; typedef struct { my_numeric_vtable const* vtable; void* data; } my_numeric_type; my_numeric_type* new_double(double d); my_numeric_type* sum(my_numeric_type* nums[], size_t n); //impl my_numeric_type* double_zero() { return new_double(0); } my_numeric_type* double_add(my_numeric_type* a, my_numeric_type* b) { double a_v = *((double*)a-data); double b_v = *((double*)b-data); return new_double(a_v+b_v); } my_numeric_type* double_free(my_numeric_type* p) { free(p-data); free(p); } my_numeric_vtable double_vtbl { double_zero, double_add, double_free }; my_numeric_type* new_double(double d) { my_numeric_type* ret = malloc(sizeof(my_numeric_type)); ret-vtable = double_vtbl; ret-data = malloc(sizeof(double)); *((double*)ret-data) = 0; return ret; } my_numeric_type* sum(my_numeric_type* nums[], size_t n) { my_numeric_vtable* vtbl = nums[0]-vtable; my_numeric_type* total = vtbl-zero(); for(size_t i; i  n; ++i) { my_numeric_type* next = vtbl-sum(total, nums[i]); vtbl-free(total); total = next; } return total; } This has the cost of being verbose and allocation heavy, but allows you to hide the underlying types and allow you or the user to add new ones.\nAdditionally You could replace the definition of my_numeric_type in the header with just struct my_numeric_type;. With this done, it is also possible to make my_numeric_vtable private by removing it from the header since it is only used via pointer. These changes have the trade-off of not allowing users to provide new implementations which may or may not be desirable.\nAvoiding dependencies in headers These tricks can help you avoid needing to pull in extra headers.\nUse forward declarations generously for non-template C++ types. Except for things in the C++ standard library (because of reserved.names.general), you can forward declare functions and thus not need their implementation as long as all APIs in which you use them consume only pointers. Use this to reduce the number of headers you pull in.\nvoid* pointers can be cast to anything except function pointers and anything can be cast to them. You can use them as “data” pointers which are casted an interepeted correctly in C++.\nDon’t include implementation details in headers, and you can get away with many fewer headers.\nTools like include-what-you-use can help with this.\nUsing a common header file for C and C++ Once you have a header for your API that uses only C compatible functions, simply mark it as such like so\n//a header guard is a nice thing to do, protects against duplicate definitions #ifndef EXPORTING_C_MARKDOWN_YGKLQ24P #define EXPORTING_C_MARKDOWN_YGKLQ24P  #ifdef __cplusplus extern \"C\" { #endif  // all functions here are C accessible  #ifdef __cplusplus } #endif  #endif /* end of include guard: EXPORTING_C_MARKDOWN_YGKLQ24P */ The extern \"C\" bit here declares the function as having the C ABI rather than the C++ one.\nHope this helps!\n","wordCount":"807","inLanguage":"en","datePublished":"2022-10-24T00:00:00Z","dateModified":"2022-10-24T00:00:00Z","author":{"@type":"Person","name":"Robert Underwood"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://robertu94.github.io/guides/exporting_c.html"},"publisher":{"@type":"Organization","name":"systems++","logo":{"@type":"ImageObject","url":"http://robertu94.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=http://robertu94.github.io/ accesskey=h title="systems++ (Alt + H)">systems++</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=http://robertu94.github.io/about.html title="About Me">
+<span>About Me</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/guides.html title=Guides>
+<span>Guides</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/learning.html title="Learning To Learn">
+<span>Learning To Learn</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/presentations.html title=Presentations>
+<span>Presentations</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=http://robertu94.github.io/>Home</a></div>
+<h1 class=post-title>
+How to export a C API from a C++ code
+</h1>
+<div class=post-meta><span title="2022-10-24 00:00:00 +0000 UTC">October 24, 2022</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;807 words&nbsp;·&nbsp;Robert Underwood
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>Table of Contents</span>
+</summary>
+<div class=inner><nav id=TableOfContents>
+<ul>
+<li><a href=#tldr>tl;dr</a></li>
+<li><a href=#why-is-this-needed>Why is this needed</a></li>
+<li><a href=#how-to-remove-c-from-your-api>How to remove C++ from your API</a>
+<ul>
+<li><a href=#using-void>Using <code>void*</code></a></li>
+<li><a href=#using-define>Using <code>#define</code></a></li>
+<li><a href=#using-vtable-structs>Using vtable <code>struct</code>s</a></li>
+</ul>
+</li>
+<li><a href=#avoiding-dependencies-in-headers>Avoiding dependencies in headers</a></li>
+<li><a href=#using-a-common-header-file-for-c-and-c>Using a common header file for C and C++</a></li>
+</ul>
+</nav>
+</div>
+</details>
+</div>
+<div class=post-content><h1 id=tldr>tl;dr<a hidden class=anchor aria-hidden=true href=#tldr>#</a></h1>
+<ol>
+<li>define a version of your API using only C compatible types in a header</li>
+<li>Do NOT include a C++ header in the transitive set of headers</li>
+<li>make the header compatible with C and C++ using <code>#ifdef __cplusplus</code> and <code>extern "C"</code></li>
+</ol>
+<h1 id=why-is-this-needed>Why is this needed<a hidden class=anchor aria-hidden=true href=#why-is-this-needed>#</a></h1>
+<p>C++ is (mostly) a super set of C. If you want C++ to be callable from C, you
+need to stick to this subset for the declaring code and mark the functions as
+having a C ABI. C++ by default includes type information in its ABI (to allow
+things like templates and overloads) Using <code>extern "C"</code> turns this off and
+defaults back to C-style the user provided name.</p>
+<h1 id=how-to-remove-c-from-your-api>How to remove C++ from your API<a hidden class=anchor aria-hidden=true href=#how-to-remove-c-from-your-api>#</a></h1>
+<p>Depends on what you are trying to remove.</p>
+<h2 id=using-void>Using <code>void*</code><a hidden class=anchor aria-hidden=true href=#using-void>#</a></h2>
+<p>A common pattern is to use a type <code>enum</code> + a void pointer. For example:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=n>T</span> <span class=n>sum</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=k>const</span><span class=o>&amp;</span> <span class=n>vec</span><span class=p>)</span> <span class=p>{</span>
+  <span class=k>return</span> <span class=n>std</span><span class=o>::</span><span class=n>accumulate</span><span class=p>(</span><span class=n>vec</span><span class=p>.</span><span class=n>begin</span><span class=p>(),</span> <span class=n>vec</span><span class=p>.</span><span class=n>end</span><span class=p>(),</span> <span class=mi>0</span><span class=p>,</span> <span class=n>std</span><span class=o>::</span><span class=n>plus</span><span class=o>&lt;&gt;</span><span class=p>{});</span>
+<span class=p>}</span>
+</code></pre></div><p>Could become</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=k>typedef</span> <span class=k>enum</span> <span class=p>{</span>
+  <span class=n>int32_dtype</span><span class=p>,</span>
+  <span class=n>int64_dtype</span>
+  <span class=c1>//other types are possible
+</span><span class=c1></span><span class=p>}</span> <span class=n>dtype</span><span class=p>;</span>
+
+<span class=kt>double</span> <span class=nf>sum_c</span><span class=p>(</span><span class=kt>void</span> <span class=k>const</span><span class=o>*</span> <span class=n>data</span><span class=p>,</span> <span class=n>dtype</span> <span class=n>type</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>n</span><span class=p>);</span>
+</code></pre></div><p>in the header file, and in the implementation file:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=kt>double</span> <span class=nf>sum_c</span><span class=p>(</span><span class=kt>void</span> <span class=k>const</span><span class=o>*</span> <span class=n>data</span><span class=p>,</span> <span class=n>dtype</span> <span class=n>type</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>n</span><span class=p>)</span> <span class=p>{</span>
+  <span class=k>switch</span><span class=p>(</span><span class=n>type</span><span class=p>)</span> <span class=p>{</span>
+    <span class=k>case</span> <span class=nl>int32_dtype</span><span class=p>:</span>
+      <span class=p>{</span>
+        <span class=k>const</span> <span class=kt>int32_t</span><span class=o>*</span> <span class=n>begin</span> <span class=o>=</span> <span class=n>static_cast</span><span class=o>&lt;</span><span class=kt>int32_t</span> <span class=k>const</span><span class=o>*&gt;</span><span class=n>data</span><span class=p>;</span>
+        <span class=k>const</span> <span class=kt>int32_t</span><span class=o>*</span> <span class=n>end</span> <span class=o>=</span> <span class=n>begin</span> <span class=o>+</span> <span class=n>n</span><span class=p>;</span>
+        <span class=k>return</span> <span class=n>sum</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int32_t</span><span class=o>&gt;</span><span class=p>(</span><span class=n>begin</span><span class=p>,</span><span class=n>end</span><span class=p>));</span>
+      <span class=p>}</span>
+    <span class=c1>// ... other implementations
+</span><span class=c1></span>  <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></div><h2 id=using-define>Using <code>#define</code><a hidden class=anchor aria-hidden=true href=#using-define>#</a></h2>
+<p>Another powerful (but error prone) option is to use C&rsquo;s pre-processor.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#define sum_definition(type) \
+</span><span class=cp>  type sum_##type(type const*, size_t n);
+</span><span class=cp>#define sum_impl(type) \
+</span><span class=cp>  extern &#34;C&#34; type sum_##type(type const* v, size_t n) { \
+</span><span class=cp>        type const * begin = static_cast&lt;type const*&gt;(data); \
+</span><span class=cp>        type const * end = begin + n; \
+</span><span class=cp>        return sum(std::vector&lt;type&gt;(begin,end)); \
+</span><span class=cp>  }
+</span></code></pre></div><p>Then the user can put <code>sum_definition(my_numeric_type)</code> to add new types that they defined,
+and instantiate their own implementations as needed with <code>sum_impl(my_numeric_type)</code>. Note
+many pre-processors will allow the second macro in a C header since the code
+isn&rsquo;t type checked until the macro is expanded.</p>
+<p>It is also pretty common to have code like this in a header</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=n>sum_definition</span><span class=p>(</span><span class=kt>float</span><span class=p>)</span>
+<span class=n>sum_definition</span><span class=p>(</span><span class=kt>double</span><span class=p>)</span>
+<span class=n>sum_definition</span><span class=p>(</span><span class=kt>int</span><span class=p>)</span>
+<span class=c1>// continue for more types
+</span></code></pre></div><p>And this in an implementation</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=n>sum_impl</span><span class=p>(</span><span class=kt>float</span><span class=p>)</span>
+<span class=n>sum_impl</span><span class=p>(</span><span class=kt>double</span><span class=p>)</span>
+<span class=n>sum_impl</span><span class=p>(</span><span class=kt>int</span><span class=p>)</span>
+<span class=c1>// continue for more types
+</span></code></pre></div><h2 id=using-vtable-structs>Using vtable <code>struct</code>s<a hidden class=anchor aria-hidden=true href=#using-vtable-structs>#</a></h2>
+<p>Another option is to define a set of function pointers that implement the same idea:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=c1>//header
+</span><span class=c1></span><span class=k>typedef</span> <span class=k>struct</span>  <span class=p>{</span>
+  <span class=n>my_numeric_type</span><span class=o>*</span> <span class=p>(</span><span class=n>zero</span><span class=o>*</span><span class=p>)();</span>
+  <span class=n>my_numeric_type</span><span class=o>*</span> <span class=p>(</span><span class=n>add</span><span class=o>*</span><span class=p>)(</span><span class=k>struct</span> <span class=n>my_numeric_type</span><span class=o>*</span><span class=p>,</span> <span class=k>struct</span> <span class=n>my_numeric_type</span><span class=o>*</span><span class=p>);</span>
+  <span class=n>my_numeric_type</span><span class=o>*</span> <span class=p>(</span><span class=n>free</span><span class=o>*</span><span class=p>)(</span><span class=k>struct</span> <span class=n>my_numeric_type</span><span class=o>*</span><span class=p>);</span>
+<span class=p>}</span> <span class=n>my_numeric_vtable</span><span class=p>;</span>
+
+<span class=k>typedef</span> <span class=k>struct</span> <span class=p>{</span>
+  <span class=n>my_numeric_vtable</span> <span class=k>const</span><span class=o>*</span> <span class=n>vtable</span><span class=p>;</span>
+  <span class=kt>void</span><span class=o>*</span> <span class=n>data</span><span class=p>;</span>
+<span class=p>}</span> <span class=n>my_numeric_type</span><span class=p>;</span>
+
+<span class=n>my_numeric_type</span><span class=o>*</span> <span class=nf>new_double</span><span class=p>(</span><span class=kt>double</span> <span class=n>d</span><span class=p>);</span>
+<span class=n>my_numeric_type</span><span class=o>*</span> <span class=nf>sum</span><span class=p>(</span><span class=n>my_numeric_type</span><span class=o>*</span> <span class=n>nums</span><span class=p>[],</span> <span class=n>size_t</span> <span class=n>n</span><span class=p>);</span>
+
+<span class=c1>//impl
+</span><span class=c1></span><span class=n>my_numeric_type</span><span class=o>*</span> <span class=nf>double_zero</span><span class=p>()</span> <span class=p>{</span>
+  <span class=k>return</span> <span class=n>new_double</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+<span class=p>}</span>
+<span class=n>my_numeric_type</span><span class=o>*</span> <span class=nf>double_add</span><span class=p>(</span><span class=n>my_numeric_type</span><span class=o>*</span> <span class=n>a</span><span class=p>,</span> <span class=n>my_numeric_type</span><span class=o>*</span> <span class=n>b</span><span class=p>)</span> <span class=p>{</span>
+  <span class=kt>double</span> <span class=n>a_v</span> <span class=o>=</span> <span class=o>*</span><span class=p>((</span><span class=kt>double</span><span class=o>*</span><span class=p>)</span><span class=n>a</span><span class=o>-&gt;</span><span class=n>data</span><span class=p>);</span>
+  <span class=kt>double</span> <span class=n>b_v</span> <span class=o>=</span> <span class=o>*</span><span class=p>((</span><span class=kt>double</span><span class=o>*</span><span class=p>)</span><span class=n>b</span><span class=o>-&gt;</span><span class=n>data</span><span class=p>);</span>
+  <span class=k>return</span> <span class=n>new_double</span><span class=p>(</span><span class=n>a_v</span><span class=o>+</span><span class=n>b_v</span><span class=p>);</span>
+<span class=p>}</span>
+<span class=n>my_numeric_type</span><span class=o>*</span> <span class=nf>double_free</span><span class=p>(</span><span class=n>my_numeric_type</span><span class=o>*</span> <span class=n>p</span><span class=p>)</span> <span class=p>{</span>
+  <span class=n>free</span><span class=p>(</span><span class=n>p</span><span class=o>-&gt;</span><span class=n>data</span><span class=p>);</span>
+  <span class=n>free</span><span class=p>(</span><span class=n>p</span><span class=p>);</span>
+<span class=p>}</span>
+<span class=n>my_numeric_vtable</span> <span class=n>double_vtbl</span> <span class=p>{</span>
+  <span class=n>double_zero</span><span class=p>,</span>
+  <span class=n>double_add</span><span class=p>,</span>
+  <span class=n>double_free</span>
+<span class=p>};</span>
+<span class=n>my_numeric_type</span><span class=o>*</span> <span class=nf>new_double</span><span class=p>(</span><span class=kt>double</span> <span class=n>d</span><span class=p>)</span> <span class=p>{</span>
+  <span class=n>my_numeric_type</span><span class=o>*</span> <span class=n>ret</span> <span class=o>=</span> <span class=n>malloc</span><span class=p>(</span><span class=k>sizeof</span><span class=p>(</span><span class=n>my_numeric_type</span><span class=p>));</span>
+  <span class=n>ret</span><span class=o>-&gt;</span><span class=n>vtable</span> <span class=o>=</span> <span class=n>double_vtbl</span><span class=p>;</span>
+  <span class=n>ret</span><span class=o>-&gt;</span><span class=n>data</span> <span class=o>=</span> <span class=n>malloc</span><span class=p>(</span><span class=k>sizeof</span><span class=p>(</span><span class=kt>double</span><span class=p>));</span>
+  <span class=o>*</span><span class=p>((</span><span class=kt>double</span><span class=o>*</span><span class=p>)</span><span class=n>ret</span><span class=o>-&gt;</span><span class=n>data</span><span class=p>)</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+  <span class=k>return</span> <span class=n>ret</span><span class=p>;</span>
+<span class=p>}</span>
+
+<span class=n>my_numeric_type</span><span class=o>*</span> <span class=nf>sum</span><span class=p>(</span><span class=n>my_numeric_type</span><span class=o>*</span> <span class=n>nums</span><span class=p>[],</span> <span class=n>size_t</span> <span class=n>n</span><span class=p>)</span> <span class=p>{</span>
+  <span class=n>my_numeric_vtable</span><span class=o>*</span> <span class=n>vtbl</span> <span class=o>=</span> <span class=n>nums</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>-&gt;</span><span class=n>vtable</span><span class=p>;</span>
+  <span class=n>my_numeric_type</span><span class=o>*</span> <span class=n>total</span> <span class=o>=</span> <span class=n>vtbl</span><span class=o>-&gt;</span><span class=n>zero</span><span class=p>();</span>
+  <span class=k>for</span><span class=p>(</span><span class=n>size_t</span> <span class=n>i</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>n</span><span class=p>;</span> <span class=o>++</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>my_numeric_type</span><span class=o>*</span> <span class=n>next</span> <span class=o>=</span> <span class=n>vtbl</span><span class=o>-&gt;</span><span class=n>sum</span><span class=p>(</span><span class=n>total</span><span class=p>,</span> <span class=n>nums</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+    <span class=n>vtbl</span><span class=o>-&gt;</span><span class=n>free</span><span class=p>(</span><span class=n>total</span><span class=p>);</span>
+    <span class=n>total</span> <span class=o>=</span> <span class=n>next</span><span class=p>;</span>
+  <span class=p>}</span>
+  <span class=k>return</span> <span class=n>total</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></div><p>This has the cost of being verbose and allocation heavy, but allows you to hide
+the underlying types and allow you or the user to add new ones.</p>
+<p>Additionally You could replace the definition of <code>my_numeric_type</code> in the
+header with just <code>struct my_numeric_type;</code>. With this done, it is also
+possible to make <code>my_numeric_vtable</code> private by removing it from the header
+since it is only used via pointer. These changes have the trade-off
+of not allowing users to provide new implementations which may or
+may not be desirable.</p>
+<h1 id=avoiding-dependencies-in-headers>Avoiding dependencies in headers<a hidden class=anchor aria-hidden=true href=#avoiding-dependencies-in-headers>#</a></h1>
+<p>These tricks can help you avoid needing to pull in extra headers.</p>
+<p>Use forward declarations generously for non-template C++ types. Except for
+things in the C++ standard library (because of reserved.names.general), you can
+forward declare functions and thus not need their implementation as long as all
+APIs in which you use them consume only pointers. Use this to reduce the number
+of headers you pull in.</p>
+<p><code>void*</code> pointers can be cast to anything except function pointers and anything
+can be cast to them. You can use them as &ldquo;data&rdquo; pointers which are casted an
+interepeted correctly in C++.</p>
+<p>Don&rsquo;t include implementation details in headers, and you can get away with many fewer headers.</p>
+<p>Tools like <code>include-what-you-use</code> can help with this.</p>
+<h1 id=using-a-common-header-file-for-c-and-c>Using a common header file for C and C++<a hidden class=anchor aria-hidden=true href=#using-a-common-header-file-for-c-and-c>#</a></h1>
+<p>Once you have a header for your API that uses only C compatible functions, simply mark it as such like so</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=c1>//a header guard is a nice thing to do, protects against duplicate definitions
+</span><span class=c1></span><span class=cp>#ifndef EXPORTING_C_MARKDOWN_YGKLQ24P
+</span><span class=cp>#define EXPORTING_C_MARKDOWN_YGKLQ24P
+</span><span class=cp></span>
+
+<span class=cp>#ifdef __cplusplus
+</span><span class=cp></span><span class=k>extern</span> <span class=s>&#34;C&#34;</span> <span class=p>{</span>
+<span class=cp>#endif
+</span><span class=cp></span>
+<span class=c1>// all functions here are C accessible
+</span><span class=c1></span>
+<span class=cp>#ifdef __cplusplus
+</span><span class=cp></span><span class=p>}</span>
+<span class=cp>#endif
+</span><span class=cp></span>
+<span class=cp>#endif </span><span class=cm>/* end of include guard: EXPORTING_C_MARKDOWN_YGKLQ24P */</span><span class=cp>
+</span><span class=cp></span>
+</code></pre></div><p>The <code>extern "C"</code> bit here declares the function as having the C ABI rather than the C++ one.</p>
+<p>Hope this helps!</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+</ul>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2022 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>

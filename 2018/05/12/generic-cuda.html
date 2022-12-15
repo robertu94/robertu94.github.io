@@ -1,0 +1,335 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>Generic Cuda | systems++</title>
+<meta name=keywords content="C++,programming,Cuda">
+<meta name=description content="GPU programming has the potential to make embarrassingly parallel tasks very quick. But what if you want to perform the same task on a variety of different types? In this post, I walk through a generic testing code that preforms a vector add on GPU and CPU to verify the correctness.
+The Test Harness Our main function is pretty simple:
+int main(int argc, char* argv[]) { check_type<int>(); check_type<long>(); check_type<double>(); check_type<float>(); return 0; } So how do we write check_type?">
+<meta name=author content="Robert Underwood">
+<link rel=canonical href=http://robertu94.github.io/2018/05/12/generic-cuda.html>
+<meta name=google-site-verification content="G-9KQE44SX6K">
+<link crossorigin=anonymous href=/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.baa4f2053c75d0009e9309aae8f8a8959f5e0372e88f80cdf2951a9533d71ce2.js integrity="sha256-uqTyBTx10ACekwmq6PiolZ9eA3Loj4DN8pUalTPXHOI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=http://robertu94.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=http://robertu94.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=http://robertu94.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=http://robertu94.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=http://robertu94.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KQE44SX6K"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9KQE44SX6K',{anonymize_ip:!1})}</script>
+<meta property="og:title" content="Generic Cuda">
+<meta property="og:description" content="GPU programming has the potential to make embarrassingly parallel tasks very quick. But what if you want to perform the same task on a variety of different types? In this post, I walk through a generic testing code that preforms a vector add on GPU and CPU to verify the correctness.
+The Test Harness Our main function is pretty simple:
+int main(int argc, char* argv[]) { check_type<int>(); check_type<long>(); check_type<double>(); check_type<float>(); return 0; } So how do we write check_type?">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://robertu94.github.io/2018/05/12/generic-cuda.html"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2018-05-12T08:00:14-05:00">
+<meta property="article:modified_time" content="2018-05-12T08:00:14-05:00"><meta property="og:site_name" content="Systems++">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Generic Cuda">
+<meta name=twitter:description content="GPU programming has the potential to make embarrassingly parallel tasks very quick. But what if you want to perform the same task on a variety of different types? In this post, I walk through a generic testing code that preforms a vector add on GPU and CPU to verify the correctness.
+The Test Harness Our main function is pretty simple:
+int main(int argc, char* argv[]) { check_type<int>(); check_type<long>(); check_type<double>(); check_type<float>(); return 0; } So how do we write check_type?">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Generic Cuda","item":"http://robertu94.github.io/2018/05/12/generic-cuda.html"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Generic Cuda","name":"Generic Cuda","description":"GPU programming has the potential to make embarrassingly parallel tasks very quick. But what if you want to perform the same task on a variety of different types? In this post, I walk through a generic testing code that preforms a vector add on GPU and CPU to verify the correctness.\nThe Test Harness Our main function is pretty simple:\nint main(int argc, char* argv[]) { check_type\u0026lt;int\u0026gt;(); check_type\u0026lt;long\u0026gt;(); check_type\u0026lt;double\u0026gt;(); check_type\u0026lt;float\u0026gt;(); return 0; } So how do we write check_type?","keywords":["C++","programming","Cuda"],"articleBody":"GPU programming has the potential to make embarrassingly parallel tasks very quick. But what if you want to perform the same task on a variety of different types? In this post, I walk through a generic testing code that preforms a vector add on GPU and CPU to verify the correctness.\nThe Test Harness Our main function is pretty simple:\nint main(int argc, char* argv[]) { check_typeint(); check_typelong(); check_typedouble(); check_typefloat(); return 0; } So how do we write check_type? Since it does most of our work, let’s break it down step by step. First we create a function that will perform our check and allcoate some data pointers we will use later.\ntemplate class T void check_type() { //create an array for 1024 items of type T  constexpr int elms = 1024; std::arrayT, elms a, b, c, d; T *d_a = nullptr, *d_b = nullptr, *d_c = nullptr; // device vectors  Generating random data To have the best guarentee that the code is working, it is best to test with random data. To do that we need to generate random data according to a distribution. In C++11, you do this by creating a random number distribution and seeding it with a random number engine.\n//create a random number generator  std::random_device rd; std::mt19937 eng(rd()); typedef typename std::conditional std::is_integralT::value, std::uniform_int_distributionT, std::uniform_real_distributionT::type generator; generator dist(0, 100); auto trand = [\u0026dist, \u0026eng]() { return dist(eng); }; In the code above we first create a std::random_device which is responsible to seed our random number generator. However, since this uses hardware randomness (if available), it can be slow. So it is not uncommon to switch to a pseduo-random number generator which we do with the marsenne twister generator mt19937 on the next line. For the generator, we need to decide if we need integral data (i.e. integers) or floating point data. We accomplish this using std::conditional and std::is_integral to select at template instantiation time between a std::uniform_int_distribution and a std::uniform_real_distribution. Finally we create a lambda expression to create a version that behaves like classic C style rand.\nComputed expected on the CPU If you’ve never worked with C++’s  header it makes boiler plate code like this a dream.\n//check_type cont...  //generate random inputs  std::generate(std::begin(a), std::end(a), trand); std::generate(std::begin(b), std::end(b), trand); //compute the expected output on the CPU  std::plusT pl; std::transform(std::begin(a), std::end(a), std::begin(b), std::begin(d), pl); std::fill(std::begin(c), std::end(c), 0); First we generate two arrays with random numbers. After that we compute the results by transforming the two arrays we generated into the result array by adding them. Finally we fill the result array with zeros to ensure the comparison fails latter if some thing goes poorly.\nMoving data to the device Unlike CPU programming, GPU programming requires explicit data movement to be efficient. Before we run the kernel, we need to explicitly request space on the GPU and move the data to it.\n//check_type cont...  //allocate the device buffers for inputs and outputs  size_t size = (sizeof(T) * elms); check_error(cudaMalloc((void**)\u0026d_a, size)); check_error(cudaMalloc((void**)\u0026d_b, size)); check_error(cudaMalloc((void**)\u0026d_c, size)); //load the inputs onto the device  check_error(cudaMemcpy(d_a, a.data(), size, cudaMemcpyHostToDevice)); check_error(cudaMemcpy(d_b, b.data(), size, cudaMemcpyHostToDevice)); Notice we compute the size based off the number of elements and the size of the type, but for C programmers who use malloc this isn’t a huge surprise. We take advantage of the .data() routine to work with std::array instead of raw data pointers.\nYou’ll notice calls to a method called check_error, for now just remember that it performs error handling. We’ll talk more about it in a later section.\nCreating and Launching the Kernel Not much changes in launching the kernel and retrieving the results. All we have to do is add  to dispatch to the correct typed version of vadd.\n//check_type cont...  //launch the kernel  int threadsPerBlock = 256; int blocksPerGrid = (elms + threadsPerBlock - 1) / threadsPerBlock; vaddTthreadsPerBlock, blocksPerGrid(d_a, d_b, d_c, elms); //copy the results back to the host  check_error(cudaMemcpy(c.data(), d_c, size, cudaMemcpyDeviceToHost)); So, how is vadd defined?\ntemplate class T __global__ void vadd(const T* a, const T* b, T* c, int elms) { int idx = blockIdx.x * blockDim.x + threadIdx.x; if (idx  elms) { c[idx] = a[idx] + b[idx]; } } If you’ve ever used cuda, this code isn’t that surprising. They only key difference is the introduction of the template  bit to make the code generic.\nWe could have accomplished the same impact with some code like this:\n#define vadd_impl(T) \\ __global__ void \\ vadd_##T(const T * a, const T * b, T * c, int elms) \\ { \\ int idx = blockIdx.x * blockDim.x + threadIdx.x; \\ if (idx c[idx] = a[idx] + b[idx]; \\ } \\ } vadd_impl(int) vadd_impl(long) vadd_impl(float) vadd_impl(double) # define vadd(T) vadd_##T which would then be called in the driver like so:\nvadd(T)threadsPerBlock,blocksPerGrid(d_a, d_b, d_c, elems) But what do we lose by doing this? We loose some readability and compiler support. Notice the vadd_impl(int), vadd_impl(long), and so on. This has to be explicitly defined for each type. Not only is this tedious, if cuda decided to add a new type, we have to update our library to support it. We also generate the code for each method whether or not we use it. But what do we gain by doing it this way? As much as I hate to say it, opencl support for most hardware available right now. Opencl 2.2 introduced the c++ kernel language which includes template support, but very few vendors support this syntax. Without it, you are left to use macros to get the same generic code.\nPrinting results //check_type cont...  //check if the results are the same and report to the user  std::cout  nameT::n  \" \"  (std::equal(std::begin(c), std::end(c), std::begin(d)) ? \"success\" : \"failed\")  std::endl; cleanup: cudaFree(d_a); cudaFree(d_b); cudaFree(d_c); What is name::n? You may recall that C++ currently doesn’t really have fully featured reflection (that may change if Herb Sutter gets his way…). So if you want the name of a class, you have two choices, typeid or some clever template programming. The problem with typeid.name() is that it returns an implementation defined name. For clang and gcc, this is the mangled name that is generated by the compiler for purposes getting unique names for linking. This can be cleaned up into a human readable name using an implementation specific demangle function. However, this is far from a perfect procedure, so I opted for some clever template programming. name is a struct that defines the name of the type is passed in as its template parameter. It is defined like this:\ntemplate class T struct name { static const char* n; }; #define decl_name(T) \\ template  \\ struct name \\ { \\ static const char* const n; \\ }; \\ const char* const name::n = #T;  decl_name(int); decl_name(double); decl_name(float); decl_name(long); It defines a macro and uses the # operator to convert the template type parameter to a string. The macro creates a template specialization of the name base template provided above. This provides a compile-time way to get the appropriate type name with requiring demangling. There is a weakness to this method. It can’t have separate entries for type aliases (i.e. size_t). But since I didn’t need that flexibility for my code, it was fine.\nSo what is with the label cleanup? Remember the method called check_error? It prints a failure message and cleans up memory if a cuda function fails. It is defined like this:\n#define check_error(x) \\ do { \\ cudaError_t err = (x); \\ if (err != cudaSuccess) { \\ std::cerr goto cleanup; \\ } \\ } while (0) Macros that are intended to act like functions can have bizarre interactions if used in non-standard places. Wrapping a macro in a do { } while(0)} allows the macro to be used almost everywhere a function call can. It also has the effect of creating a scope that can prevent naming conflicts. The parens about (x) are also to prevent weird order of operations bugs that can results from macros. Finally we goto cleanup if the error happens which simplifies the control flow from being a huge if pyramid.\nI hope you find this helpful. Until next time, happy programming!\n","wordCount":"1378","inLanguage":"en","datePublished":"2018-05-12T08:00:14-05:00","dateModified":"2018-05-12T08:00:14-05:00","author":{"@type":"Person","name":"Robert Underwood"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://robertu94.github.io/2018/05/12/generic-cuda.html"},"publisher":{"@type":"Organization","name":"systems++","logo":{"@type":"ImageObject","url":"http://robertu94.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=http://robertu94.github.io/ accesskey=h title="systems++ (Alt + H)">systems++</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=http://robertu94.github.io/about.html title="About Me">
+<span>About Me</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/guides.html title=Guides>
+<span>Guides</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/learning.html title="Learning To Learn">
+<span>Learning To Learn</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/presentations.html title=Presentations>
+<span>Presentations</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=http://robertu94.github.io/>Home</a></div>
+<h1 class=post-title>
+Generic Cuda
+</h1>
+<div class=post-meta><span title="2018-05-12 08:00:14 -0500 -0500">May 12, 2018</span>&nbsp;·&nbsp;7 min&nbsp;·&nbsp;1378 words&nbsp;·&nbsp;Robert Underwood
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>Table of Contents</span>
+</summary>
+<div class=inner><nav id=TableOfContents>
+<ul>
+<li><a href=#the-test-harness>The Test Harness</a></li>
+<li><a href=#generating-random-data>Generating random data</a></li>
+<li><a href=#computed-expected-on-the-cpu>Computed expected on the CPU</a></li>
+<li><a href=#moving-data-to-the-device>Moving data to the device</a></li>
+<li><a href=#creating-and-launching-the-kernel>Creating and Launching the Kernel</a></li>
+<li><a href=#printing-results>Printing results</a></li>
+</ul>
+</nav>
+</div>
+</details>
+</div>
+<div class=post-content><p>GPU programming has the potential to make embarrassingly parallel tasks very quick.
+But what if you want to perform the same task on a variety of different types?
+In this post, I walk through a generic testing code that preforms a vector add on GPU and CPU to verify the correctness.</p>
+<h1 id=the-test-harness>The Test Harness<a hidden class=anchor aria-hidden=true href=#the-test-harness>#</a></h1>
+<p>Our main function is pretty simple:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=kt>int</span>
+<span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span><span class=o>*</span> <span class=n>argv</span><span class=p>[])</span>
+<span class=p>{</span>
+  <span class=n>check_type</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span><span class=p>();</span>
+  <span class=n>check_type</span><span class=o>&lt;</span><span class=kt>long</span><span class=o>&gt;</span><span class=p>();</span>
+  <span class=n>check_type</span><span class=o>&lt;</span><span class=kt>double</span><span class=o>&gt;</span><span class=p>();</span>
+  <span class=n>check_type</span><span class=o>&lt;</span><span class=kt>float</span><span class=o>&gt;</span><span class=p>();</span>
+  <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></div><p>So how do we write <code>check_type</code>?
+Since it does most of our work, let&rsquo;s break it down step by step.
+First we create a function that will perform our check and allcoate some data pointers we will use later.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=kt>void</span>
+<span class=n>check_type</span><span class=p>()</span>
+<span class=p>{</span>
+  <span class=c1>//create an array for 1024 items of type T
+</span><span class=c1></span>  <span class=k>constexpr</span> <span class=kt>int</span> <span class=n>elms</span> <span class=o>=</span> <span class=mi>1024</span><span class=p>;</span>
+  <span class=n>std</span><span class=o>::</span><span class=n>array</span><span class=o>&lt;</span><span class=n>T</span><span class=p>,</span> <span class=n>elms</span><span class=o>&gt;</span> <span class=n>a</span><span class=p>,</span> <span class=n>b</span><span class=p>,</span> <span class=n>c</span><span class=p>,</span> <span class=n>d</span><span class=p>;</span>
+  <span class=n>T</span> <span class=o>*</span><span class=n>d_a</span> <span class=o>=</span> <span class=k>nullptr</span><span class=p>,</span> <span class=o>*</span><span class=n>d_b</span> <span class=o>=</span> <span class=k>nullptr</span><span class=p>,</span> <span class=o>*</span><span class=n>d_c</span> <span class=o>=</span> <span class=k>nullptr</span><span class=p>;</span> <span class=c1>// device vectors
+</span><span class=c1></span>
+</code></pre></div><h1 id=generating-random-data>Generating random data<a hidden class=anchor aria-hidden=true href=#generating-random-data>#</a></h1>
+<p>To have the best guarentee that the code is working, it is best to test with random data.
+To do that we need to generate random data according to a distribution.
+In C++11, you do this by creating a random number distribution and seeding it with a random number engine.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++>  <span class=c1>//create a random number generator
+</span><span class=c1></span>  <span class=n>std</span><span class=o>::</span><span class=n>random_device</span> <span class=n>rd</span><span class=p>;</span>
+  <span class=n>std</span><span class=o>::</span><span class=n>mt19937</span> <span class=n>eng</span><span class=p>(</span><span class=n>rd</span><span class=p>());</span>
+  <span class=k>typedef</span> <span class=k>typename</span> <span class=n>std</span><span class=o>::</span><span class=n>conditional</span><span class=o>&lt;</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>is_integral</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;::</span><span class=n>value</span><span class=p>,</span> <span class=n>std</span><span class=o>::</span><span class=n>uniform_int_distribution</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span><span class=p>,</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>uniform_real_distribution</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;&gt;::</span><span class=n>type</span> <span class=n>generator</span><span class=p>;</span>
+  <span class=n>generator</span> <span class=nf>dist</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>100</span><span class=p>);</span>
+  <span class=k>auto</span> <span class=n>trand</span> <span class=o>=</span> <span class=p>[</span><span class=o>&amp;</span><span class=n>dist</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>eng</span><span class=p>]()</span> <span class=p>{</span> <span class=k>return</span> <span class=nf>dist</span><span class=p>(</span><span class=n>eng</span><span class=p>);</span> <span class=p>};</span>
+</code></pre></div><p>In the code above we first create a <code>std::random_device</code> which is responsible to seed our random number generator.
+However, since this uses hardware randomness (if available), it can be slow.
+So it is not uncommon to switch to a pseduo-random number generator which we do with the marsenne twister generator <code>mt19937</code> on the next line.
+For the generator, we need to decide if we need integral data (i.e. integers) or floating point data.
+We accomplish this using <code>std::conditional</code> and <code>std::is_integral</code> to select at template instantiation time between a <code>std::uniform_int_distribution</code> and a <code>std::uniform_real_distribution</code>.
+Finally we create a lambda expression to create a version that behaves like classic C style <code>rand</code>.</p>
+<h1 id=computed-expected-on-the-cpu>Computed expected on the CPU<a hidden class=anchor aria-hidden=true href=#computed-expected-on-the-cpu>#</a></h1>
+<p>If you&rsquo;ve never worked with C++&rsquo;s <code>&lt;algorithm></code> header it makes boiler plate code like this a dream.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++>  <span class=c1>//check_type cont...
+</span><span class=c1></span>  <span class=c1>//generate random inputs
+</span><span class=c1></span>  <span class=n>std</span><span class=o>::</span><span class=n>generate</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>begin</span><span class=p>(</span><span class=n>a</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>end</span><span class=p>(</span><span class=n>a</span><span class=p>),</span> <span class=n>trand</span><span class=p>);</span>
+  <span class=n>std</span><span class=o>::</span><span class=n>generate</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>begin</span><span class=p>(</span><span class=n>b</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>end</span><span class=p>(</span><span class=n>b</span><span class=p>),</span> <span class=n>trand</span><span class=p>);</span>
+
+  <span class=c1>//compute the expected output on the CPU
+</span><span class=c1></span>  <span class=n>std</span><span class=o>::</span><span class=n>plus</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>pl</span><span class=p>;</span>
+  <span class=n>std</span><span class=o>::</span><span class=n>transform</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>begin</span><span class=p>(</span><span class=n>a</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>end</span><span class=p>(</span><span class=n>a</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>begin</span><span class=p>(</span><span class=n>b</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>begin</span><span class=p>(</span><span class=n>d</span><span class=p>),</span> <span class=n>pl</span><span class=p>);</span>
+  <span class=n>std</span><span class=o>::</span><span class=n>fill</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>begin</span><span class=p>(</span><span class=n>c</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>end</span><span class=p>(</span><span class=n>c</span><span class=p>),</span> <span class=mi>0</span><span class=p>);</span>
+</code></pre></div><p>First we generate two arrays with random numbers.
+After that we compute the results by transforming the two arrays we generated into the result array by adding them.
+Finally we fill the result array with zeros to ensure the comparison fails latter if some thing goes poorly.</p>
+<h1 id=moving-data-to-the-device>Moving data to the device<a hidden class=anchor aria-hidden=true href=#moving-data-to-the-device>#</a></h1>
+<p>Unlike CPU programming, GPU programming requires explicit data movement to be efficient.
+Before we run the kernel, we need to explicitly request space on the GPU and move the data to it.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++>
+  <span class=c1>//check_type cont...
+</span><span class=c1></span>  <span class=c1>//allocate the device buffers for inputs and outputs
+</span><span class=c1></span>  <span class=n>size_t</span> <span class=n>size</span> <span class=o>=</span> <span class=p>(</span><span class=k>sizeof</span><span class=p>(</span><span class=n>T</span><span class=p>)</span> <span class=o>*</span> <span class=n>elms</span><span class=p>);</span>
+  <span class=n>check_error</span><span class=p>(</span><span class=n>cudaMalloc</span><span class=p>((</span><span class=kt>void</span><span class=o>**</span><span class=p>)</span><span class=o>&amp;</span><span class=n>d_a</span><span class=p>,</span> <span class=n>size</span><span class=p>));</span>
+  <span class=n>check_error</span><span class=p>(</span><span class=n>cudaMalloc</span><span class=p>((</span><span class=kt>void</span><span class=o>**</span><span class=p>)</span><span class=o>&amp;</span><span class=n>d_b</span><span class=p>,</span> <span class=n>size</span><span class=p>));</span>
+  <span class=n>check_error</span><span class=p>(</span><span class=n>cudaMalloc</span><span class=p>((</span><span class=kt>void</span><span class=o>**</span><span class=p>)</span><span class=o>&amp;</span><span class=n>d_c</span><span class=p>,</span> <span class=n>size</span><span class=p>));</span>
+
+  <span class=c1>//load the inputs onto the device
+</span><span class=c1></span>  <span class=n>check_error</span><span class=p>(</span><span class=n>cudaMemcpy</span><span class=p>(</span><span class=n>d_a</span><span class=p>,</span> <span class=n>a</span><span class=p>.</span><span class=n>data</span><span class=p>(),</span> <span class=n>size</span><span class=p>,</span> <span class=n>cudaMemcpyHostToDevice</span><span class=p>));</span>
+  <span class=n>check_error</span><span class=p>(</span><span class=n>cudaMemcpy</span><span class=p>(</span><span class=n>d_b</span><span class=p>,</span> <span class=n>b</span><span class=p>.</span><span class=n>data</span><span class=p>(),</span> <span class=n>size</span><span class=p>,</span> <span class=n>cudaMemcpyHostToDevice</span><span class=p>));</span>
+</code></pre></div><p>Notice we compute the size based off the number of elements and the size of the type, but for C programmers who use malloc this isn&rsquo;t a huge surprise.
+We take advantage of the <code>.data()</code> routine to work with <code>std::array</code> instead of raw data pointers.</p>
+<p>You&rsquo;ll notice calls to a method called <code>check_error</code>, for now just remember that it performs error handling.
+We&rsquo;ll talk more about it in a later section.</p>
+<h1 id=creating-and-launching-the-kernel>Creating and Launching the Kernel<a hidden class=anchor aria-hidden=true href=#creating-and-launching-the-kernel>#</a></h1>
+<p>Not much changes in launching the kernel and retrieving the results.
+All we have to do is add <code>&lt;T></code> to dispatch to the correct typed version of <code>vadd</code>.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++>  <span class=c1>//check_type cont...
+</span><span class=c1></span>  <span class=c1>//launch the kernel
+</span><span class=c1></span>  <span class=kt>int</span> <span class=n>threadsPerBlock</span> <span class=o>=</span> <span class=mi>256</span><span class=p>;</span>
+  <span class=kt>int</span> <span class=n>blocksPerGrid</span> <span class=o>=</span> <span class=p>(</span><span class=n>elms</span> <span class=o>+</span> <span class=n>threadsPerBlock</span> <span class=o>-</span> <span class=mi>1</span><span class=p>)</span> <span class=o>/</span> <span class=n>threadsPerBlock</span><span class=p>;</span>
+  <span class=n>vadd</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;&lt;&lt;&lt;</span><span class=n>threadsPerBlock</span><span class=p>,</span> <span class=n>blocksPerGrid</span><span class=o>&gt;&gt;&gt;</span><span class=p>(</span><span class=n>d_a</span><span class=p>,</span> <span class=n>d_b</span><span class=p>,</span> <span class=n>d_c</span><span class=p>,</span> <span class=n>elms</span><span class=p>);</span>
+
+  <span class=c1>//copy the results back to the host
+</span><span class=c1></span>  <span class=n>check_error</span><span class=p>(</span><span class=n>cudaMemcpy</span><span class=p>(</span><span class=n>c</span><span class=p>.</span><span class=n>data</span><span class=p>(),</span> <span class=n>d_c</span><span class=p>,</span> <span class=n>size</span><span class=p>,</span> <span class=n>cudaMemcpyDeviceToHost</span><span class=p>));</span>
+</code></pre></div><p>So, how is <code>vadd</code> defined?</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=n>__global__</span> <span class=kt>void</span>
+<span class=n>vadd</span><span class=p>(</span><span class=k>const</span> <span class=n>T</span><span class=o>*</span> <span class=n>a</span><span class=p>,</span> <span class=k>const</span> <span class=n>T</span><span class=o>*</span> <span class=n>b</span><span class=p>,</span> <span class=n>T</span><span class=o>*</span> <span class=n>c</span><span class=p>,</span> <span class=kt>int</span> <span class=n>elms</span><span class=p>)</span>
+<span class=p>{</span>
+  <span class=kt>int</span> <span class=n>idx</span> <span class=o>=</span> <span class=n>blockIdx</span><span class=p>.</span><span class=n>x</span> <span class=o>*</span> <span class=n>blockDim</span><span class=p>.</span><span class=n>x</span> <span class=o>+</span> <span class=n>threadIdx</span><span class=p>.</span><span class=n>x</span><span class=p>;</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>idx</span> <span class=o>&lt;</span> <span class=n>elms</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>c</span><span class=p>[</span><span class=n>idx</span><span class=p>]</span> <span class=o>=</span> <span class=n>a</span><span class=p>[</span><span class=n>idx</span><span class=p>]</span> <span class=o>+</span> <span class=n>b</span><span class=p>[</span><span class=n>idx</span><span class=p>];</span>
+  <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></div><p>If you&rsquo;ve ever used cuda, this code isn&rsquo;t that surprising.
+They only key difference is the introduction of the <code>template &lt;class T></code> bit to make the code generic.</p>
+<p>We could have accomplished the same impact with some code like this:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=cp>#define vadd_impl(T)                                  \
+</span><span class=cp>  __global__ void                                     \
+</span><span class=cp>  vadd_##T(const T * a, const T * b, T * c, int elms) \
+</span><span class=cp>  {                                                   \
+</span><span class=cp>    int idx = blockIdx.x * blockDim.x + threadIdx.x;  \
+</span><span class=cp>    if (idx &lt; elms) {                                 \
+</span><span class=cp>      c[idx] = a[idx] + b[idx];                       \
+</span><span class=cp>    }                                                 \
+</span><span class=cp>  }
+</span><span class=cp></span><span class=n>vadd_impl</span><span class=p>(</span><span class=kt>int</span><span class=p>)</span>
+<span class=n>vadd_impl</span><span class=p>(</span><span class=kt>long</span><span class=p>)</span>
+<span class=n>vadd_impl</span><span class=p>(</span><span class=kt>float</span><span class=p>)</span>
+<span class=n>vadd_impl</span><span class=p>(</span><span class=kt>double</span><span class=p>)</span>
+
+<span class=cp># define vadd(T) vadd_##T
+</span></code></pre></div><p>which would then be called in the driver like so:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=n>vadd</span><span class=p>(</span><span class=n>T</span><span class=p>)</span><span class=o>&lt;&lt;&lt;</span><span class=n>threadsPerBlock</span><span class=p>,</span><span class=n>blocksPerGrid</span><span class=o>&gt;&gt;&gt;</span><span class=p>(</span><span class=n>d_a</span><span class=p>,</span> <span class=n>d_b</span><span class=p>,</span> <span class=n>d_c</span><span class=p>,</span> <span class=n>elems</span><span class=p>)</span>
+</code></pre></div><p>But what do we lose by doing this?
+We loose some readability and compiler support.
+Notice the <code>vadd_impl(int)</code>, <code>vadd_impl(long)</code>, and so on.
+This has to be explicitly defined for each type.
+Not only is this tedious, if cuda decided to add a new type, we have to update our library to support it.
+We also generate the code for each method whether or not we use it.
+But what do we gain by doing it this way?
+As much as I hate to say it, opencl support for most hardware available right now.
+Opencl 2.2 introduced the c++ kernel language which includes template support, but very few vendors support this syntax.
+Without it, you are left to use macros to get the same generic code.</p>
+<h1 id=printing-results>Printing results<a hidden class=anchor aria-hidden=true href=#printing-results>#</a></h1>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp>  <span class=c1>//check_type cont...
+</span><span class=c1></span>  <span class=c1>//check if the results are the same and report to the user
+</span><span class=c1></span>  <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>name</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;::</span><span class=n>n</span> <span class=o>&lt;&lt;</span> <span class=s>&#34; &#34;</span>
+            <span class=o>&lt;&lt;</span> <span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>equal</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>begin</span><span class=p>(</span><span class=n>c</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>end</span><span class=p>(</span><span class=n>c</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>begin</span><span class=p>(</span><span class=n>d</span><span class=p>))</span>
+                  <span class=o>?</span> <span class=s>&#34;success&#34;</span>
+                  <span class=o>:</span> <span class=s>&#34;failed&#34;</span><span class=p>)</span>
+            <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+
+<span class=nl>cleanup</span><span class=p>:</span>
+  <span class=n>cudaFree</span><span class=p>(</span><span class=n>d_a</span><span class=p>);</span>
+  <span class=n>cudaFree</span><span class=p>(</span><span class=n>d_b</span><span class=p>);</span>
+  <span class=n>cudaFree</span><span class=p>(</span><span class=n>d_c</span><span class=p>);</span>
+</code></pre></div><p>What is <code>name&lt;T>::n</code>?
+You may recall that C++ currently doesn&rsquo;t really have fully featured reflection (that may change if Herb Sutter gets his way&mldr;).
+So if you want the name of a class, you have two choices, <code>typeid</code> or some clever template programming.
+The problem with <code>typeid.name()</code> is that it returns an implementation defined name.
+For clang and gcc, this is the mangled name that is generated by the compiler for purposes getting unique names for linking.
+This can be cleaned up into a human readable name using an implementation specific demangle function.
+However, this is far from a perfect procedure, so I opted for some clever template programming.
+<code>name</code> is a struct that defines the name of the type is passed in as its template parameter.
+It is defined like this:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=k>template</span> <span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=k>struct</span> <span class=nc>name</span>
+<span class=p>{</span>
+  <span class=k>static</span> <span class=k>const</span> <span class=kt>char</span><span class=o>*</span> <span class=n>n</span><span class=p>;</span>
+<span class=p>};</span>
+
+<span class=cp>#define decl_name(T)                                                           \
+</span><span class=cp>  template &lt;&gt;                                                                  \
+</span><span class=cp>  struct name&lt;T&gt;                                                               \
+</span><span class=cp>  {                                                                            \
+</span><span class=cp>    static const char* const n;                                                \
+</span><span class=cp>  };                                                                           \
+</span><span class=cp>  const char* const name&lt;T&gt;::n = #T;
+</span><span class=cp></span>
+<span class=n>decl_name</span><span class=p>(</span><span class=kt>int</span><span class=p>);</span>
+<span class=n>decl_name</span><span class=p>(</span><span class=kt>double</span><span class=p>);</span>
+<span class=n>decl_name</span><span class=p>(</span><span class=kt>float</span><span class=p>);</span>
+<span class=n>decl_name</span><span class=p>(</span><span class=kt>long</span><span class=p>);</span>
+</code></pre></div><p>It defines a macro and uses the <code>#</code> operator to convert the template type parameter to a string.
+The macro creates a template specialization of the <code>name</code> base template provided above.
+This provides a compile-time way to get the appropriate type name with requiring demangling.
+There is a weakness to this method.
+It can&rsquo;t have separate entries for type aliases (i.e. <code>size_t</code>).
+But since I didn&rsquo;t need that flexibility for my code, it was fine.</p>
+<p>So what is with the label <code>cleanup</code>?
+Remember the method called <code>check_error</code>?
+It prints a failure message and cleans up memory if a cuda function fails.
+It is defined like this:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=cp>#define check_error(x)                                                         \
+</span><span class=cp>  do {                                                                         \
+</span><span class=cp>    cudaError_t err = (x);                                                     \
+</span><span class=cp>    if (err != cudaSuccess) {                                                  \
+</span><span class=cp>      std::cerr &lt;&lt; &#34;Failed: &#34; &lt;&lt; __LINE__ &lt;&lt; &#34; &#34; &lt;&lt; cudaGetErrorString(err)    \
+</span><span class=cp>                &lt;&lt; std::endl;                                                  \
+</span><span class=cp>      goto cleanup;                                                            \
+</span><span class=cp>    }                                                                          \
+</span><span class=cp>  } while (0)
+</span></code></pre></div><p>Macros that are intended to act like functions can have bizarre interactions if used in non-standard places.
+Wrapping a macro in a <code>do { } while(0)}</code> allows the macro to be used almost everywhere a function call can.
+It also has the effect of creating a scope that can prevent naming conflicts.
+The parens about <code>(x)</code> are also to prevent weird order of operations bugs that can results from macros.
+Finally we <code>goto cleanup</code> if the error happens which simplifies the control flow from being a huge <code>if</code> pyramid.</p>
+<p>I hope you find this helpful. Until next time, happy programming!</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=http://robertu94.github.io/tags/c++.html>C++</a></li>
+<li><a href=http://robertu94.github.io/tags/programming.html>Programming</a></li>
+<li><a href=http://robertu94.github.io/tags/cuda.html>Cuda</a></li>
+</ul>
+<nav class=paginav>
+<a class=prev href=http://robertu94.github.io/2018/07/31/configuration-management-the-related-systems.html>
+<span class=title>« Prev</span>
+<br>
+<span>Configuration Management: the Related Systems</span>
+</a>
+<a class=next href=http://robertu94.github.io/2017/12/10/life-with-libtooling.html>
+<span class=title>Next »</span>
+<br>
+<span>Life with Libtooling</span>
+</a>
+</nav>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2022 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>
