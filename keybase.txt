@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/robertu94
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://robertu94.github.io
+  * I am robertu94 (https://keybase.io/robertu94) on keybase.
+  * I have a public key ASC-w_gfkWdK1OSiU1PWXQYVo_8wORU6pYDSf0feStPZlwo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120bec3f81f91674ad4e4a25353d65d0615a3ff3039153aa580d27f47de4ad3d9970a",
+      "host": "keybase.io",
+      "kid": "0120bec3f81f91674ad4e4a25353d65d0615a3ff3039153aa580d27f47de4ad3d9970a",
+      "uid": "45e8d829535ab3b520976b9547115819",
+      "username": "robertu94"
+    },
+    "merkle_root": {
+      "ctime": 1534260347,
+      "hash": "5557f1b0b604648ff8888a51ac9e3776c084f285e2e83828a3e8c13f8aa6e6533785ca3cfac883a4fef7ae6f7869de62d7000721ce7a545ad0c7cd282c08381c",
+      "hash_meta": "e00db0a834137975516b4717ce9c57940700a972112ca4c851fd35d0f7848e3e",
+      "seqno": 3454689
+    },
+    "service": {
+      "entropy": "8m/WFqtwFpiYkOxPDMbYwZrA",
+      "hostname": "robertu94.github.io",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "2.6.0"
+  },
+  "ctime": 1534260364,
+  "expire_in": 504576000,
+  "prev": "943d95035cf5a6898ba85fc6c59a9d77f4adbc3ca98c05c05e168d9faeb79655",
+  "seqno": 12,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgvsP4H5FnStTkolNT1l0GFaP/MDkVOqWA0n9H3krT2ZcKp3BheWxvYWTESpcCDMQglD2VA1z1pomLqF/GxZqdd/StvDypjAXAXhaNn663llXEIJFLxpuIidzExei1F7UYqYibmZfQIW4/eH5cDPF56sYnAgHCo3NpZ8RA5XlMxcMUUo8iPnOc27s9r3JVGhnsgHXQEfT0lIiPtrFcrOL1n1wbNFMF8YQU/iE8qO6DjxTtI4lpRJq9tWxQCqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIEwv8kLXwKgL2KAEjYNcm5IFNNr+Vzxv3UGQxSDDn7Pho3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/robertu94
+
+==================================================================
