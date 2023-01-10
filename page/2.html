@@ -72,6 +72,19 @@
 <main class=main>
 <article class=post-entry>
 <header class=entry-header>
+<h2>Generic Cuda
+</h2>
+</header>
+<div class=entry-content>
+<p>GPU programming has the potential to make embarrassingly parallel tasks very quick. But what if you want to perform the same task on a variety of different types? In this post, I walk through a generic testing code that preforms a vector add on GPU and CPU to verify the correctness.
+The Test Harness Our main function is pretty simple:
+int main(int argc, char* argv[]) { check_type&lt;int>(); check_type&lt;long>(); check_type&lt;double>(); check_type&lt;float>(); return 0; } So how do we write check_type?...</p>
+</div>
+<footer class=entry-footer><span title="2018-05-12 08:00:14 -0500 -0500">May 12, 2018</span>&nbsp;·&nbsp;7 min&nbsp;·&nbsp;1378 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Generic Cuda" href=http://robertu94.github.io/2018/05/12/generic-cuda.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
 <h2>Life with Libtooling
 </h2>
 </header>
@@ -176,18 +189,6 @@ Speeding Up Ansible Anyone that has used ansible for more than a few hosts with 
 <footer class=entry-footer><span title="2017-01-22 18:58:14 -0500 -0500">January 22, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;627 words&nbsp;·&nbsp;Robert Underwood</footer>
 <a class=entry-link aria-label="post link to LLVM Tooling for C++" href=http://robertu94.github.io/2017/01/22/llvm-tooling-for-c-.html></a>
 </article>
-<article class=post-entry>
-<header class=entry-header>
-<h2>Interpreters Made Easy
-</h2>
-</header>
-<div class=entry-content>
-<p>The Interpreter pattern from the “Design Patterns: Elements of Reusable Object Oriented Software” can potentially be a very powerful pattern. It allows you to use a domain specific language to represent a complex computational situation. However, writing interpreters in practice can be tricky and time consuming. It really helps to know something about some fundamental parsing algorithms and techniques.
-The most naive approach to writing an interpret involves manually matching each possible next phrase and creating an if else soup to match each possible outcome....</p>
-</div>
-<footer class=entry-footer><span title="2017-01-15 10:14:14 -0500 -0500">January 15, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;580 words&nbsp;·&nbsp;Robert Underwood</footer>
-<a class=entry-link aria-label="post link to Interpreters Made Easy" href=http://robertu94.github.io/2017/01/15/interpreters-made-easy.html></a>
-</article>
 <footer class=page-footer>
 <nav class=pagination>
 <a class=prev href=http://robertu94.github.io/>
@@ -199,7 +200,7 @@ The most naive approach to writing an interpret involves manually matching each 
 </footer>
 </main>
 <footer class=footer>
-<span>&copy; 2022 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>&copy; 2023 <a href=http://robertu94.github.io/>systems++</a></span>
 <span>
 Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &

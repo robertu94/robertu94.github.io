@@ -78,6 +78,18 @@ Posts
 </header>
 <article class=post-entry>
 <header class=entry-header>
+<h2>2022 12 28 Refactoring With Clang Query
+</h2>
+</header>
+<div class=entry-content>
+<p>Have you ever wanted to identify a list of files that would need modifications to adopt a new API? Clang-Query can make this much easier. I recently wanted to introduce a set of helper functions to simplfy an aspect of compressor configuation in LibPressio. But first, I needed to know what modules were effected.
+Clang-query needs a compilation database which can be produced by tools such as bear (if you have a Autotools or Makefile based project) or more sophisticated build systems such as cmake, meson or bazel....</p>
+</div>
+<footer class=entry-footer><span title="2022-12-28 10:01:25 -0600 -0600">December 28, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;289 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to 2022 12 28 Refactoring With Clang Query" href=http://robertu94.github.io/2022/12/28/2022-12-28-refactoring-with-clang-query.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
 <h2>Three Neat Things I Did With Julia
 </h2>
 </header>
@@ -181,19 +193,6 @@ Ease of Use Time to Setup Difficulty of Adding More Machines Difficulty of Creat
 <footer class=entry-footer><span title="2018-07-31 08:00:00 -0500 -0500">July 31, 2018</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;688 words&nbsp;·&nbsp;Robert Underwood</footer>
 <a class=entry-link aria-label="post link to Configuration Management: the Related Systems" href=http://robertu94.github.io/2018/07/31/configuration-management-the-related-systems.html></a>
 </article>
-<article class=post-entry>
-<header class=entry-header>
-<h2>Generic Cuda
-</h2>
-</header>
-<div class=entry-content>
-<p>GPU programming has the potential to make embarrassingly parallel tasks very quick. But what if you want to perform the same task on a variety of different types? In this post, I walk through a generic testing code that preforms a vector add on GPU and CPU to verify the correctness.
-The Test Harness Our main function is pretty simple:
-int main(int argc, char* argv[]) { check_type&lt;int>(); check_type&lt;long>(); check_type&lt;double>(); check_type&lt;float>(); return 0; } So how do we write check_type?...</p>
-</div>
-<footer class=entry-footer><span title="2018-05-12 08:00:14 -0500 -0500">May 12, 2018</span>&nbsp;·&nbsp;7 min&nbsp;·&nbsp;1378 words&nbsp;·&nbsp;Robert Underwood</footer>
-<a class=entry-link aria-label="post link to Generic Cuda" href=http://robertu94.github.io/2018/05/12/generic-cuda.html></a>
-</article>
 <footer class=page-footer>
 <nav class=pagination>
 <a class=next href=http://robertu94.github.io/posts/page/2.html>Next&nbsp;&nbsp;»
@@ -202,7 +201,7 @@ int main(int argc, char* argv[]) { check_type&lt;int>(); check_type&lt;long>(); 
 </footer>
 </main>
 <footer class=footer>
-<span>&copy; 2022 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>&copy; 2023 <a href=http://robertu94.github.io/>systems++</a></span>
 <span>
 Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
