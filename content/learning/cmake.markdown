@@ -20,6 +20,44 @@ I recommend new users to CMake start with the following resources:
 + [Mastering CMake](https://cmake.org/cmake/help/book/mastering-cmake/) is a high level overview of how to use CMake developed and maintained by the CMake Developers.
 + [Modern CMake](https://cliutils.gitlab.io/modern-cmake/) Is focuses on a useful subset of CMake for a number of common tasks.
 
+# Using CMake to build something
+
+If a package cmake 3.15 or newer (most people), the following sequence will build and install a cmake project
+
+```bash
+cmake -S ./path/to/sourcedir -B ./path/to/builddir
+cmake --build -j $(nproc)
+cmake --install
+```
+
+Here `./path/to/sourcedir` is the directory where you source files (specifically the "toplevel" `CMakeLists.txt` is stored).
+and `./path/to/builddir` is a directory (which may not exist) where you want to store build artifacts prior to installation.
+
+You can customize the build by passing flags to the first cmake command.  I commonly use the following
+
+```bash
+cmake -S ./path/to/sourcedir -B ./path/to/builddir \
+        -G Ninja \
+        -DCMAKE_INSTALL_PREFIX=$(pwd)/.local \
+        -DBUILD_SHARED_LIBS=ON \
+        -DBUILD_TESTING=ON \
+        -DCMAKE_BUILD_TYPE=Debug \
+        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+        -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+        -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cmake --build -j $(nproc)
+cmake --install
+```
+
+To prefer the `Ninja` build generator, and `ccache` for faster development builds with shared libraries
+installed to my user's prefix instaed of the the `/` or `/usr` prefix which may require admin privledges
+and to enable LLVM based tooliing (i.e. `clangd` for completions in my editor).  These preferences
+are encoded into my [`m` build tool](https://github.com/robertu94/m).
+
+CMake also respects GNU style envionment variables (i.e. `CXX`, `CC`, `CFLAGS`,
+`CXXFLAGS`, and `LDLIBS`) to pick up common defaults.
+
+
 # Key Commands
 
 Required boilerplate that must appear at the top of your top-level cmake
@@ -100,4 +138,6 @@ CMake provides most of what you want on its own, but a few tools are worth knowi
 
 # Changelog
 
++ 2023-01-09 Added basic usage example
 + 2022-11-15 Created
+
