@@ -11,7 +11,7 @@ tags:
 
 So you want to do empirical computer science? Doing good science is difficult. It requires discipline and attention to detail. However there are strategies that can help you focus on answering the questions you can attempt to answer. First you should ask, “is this a scientific question?” Not all questions are scientific questions. Questions about aesthetics, values, ethics are not science questions. “Is A better than B?” is not a scientific question, it’s a question of values. Questions of values require trade offs, and while important can’t be solved with the scientific method of stating assumptions, posing questions, designing experiments, collecting data, and interpreting results.  “Can method A achieve more flops than method B in a given specific context?” Is more of a scientific question. 
 
-Another of the most important questions to ask is, “What are you trying to measure and what could it tell you?”. The latter part about what it could tell you is essential because it helps protect you from spurious conclusions that weren’t central when designing your system. Answering this pair of questions will often require you to clearly specify a model of your system and understand or at least have an educated guess about how your system works. Once you have answered that question (at least for now; you’ll often have to revise it with new data), my hope is that this document can give you some pointers on how to most efficiently and confidently answer your question.
+Another of the most important questions to ask is, “What are you trying to measure and what could it tell you?”. The latter part about what it could tell you is essential because it helps protect you from spurious conclusions that were not central when designing your system. Answering this pair of questions will often require you to clearly specify a model of your system and understand or at least have an educated guess about how your system works. Once you have answered that question (at least for now; you’ll often have to revise it with new data), my hope is that this document can give you some pointers on how to most efficiently and confidently answer your question.
 
 # Systems Modeling
 
@@ -19,7 +19,7 @@ The process of science begins with a hypothesis — a testable statement about t
 
 The process of creating these models is called systems modeling. While targeted, accurate, and concise systems modeling is challenging often relying on experience and expertise of the modeler or scientist constructing the model, there are a few principles that can be helpful:
 
-Start with a broad model that isn’t refined. Done appropriately you may be surprised about how accurate it is. 
+Start with a broad model that is not refined. Done appropriately you may be surprised about how accurate it is. 
 You can always refine a broad model into a more accurate one by decomposing its parts into a more accurate model.
 Focus on the interfaces, inputs and outputs. These are the trickiest to get right, but also can give you the most leverage to tweak the behavior of your model.
 
@@ -82,7 +82,7 @@ for _, approach in product(range(replicates), approaches):
 ```
 
 
-Code like this can be easily parallelized and distributed using something like a MPI4Py MPICommExecutor (python) or libdistributed work queue (c++).  The C++ equivalent of product is `std::views::cartesian_product` or range-v3’s `cartesian_product`.
+Code like this can be easily parallelize and distributed using something like a MPI4Py MPICommExecutor (python) or libdistributed work queue (c++).  The C++ equivalent of product is `std::views::cartesian_product` or range-v3’s `cartesian_product`.
 
 
 

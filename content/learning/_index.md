@@ -8,6 +8,7 @@ Lastly, if you find the articles insufficient in some way, please [email me](mai
 
 ## Meta 
 
++ [Journaling, Task Management, and Time Tracking]({{< ref time.markdown >}}): three foundational skills for everything else
 + [Reading]({{< ref reading.markdown >}}): how to get the most out of technical documents
 + [Studying]({{< ref litrature-review.markdown >}}): how to go about learning new topics
 + [Intake]({{< ref intake.markdown >}}): how to stay up to date on current topics
@@ -28,6 +29,8 @@ Lastly, if you find the articles insufficient in some way, please [email me](mai
 ## Tools
 
 + [CMake]({{< ref cmake.markdown >}}) the defacto C++ build system
++ [GDB]({{< ref gdb.markdown >}}) the most commonly used open source debugger for natively compiled languages.
++ [MPI]({{< ref mpi.markdown >}}) the defacto parallel processing framework in C++ for HPC
 
 # Most Recent Updates
 

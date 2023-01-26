@@ -1,7 +1,7 @@
 ---
 layout: post
 title:    "Learning to Learn: Software Development on Linux"
-date:     2020-03-21 08:00:00 -0500
+date:     2023-01-22 08:00:00 -0500
 tags: 
 - Learning to Learn
 - Linux
@@ -31,9 +31,9 @@ However if all we study is software engineering, we perhaps have missed the poin
 We lose sight of the development of the individual over time, their maturation in the discipline, and their self awareness of their abilities.
 This is what I call software craftsmanship.
 
-Software craftmanship highlights the need for the development of the individual developer over time.
-As I use it, software craftmanship is the inherently personal processes of software engineering that transcend a project boundary.
-Software engineering more often focuses on a topic like task management as something that is shared amongst a team.
+Software craftsmanship highlights the need for the development of the individual developer over time.
+As I use it, software craftsmanship is the inherently personal processes of software engineering that transcend a project boundary.
+Software engineering more often focuses on a topic like task management as something that is shared among a team.
 Whereas, software craftsmanship is the self awareness of how an individual will progress through the task.
 Software engineering often looks at measures of performance across an organization.
 Whereas, software craftsmanship focuses inward as to how one can grow for the long term.
@@ -75,7 +75,7 @@ From my experience, you it will not be too long before you will hear comments li
 
 1. If you are not using a `$TEXT_EDITOR`, you are an inferior software developer.
 2. `$LANGUAGE_1` is always a better language than `$LANGUAGE_2` be cause it has `$FEATURE`
-3. `$ENGINEERING_METHODLOGY_1` is strictly better than `$ENGINEERING_METHODLOGY_2`, why are you stuck in the past?
+3. `$ENGINEERING_METHODOLOGY_1` is strictly better than `$ENGINEERING_METHODOLOGY_2`, why are you stuck in the past?
 
 Often upon further extermination, these kinds of claims can be shown to logically false and are more an expression of the ignorance or preference person who said them.
 That is not to say that they may not defect some truth, but software development is a study of trade-offs.
@@ -96,7 +96,7 @@ Beyond that, a pedantic C developer might point out that Java has the concept of
 Ultimately, in both of these cases, you need to refine the question and determine objective means to come to a conclusion.
 Software engineering the is study of techniques that make software development more repeatable and effective.
 Software engineering gives us tools to answer questions such as:
-Do I favor performance over readability? Resilience over performance? Portability over Implementability?
+Do I favor performance over readability? Resilience over performance? Portability over Implement-ability?
 These are all choices that skilled software developers make and one a careful application of process can help answer.
 
 **Finally**, these practices are best learned in community.
@@ -126,7 +126,7 @@ Remember my discussions of trade-offs in the previous section?
 You can't really begin to discuss the way you are going to implement a design until you truly understand the constraints involved.
 In most software engineering methodologies, this is called requirements analysis or requirements gathering.
 
-So what does this do with the craftmanship of software?
+So what does this do with the craftsmanship of software?
 Writing good requirements is difficult.
 Almost no one knows exactly what they want from the beginning and can correctly anticipate how that will shift over time.
 A software craftsman can tell the difference between certain and uncertain requirements and design in such a way as to obviate those concerns.
@@ -181,7 +181,7 @@ Consistent means that it is possible that all requirements can be implemented at
 On one level, this means that functional requirements should be non-contradictory.
 On a deeper level it also means that non-functional requirements should be non-contradictory.
 For example, consider the requirement that a system be highly usable.
-This may be in conflict with requirements such as high security or extensive modifiability which tend to increase complexity.
+This may be in conflict with requirements such as high security or extensive modify-ability which tend to increase complexity.
 
 Few if any systems have ever implemented every feature considered.
 In this case, budget concerns (both cost and schedule) can limit the extent of the implementation of the system.
@@ -208,10 +208,10 @@ Requiring this protocol essentially limited their design space to one very expen
 Did they actually need this? Perhaps they did.
 In reality, they could have considered other and possibly better designs if they relaxed this requirement.
 
-Traceability is not so much a question of the content of a requirement but rather the process that created it.
+Trace-ability is not so much a question of the content of a requirement but rather the process that created it.
 The idea is that you should be able to give a rational basis for why the requirement was introduced in the first place.
 It can be "traced" to its cause.
-Traceability becomes increasingly important for long standing projects where the understanding design decisions of years past can become a act of archaeological excavation and avoid repeating the mistakes of the past.
+Trace-ability becomes increasingly important for long standing projects where the understanding design decisions of years past can become a act of archaeological excavation and avoid repeating the mistakes of the past.
 
 Lastly the principle of necessity is the Occam's Razor of software architecture.
 Systems that are less constrained are easier to build.
@@ -261,7 +261,7 @@ Yes, docker provides a substantially better interface for building and distribut
 
 Now how can one learn the most from source code or architectures written by someone else?
 I suggest that you read with a purpose; I've recorded some thoughts on this in [my post entitled "Learning to Learn: Reading"]({{< ref reading.markdown >}})
-Here are some common questions that I ask when I am reading to understand a codebase:
+Here are some common questions that I ask when I am reading to understand a code base:
 
 1. What are the major parts of the code base/architecture related to what I do?
     1. Why did each one need to be included?  Understanding the role a component fills can provide guidance about what kinds of roles or information you may need to implement your system.
@@ -290,14 +290,14 @@ there are [countless studies that record poor quality answers](https://scholar.g
 
 ## What Lessons Have I Learned?
 
-Software craftmanship is not learned overnight.
+Software craftsmanship is not learned overnight.
 It isn't even necessarily learned reading posts or books such as these.
 It is learned by doing and by learning from the doing of others.
 In this section, I want to highlight some of the most important lessons that I have learned about software engineering.
 
 ### Quality Attributes: A powerful way to think about non-functional requirements
 
-One final tool that I think has been very powerful in how I think about software craftmanship is quality attributes.
+One final tool that I think has been very powerful in how I think about software craftsmanship is quality attributes.
 Quality attributes are a way to think about non-functional requirements of a system.
 Here is a listing of Quality Attributes that I learned about in my graduate software engineering course:
 
@@ -311,10 +311,10 @@ Here is a listing of Quality Attributes that I learned about in my graduate soft
     + Compatibility - does it fit into our existing work-flow?
     + Interoperability - does it inter-operate with our our other systems?
 + Maintainability
-    + Correctability - how easy is it to fix bugs when they occur?
-    + Analyzability - how easy is it to figure out what is going on with the system?
-    + Modifiablity - how easy is it to modify the functionality of the system?
-    + Testability - how easy is it to test that the system is operating as expected?
+    + Correct-ability - how easy is it to fix bugs when they occur?
+    + Analyze-ability - how easy is it to figure out what is going on with the system?
+    + Modify-ability - how easy is it to modify the functionality of the system?
+    + Test-ability - how easy is it to test that the system is operating as expected?
 + Portability
     + Hardware Independence - can the system run on multiple kinds of hardware?
     + Software Independence - can we change the underlying software dependencies (the operating system, standard library, other library components, etc...)
@@ -339,8 +339,8 @@ So when thinking about quality attributes in a design, it is important to think 
 So how can one design for quality attributes, let's consider a few examples:
 
 + Design for "native paradigms" -- this requirement emphasizes the learn ability of the system for developers.  By using software patterns that they are used to, they will likely be able to learn and modify the system more easily. However, using native paradigms make the system less portable to systems that don't share these paradigms.  I tend favor native paradigms  things that are unlikely to change.  You probably won't rewrite the entire application in a different language, so using a language paradigm is probably ok.  You probably will change the database system or UI, so organizing your data to optimize for a particular database/graphical toolkit probably isn't worth it.
-+ Favor small modules and functions with a single task -- this requirement favors modifiability and understandability of individual component over the time/resource economy of the whole system.  From personal experience, the cost in time/resource economy is overstated; optimizing compilers can often remove the layers of abstraction introduced completely, and the improved readability of the system is very often worth it.  Additionally, when you isolate concerns like computation from IO, you have to change less if you want to introduce different IO or computational patterns later.
-+ Prefer self-describing IO formats (protocol buffers, HDF5, JSON, CSV, ORMs). Using these formats makes your system more inter-operable, but will likely increase your resource usage over a custom wire/disk protocol. Personally, I tend to prefer interoperability and switch to a custom protocol later if I have to for resource constraints.
++ Favor small modules and functions with a single task -- this requirement favors modify-ability and understand-ability of individual component over the time/resource economy of the whole system.  From personal experience, the cost in time/resource economy is overstated; optimizing compilers can often remove the layers of abstraction introduced completely, and the improved readability of the system is very often worth it.  Additionally, when you isolate concerns like computation from IO, you have to change less if you want to introduce different IO or computational patterns later.
++ Prefer self-describing IO formats (protocol buffers, HDF5, JSON, CSV, ORMs). Using these formats makes your system more inter-operable, but will likely increase your resource usage over a custom wire/disk protocol. Personally, I tend to prefer Interoperability and switch to a custom protocol later if I have to for resource constraints.
 
 ### Diagramming: A Quick Picture is Worth a Hundred Hours
 
@@ -390,7 +390,7 @@ I don't use these notations strictly, but where I think they are helpful.
 Lastly, what tools should I use to create diagrams?
 Most of the time, I use a white board or pen and paper.
 The goal is to reduce the effort of brainstorming interactions.
-However, when I need something that looks more "professional", I use either Inkscape or Dia to make a publication quality version.
+However, when I need something that looks more "professional", I use either Inkscape, draw.io or Dia to make a publication quality version.
 
 ### Blank Baling: The Art and Value of Prototyping
 
@@ -473,7 +473,7 @@ Here are some questions that I think about when designing types:
   - Exception/Error behavior -- can the invariant be maintained in the case of errors/warnings?
 4. How well does this class/function follow the robustness principle (be liberal in what you accept, and conservative in what you return)?
   - Am I really specifying the broadest interface that I can still consistently use correctly?
-  - You can find some my thoughts about [liberal vs conservative interfaces here]({% post_url 2019-11-17-strong-or-robust %})
+  - You can find some my thoughts about [liberal vs conservative interfaces here]({{< ref "/posts/2019-11-17-strong-or-robust" >}})
 5. Does the function/class appropriately propagate errors at the correct level of abstraction?
 
 Reviewing your plan after diagramming and prototyping some of the important APIs can really go along way into developing a use-able interface.
@@ -650,18 +650,18 @@ Comments are most appropriate when:
 4. To mark TODOs for the code
 5. When the code serves as a personal reference or a teaching tool when it makes the code self-contained or to emphasize a subtle point. 
 
-I tend to favor a lighter comment style. A comment can be seen in some cases as a code smell indicating that the APIs and functions involved doesn’t reflect the intent of the code. A developer favoring this style of comments would use variable and function names to show intent rather than comments. Note that this works best when functions are small and describe a single intent.
+I tend to favor a lighter comment style. A comment can be seen in some cases as a code smell indicating that the APIs and functions involved dose not reflect the intent of the code. A developer favoring this style of comments would use variable and function names to show intent rather than comments. Note that this works best when functions are small and describe a single intent.
 
-Maybe that changes if the code is truely arcane (a regex, shell code, forth, awk, Perl, some Haskell for a C programmer, and TeX all come to mind) maybe this changes, and documentation is sparse to non-existent.
+Maybe that changes if the code is truly arcane (a regex, shell code, forth, awk, Perl, some Haskell for a C programmer, and TeX all come to mind) maybe this changes, and documentation is sparse to non-existent.
 
-However it’s worth knowing in every windows IDE I’ve ever used you just hover unfamiliar APIs like VirtualAllocEX and the IDE summarizes either the call and it’s arguments. If your comment shows up on hover, you don’t need to add it.
+However it’s worth knowing in every windows IDE I have ever used you just hover unfamiliar APIs like VirtualAllocEX and the IDE summarizes either the call and it’s arguments. If your comment shows up on hover, you don’t need to add it.
 
-I write comments while learning new APIs.  I keep a running journal of code like this, and even have a directory on my machine for code like this called `play` (Thank you Dr. Malloy) for this code.  It also has a place in teaching examples.  When I was first learning Perl and Haskell, it annoyed me how terse some of the code was without any comments, and it wasn’t until I found a book that had comments like this that I finally got it.  
+I write comments while learning new APIs.  I keep a running journal of code like this, and even have a directory on my machine for code like this called `play` (Thank you Dr. Malloy) for this code.  It also has a place in teaching examples.  When I was first learning Perl and Haskell, it annoyed me how terse some of the code was without any comments, and it was not until I found a book that had comments like this that I finally got it.  
 
 When thinking about whether and how to comment consider:
 
 1. Tools can do a lot for you (even tools like Vim), and you should think about if you are duplicating their effort. 
-2. Good comments like code need to be updated and maintained with the code around them; is this comment worth the cost to maintain it in addition to the code?.  Saying `close` closes a file in a comment is probably obvious and updating the comment is probably more effort than it’s worth, but I would not have guessed that VirtualAllocEx could allocate memory in another process.   As a primarily a linux/unix dev, I appreciated this comment pointing out this huge possible foot-gun in the Windows API.  
+2. Good comments like code need to be updated and maintained with the code around them; is this comment worth the cost to maintain it in addition to the code?.  Saying `close` closes a file in a comment is probably obvious and updating the comment is probably more effort than it’s worth, but I would not have guessed that VirtualAllocEx could allocate memory in another process.   As a primarily a linux/unix developer, I appreciated this comment pointing out this huge possible foot-gun in the Windows API.  
 3. Git commit messages can not only serve as a place to keep important context about why a change was made, but also a high level summary of what is going on within a change. Reading through a large set of small changes is still challenging without some high level context of what was changed and why. In the note taking world this is called progressive summarization and is powerful in helping you review critical information quickly. 
 
 
@@ -828,6 +828,8 @@ You'll thank me later.
 ### Profilers
 
 Profilers are typically "lightweight" tools that measure where the execution time of a program is being spent.
+They save you the effort of having to manually instrument your code at all points where you would like to gather timings.
+Some profilers can also incorporate low level system information from the kernel to give a more complete picture of performance.
 
 One common problem across these tools is how to get a meaningful stack-traces.
 Oftentimes, this comes down to two issues: including debugging symbols and not clobbering the frame pointer.
@@ -865,6 +867,18 @@ To find more information, I would highly recommend Brandon Greg's [page on Linux
 ### Build Systems
 
 Another key tool to become familiar with is your build system.
+Build systems as you expect allow you to build your project.
+Yes, you could write a shell script or a program to build your program, but a proper build system will do a better job than you can quickly do without it:
+
++ parallelize your build according to dependencies
++ handle caching and incremental compilation between builds
++ download and include dependencies
++ handle differences between compilers
++ provide a system to cross compile for a different native architecture
++ automatically provide hooks to customize installation, and debug builds
++ provide reasonable defaults.
+
+
 Every language seems to rely on its own build system and there are relatively few of them that work across languages.
 
 So what should you learn to do with your build system?
@@ -879,7 +893,15 @@ Why do this, it ultimately saves you time and effort for almost everything else 
 ### Version control
 
 Lastly, the final tool that you should learn is a version control system.
-At this point in history, that tool is `git`.
+Without a version control system, you can still track changes yourself: You've probably had files on your computer called `thing_v1.txt`, `thing_v2.txt`, etc.
+But then the question quickly becomes what if multiple team mates are making changes simultaneously, what was changed? Everything merged correctly? Why were things changed?
+Version control systems solve the problems of
+
++ tracking changes over time
++ making it easier to understand why a change was made
++ make it easier to share those changes consistently with others.
+
+At this point in history, that tool used most often is `git`.
 Git currently is prevalent because it scales well to extremely large code bases and is flexible enough to support a number of different work flows.
 To learn Git, I recommend the [git book](https://git-scm.com/book/en/v2)
 
@@ -909,8 +931,85 @@ More nuanced answers say things like, "one branch per feature", "one branch per 
 I've worked with each, and don't have a strong opinion on which is correct.
 It is more important to be consistent.
 
+## Libraries
+
+Also important to any development effort is what you won't develop yourself.
+Libraries are a form of dependency that provide standard functionality that you can adopt into your code leaving these dependencies to others.
+While I talk about dependencies [more fully in another post]({{< ref "/posts/2022-05-05-dependencies.markdown" >}})
+I wanted to briefly list here the more kinds of things that you typically want to bring in as dependencies, and some of the key trade-offs
+
+
+### Logging
+
+Logging is a deceptively simple problem.
+Yes, the absolute simplest approach of printing to `stdout` or `console.log` is really easy to do,
+but very quickly, you have a much more complicated problem.
+
+Here are some of the things that send people looking for more complex logging tools:
+
++ automatic insertion of context (i.e. stack traces, hostname, time, etc...)
++ distributed logging across several machines
++ log immutability and tamper dectection
++ filtering messages from a particular subsystem, severity, or host
++ extremely high reliability requirements -- if logging does not work, you can not debug anything
++ extremely high bandwidth requirements -- logging should not slow down the system
++ extremely constrained resource requirements -- for example `printk` in the kernel needs to work before memory allocators are initialized.
++ human and machine readability
+
+Appropriate logging frameworks differ for each language, but projects like open telemetry are trying to 
+provide standard approaches to this that work across languages.
+
+### Configuration Files
+
+Almost every program over a certain size has configuration files of some sort.
+When considering how to design your configuration files, the real question is
+what is your goal, and what will your users need and expect?
+
+Here are some of the things that send people looking for more complex configuration tools:
+
++ human readable error messages when an error is encountered parsing the file
++ types other than strings
++ fast parsing performance
++ human and machine read-abilty
++ machine and machine edit-ablity
+
+Here are a few possible choices:
+
+Languages like [like CUE](https://cuelang.org/) or
+[dHall](https://dhall-lang.org/) provide advanced features (data validation,
+schema definition and error reporting, code generation, scripting tools) but
+may not serve your particular language well or provide more features than you
+may need.
+
+YAML is another popular choice, giving a lot of flexibility, but features
+aspects like type autodetection which are misfavored by some for the same
+reasons that implicit casts are disfavored by some in C++. 
+Let’s be fair here: most the reasons people hate yaml are not yaml's fault. They
+often boil down to the person who implemented yaml config files, essentially
+wrote a Turing complete programming language in them (cough Kubernetes), or to
+use it as a relational database and it is not  the right tool for that.
+
+TOML has many of the niceties of yaml but in my opinion provides less pain in
+the edge cases and stripping out some of the unneeded features.  
+
+JSON is ubiquitous and simple, but some would argue is really easy to typo.
+Classic ini files are also really simple, but lack schema validation.
+
+XML is a very verbose (and often much maligned), but enables very sophisticated
+manipulation and expression which may be appropriate given the complexity of a
+particular use case -- for example libVirt uses XML for virtual machine
+definition and the web uses HTML which is similar in several respects.
+
+Several projects that use embedded python or lua as the config file language.
+This requires some setup, but is incredibly powerful granting functions,
+looping, variables, string manipulation, and object orientation.
+However all of this flexibility makes validation harder.
+
 # Testing
 
+One of the most expensive aspects of software development is when software either doesn't do what is supposed to.
+Even innocuous seeming changes can sometimes have massive unintented effects, being able to detect these quickly massively increases productivity.
+For this reason as soon as you know what you want to develop, testing code should follow swiftly after.
 
 So now you have some code that is ready to test, how do you test it?
 Scholars divide testing into two categories: verification and validation.
@@ -1104,7 +1203,7 @@ Here are a few key pieces of advice for building containers:
 7. Consider setting up a caching proxy if you are going to be building containers frequently to speed up the download process.
 8. If you need to start several processes in the container, then write an entry point script that will start them or use a container management system like `supervisord`
 9. If at all reasonable, try to separate different daemons into separate containers.  This will make it easier to update them and restrict the permissions on a single container.
-10. Consider using a management tool like `docker-compose` or `kubernetes` when you wan to run more than a few containers on a regular basis.  This will help you ensure that containers are spawned in a consistent fashion.
+10. Consider using a management tool like `docker-compose`, `dagger`, or `kubernetes` when you wan to run more than a few containers on a regular basis.  This will help you ensure that containers are spawned in a consistent fashion.
 
 ## Continuous Integration and Continuous Deployment
 
@@ -1115,6 +1214,7 @@ Automating the process means that your computer can work along side you to ensur
 
 There are a bunch of tools for doing CI/CD.
 The most well known are probably Jenkins, TravisCI, AppVeyor, and GitLab.
+I've recently come to appreicate tools like `dagger` which enable portable CI workflows.
 Each offers their own distinct advantages and disadvantages that you should consider carefully when choosing which to use.
 Almost all of them have templates for most common languages that you can copy and paste for your applications. 
 Setting up CI/CD often isn't hard, but you will likely be glad that you did.
@@ -1129,6 +1229,7 @@ Please let me know if you have any feedback.
 
 ## Change Log
 
++ January 2023 - Added section on libraries, updated sections on tools to explain why to use them.
 + October 2022 - Added section on comments
 + August 2020 - Added links to flame graphs.
 + March 2020 - Initial Version

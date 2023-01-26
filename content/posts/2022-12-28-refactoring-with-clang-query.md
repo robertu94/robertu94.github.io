@@ -1,7 +1,6 @@
 ---
-layout: post
-title: "2022 12 28 Refactoring With Clang Query"
-date: 2022-12-28T10:01:25-06:00
+title: "Refactoring With Clang Query"
+date: "2022-12-28"
 tags: 
 - clang
 - programming
