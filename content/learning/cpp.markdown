@@ -26,6 +26,15 @@ For this section, I would read at least Effective C++ and Effective Modern C++, 
 4. Modern Effective C++ by Scott Meyers - How to effectively use new features in C++11 which radically modernized the language.
 5. [C++ Core Guidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md) - How to effectively use newer parts of the language.
 
+Here are some challenges to improve your C++ knowledge
+
++ Implement `std::unique_ptr` and then `std::shared_ptr` from scratch.
++ Implement `std::tuple`, `std::variant` and `std::any` from scratch.
++ Implement a function `fmap` that takes a arbitrary `Container` of with elements of type `T`, a function which may convert each `T` to a possibly different type `V` and then stores the result into an instance of that container.  Ensure your function works for `std::vector`, `std::map`, `std::optional`, and `std::tuple`.
++ Implement a function `curry` that take a function of arity `k` and an argument of the type of the first argument and returns a function of arity `k-1`.
++ Implement a function `flatten` that takes possibly arbitrarily nested sequence containers and returns all of the items fully un-nested.
+{.activity}
+
 ## Standard Library
 
 It almost goes without saying that the C++ Standard library is incredibly useful, and you should almost always start here.  Its not as complete as say Python's standard library, but its far more flexible.  I would use [cppreference.com](http://en.cppreference.com/w/) or [devdoc.io](https://devdocs.io/) to read documentation on the standard library.
@@ -35,24 +44,24 @@ I would at least know about the following core objects in the standard library o
 | Name              | Use                                                                         |
 | ---------------   | --------------------------------------------------------------------------- |
 | `<algoritm>`      | generally useful functions                                                  |
-| unique_ptr        | pointers that are the only reference to an object in memory                 |
-| shared_ptr        | pointers that automatically count references                                |
-| format            | a typesafe printf-like alterative to iostreams                              |
-| array             | a statically allocated array with handy bindings                            |
-| vector            | a dynamically resizing array                                                |
-| map               | key value store, often implemented as a red-black tree                      |
-| unordered_map     | key value store, often implemented as a hash table                          |
-| set               | key store, often implemented as a red-black tree                            |
-| unordered_set     | key store, often implemented as a hash table                                |
+| `std::unique_ptr`        | pointers that are the only reference to an object in memory                 |
+| `std::shared_ptr`       | pointers that automatically count references                                |
+| `std::format`            | a typesafe printf-like alterative to iostreams                              |
+| `std::array`             | a statically allocated array with handy bindings                            |
+| `std::vector`            | a dynamically resizing array                                                |
+| `std::map`               | key value store, often implemented as a red-black tree                      |
+| `std::unordered_map`     | key value store, often implemented as a hash table                          |
+| `std::set`               | key store, often implemented as a red-black tree                            |
+| `std::unordered_set`     | key store, often implemented as a hash table                                |
 | Iterator Concepts/Ranges | simplifies accessing members of a collection                                |
-| string            | dynamically resizing character data                                         |
-| span              | a nonowning view into an existing container                                 |
-| string_view       | a non-owning reference to character data                                    |
-| tuple             | a generic version of a struct useful for generic programming                |
-| list              | a doublely linked list                                                      |
-| ostream           | output to file, string, or stdout                                           |
-| istream           | input from file, string, stdin                                              |
-| exception         | indicates extra-ordinary circumstances                                      |
+| `std::string`            | dynamically resizing character data                                         |
+| `std::span`              | a nonowning view into an existing container                                 |
+| `std::string_view`       | a non-owning reference to character data                                    |
+| `std::tuple`             | a generic version of a struct useful for generic programming                |
+| `std::list`              | a doublely linked list                                                      |
+| `std::ostream`           | output to file, string, or stdout                                           |
+| `std::istream`           | input from file, string, stdin                                              |
+| `std::exception`         | indicates extra-ordinary circumstances                                      |
 
 ## Build Systems and the C++ Ecosystem
 
@@ -75,7 +84,7 @@ For this section, read what each class of tool does; then use it as a reference 
 | Compilers                     | GCC `g++`                   | Currently still faster, more common                      |
 | IDE Integratin                | clangd                      | Clang based IDE integration shows warnings and advice    |
 | Debugger                      | lldb                        | Highly programmable, handles templates well, easy to use |
-| Debugger                      | gdb                         | The standard debugger, esoteric interface                |
+| Debugger                      | gdb                         | The standard debugger, esoteric interface, [more on gdb here]({{< ref gdb.markdown >}})                |
 | Debugger                      | templight                   | Specialized debugger for compile time C++ code           |
 | Debugger                      | metashell                   | An older, ease of use tool built atop templight          |
 | Indexing                      | Exhuberant Ctags            | The de facto tool for this job                           |
@@ -115,13 +124,22 @@ Here is a list of other libraries that I have used and would recommend.
 | Benchmarking            | Google Benchmark   | Very common benchmarking tool, easy to use                |
 | Networking              | Protobuf/gRPC      | Networking Server/Communication framework                 |
 | Networking              | Boost.ASIO         | De facto C++ native networking library                    |
-| Networking              | sys/socket.h       | Still works, arguably simpler than ASIO                   |
+| Networking              | `sys/socket.h`       | Still works, arguably simpler than ASIO                   |
 | Graphs                  | Boost.Graph        | Tons of standard graph algorithms and structures          |
-| Date Math               | date.h             | Incredibly fast, easy to use; now in the standard library |
+| Date Math               | `date.h`             | Incredibly fast, easy to use; now in the standard library |
 | JSON/XML Parsing        | Boost.PropertyTree | Easy to use                                               |
+| JSON Parsing        | nholman-json | Extreemly easy to use                                               |
 | Distributed Programming | HPX                | A different take on HPC; I would argue easier to use      |
 | Distributed Programming | Boost.MPI          | More native than standard MPI; fewer interfaces           |
-| Distributed Programming | OpenMPI            | Very flexible                                             |
+| Distributed Programming | OpenMPI/MPICH            | Very flexible                                             |
+
++ Profile some C++ that you wrote.  What is are the bottlenecks in your code and why?
++ Port the build system of a package that you use to another build system.  What was easier or harder?
++ Configure your build system to run your tests, run `clang-format`, `clang-tidy` and `clangd`
++ Create a program trace with `ltrace`, `strace`, `llvm-xray`, and `perf` compare and contrast the outputs
++ Write a `clang-query` script to find all references to a function or of an enum value.
++ Try accelerating your build with `ccache`/`sccache` or `icecream`/`distcc`.
+{.activity}
 
 ## Profiling and Speeding up C++ builds
 
@@ -137,6 +155,9 @@ See [The Blog post "time-trace: timeline / flame chart profiler for Clang"](http
 
 Once you've made as many changes to your problematic structures and functions as you can, you may further reduce build times by using "precompiled headers" and "unity builds".  Precompiled headers work by serializing the compilers internal state so that the parsing phase of C++ can be skipped.  Unity builds reduce the time required to instantiate identical headers by grouping source files for compilation.  These both are not without their drawbacks for tooling which relies on source file names such as clangd, but I am hopeful that both of these techniques will be obviated with C++20 modules while improving the tooling situation.  However, at time of writing, C++20 modules are not yet completely implemented by most major compilers.
 
++ use clang's `-ftime-trace` or a similar feature in another compiler to profile your build.  What could you do to accelerate the build?
+{.activity}
+
 ## Object-Oriented C++
 
 C++ has a uniquely complicated object oriented system.  Most of this is due to the use of templates for generic programming and Turing-completeness of templates.
@@ -148,7 +169,11 @@ For this section, the ordering is less important.  Several of these books apply 
 3.	The Pimpl Idiom - Pointer to Implementation is a powerful technique to reduce compile time dependancies.  Read the set of [two articles](https://herbsutter.com/gotw/) entitled "Compilation Firewalls" by Herb Sutter.
 4.	The RAII Pattern - Resource Acquisition is Initialization is a fundamental to memory and exception safe programming in C++. Read the [article about RAII](http://en.cppreference.com/w/cpp/language/raii) on CPP Reference.
 5.	Modern C++ Design: Generic Programming and Design Patterns Applied by Andrei Alexandrescu - One of the few uniquely C++ Object-Oriented books I have read.  It assumes a fair bit of knowledge on generics and templates so read about it first.
-6.	[Metaclasses: Thoughts on Generative C++](https://www.youtube.com/watch?v=4AfRAVcThyA) by Herb Sutter - This video highlights were object oriented C++ is going at time of writing in early 2018.
+6.	[Metaclasses: Thoughts on Generative C++](https://www.youtube.com/watch?v=4AfRAVcThyA) by Herb Sutter - This video highlights were object oriented C++ maybe going at time of writing in early 2018.
+
++ Wrap a c library that you use to use RAII.  How much more concise is the user code?
++ Try implementing generic versions of the Gang of Four patterns from "Object Oriented Design Patterns".  The flyweight pattern and factory pattern are especially rewarding to implement.
+{.activity}
 
 ## Generic C++ and Templates
 
@@ -161,7 +186,8 @@ For this section, the ordering is especially important, the later items are quit
 3.	"Modern C++ Design: Generic Programming and Design Patterns Applied" by Andrei Alexandrescu - I listed this in the object-oriented section, but this book opened my eyes the possibilities of C++ templates and generic programming in general.
 
 
-If you can't figure out why a particular template won't compile, consider using templight or metashell.
+If you can't figure out why a particular template won't compile, consider using `templight` or `metashell`.
+
 
 ## Functional C++
 
@@ -190,9 +216,11 @@ I have two key suggestions to learn the language:
 1.	Start small: choose a subset of the language that you want to learn well.  The language is too large for most if not all people to be an expert on all parts of the language.  Somethings like parameter passing should be in everyone's subset, but the oddities of `std::atomic<>`, `vector<bool>` or the CRTP probably don't need to be.
 2.	Expand your subset as needed: choose a series of small projects that motivate why you want to learn various aspects of the language.  This will help you practice and remember what you've learned.
 
+
 I hope you find this useful.  Until next time!
 
 ## Change Notes
 
++ 2023 - improved formatting, updated tools
 + 2020 - Added section on build profiling, updated tools, library components to learn, and further resources
 + 2018 - Initial version

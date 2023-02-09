@@ -129,6 +129,10 @@ I've just scratched the surface.  There are many more powerful features that I h
 
 For more information see the [GDB documentation](https://sourceware.org/gdb/onlinedocs/gdb/)
 
++ Many students that I know only use the `run`, `continue`, `break`, `step`, `fin`, `backtrace` and `print` and `next` functions.  Which if any of these GDB features have you used?  How could they improve your debugging process?
++ Write a gdb script that breaks on a function when an argument is a particular value and prints a backtrace before continuing.
+{.activity}
+
 I hope this helps!
 
 # Changelog

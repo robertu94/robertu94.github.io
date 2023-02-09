@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  “Suggestions for the Design of Computational Experiments”
+title:  "Suggestions for the Design of Computational Experiments"
 date:   2022-10-18 08:00:00 -0500
 tags: 
 - Learning to Learn
@@ -246,6 +246,9 @@ sns.set_theme(context="talk", style="whitegrid")
 fig = sns.barplot(x="approach", y="runtime", data=success)
 fig.get_figure().savefig("runtime.eps")
 ```
+
++ Which of the principles in this chapter should you focus on improving in your experimental design?  Which do you do well with?
+{.activity}
 
 
 # Changelog

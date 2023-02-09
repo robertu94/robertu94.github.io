@@ -20,6 +20,11 @@ My chemistry and physics teacher -- Dr. Brown -- in high school always began his
 +	Summarize -- Summarize the document.  I find about 1 paragraph is for every 10 pages of a standard technical document to present a high level overview.  The summary should answer the most important questions you developed.  If you can't get 1 paragraph, there are three possible problems 1) the document is simply too dense and you need more text, or 2) you are not actually summarizing but paraphrasing, or 3) which is most likely you don't understand the paper well enough to summarize it, and you should read it again with some more questions based on what you learned last time.  I'll reiterate the key piece of advise I learned from his class: "be concise".
 + Test -- Test your knowledge of the document using the questions you developed.  If you can't retain the information without looking at your notes you should try again by starting at the question phase using the questions you did not retain well.  It will probably help you to go through the summarize and reading phases again so as to rehearse the information in your mind.
 
+> 
+
++ try applying PQRST to a paper or book that you need to read.  How did the questions you asked help in your understanding?
+{.activity}
+
 # Strategies for Reading Source Code
 
 Not all systems are well documented.  For example the Linux kernel has over 400,000 lines of Documentation which seems like a lot until you consider that it has 22,802,098 of C source files and headers as of 4.18-rc6.  This means that if you want to understand them you will need to do some digging.  Reading the source code can also give you insight at a level of detail that the documentation does not.  But how do you get started with a project that large?  Here are a few suggestions:
@@ -31,6 +36,9 @@ Not all systems are well documented.  For example the Linux kernel has over 400,
 5. Build an interaction diagram.  Look for which functions call other functions and in what contexts.  Having a clear picture of what functions call which other functions can give insight into the layers in the architecture or suggest what other aspects of the system to study next if necessary.
 6. Use tools like ltrace, strace, xray, or perf to gather information about the runtime call usage.  This can provide insight into what the system does under live conditions.
 7. Use a debugger. When you are curious about a specific use case of a system, you can use a debugger to see what values are set or where they are changed through the use of breakpoints and watchpoints; However this comes with a performance cost, and is notoriously difficult to do on distributed systems.
+
++ use the techniques in this section to summarize some source code for a project that you use, but are not familiar with.  What did you learn?
+{.activity}
 
 # Strategies for Reading Journals and Conference Papers
 
@@ -53,6 +61,7 @@ Academic papers are often peer-reviewed.  It is also often helpful to think like
 5.	How well organized is the paper?  Why did the authors organize the paper the way that they did, and does that reduce forward references and  duplication while presenting the information in a logically ordered manner that flows well?
 6.	How confident am I about my ratings?  If you can't answer these questions confidently, you should probably read some more of the cited work in the paper so that you have a better understanding of norms and conventions in the field they are studying.  It may also be helpful to do a Google Scholar search for key concepts in the paper.
 
-
++ Identify 3 key citations and read papers that cite or are cited by the paper you read.  How does this work compare to similar papers?
+{.activity}
 
 Hope this helps!

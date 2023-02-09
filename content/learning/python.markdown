@@ -64,7 +64,7 @@ Python's claim to fame is that it has one of the best "batteries included" stand
 | itertools              | Tools for working with iterators             |
 | functools              | Tools for higher level functions             |
 | unittest               | Built-in unit testing framework.              |
-| doctest.               | Another unit testing framework that uses doc strings |
+| doctest               | Another unit testing framework that uses doc strings |
 
 ## 3rd Party Libraries
 
@@ -182,12 +182,13 @@ Once you've done the above, I would consider the following resources for father 
 
 # Suggestions to Learn the Language
 
-I have one key suggestion to learning Python:
+I have one key suggestion to learning Python: Refuse the temptation to write C in Python.  Python has great functional and object oriented facilities use them.
 
-1. Pick a project that is useful you:  Python has libraries for almost everything.  Some much better than others.  I would suggest picking a project then do some quick research about what libraries people use to do that kind of work.
-2. Refuse the temptation to write C in Python.  Python has great functional and object oriented facilities use them.
-3. After you have written the code, re-write it after watching videos like the ones from Raymond Hettinger or considering the Zen of Python.  This will help you understand Pythonic style more and write more natural code.
++ Pick a project that is useful you:  Python has libraries for almost everything.  Some much better than others.  I would suggest picking a project then do some quick research about what libraries people use to do that kind of work.
++ After you have written the code, re-write it after watching videos like the ones from Raymond Hettinger or considering the Zen of Python.  This will help you understand Pythonic style more and write more natural code.
+{.activity}
 
 Hope this helps!
+
 
 

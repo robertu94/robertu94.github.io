@@ -10,7 +10,7 @@ tags:
 Communication is essential to the enterprise of knowledge.
 Without communication, we would never be able to build upon the works of others or have them build upon our own.
 One of the most important -- and challenging -- arts within communication is writing.
-Writing is unique amongst commutative forms in its durability and portability.
+Writing is unique among commutative forms in its durability and portability.
 Once written, the words of the author can transcend even their death and travel places they never dreamed to tread.
 However writings portability and durability are the same feature that present its central challenge: With the author long gone, how can the he still communicate his or her intent?
 In this post, I ponder how I face these challenges and encourage others to do the same.
@@ -83,6 +83,45 @@ Here are some common mistakes that I have seen:
 + Not justifying the reasons for your methods.  Nearly all experiments have some number of arbitrary choices.  However, there can be great significance in which choices were arbitrary and which were informed.  Explaining to your audience which is which is one of the few ways they know the difference.
 + Conclusions must follow logically from the arguments.  Often in my primary education, I heard it described that conclusions ought to summarize the essay followed.  I submit this is insufficient.  Conclusions need to explicitly and _logically_ follow from that which came before.  Otherwise, what is it concluding?
 
+>
+
++ What is the purpose of your document?  What is the argument presented by your document?  Does the argument support your purpose or is their missing or extraneous information?
+{.activity}
+
+
+# Using Evidence
+
+Arguments are evaluated by the evidences for them.
+As the writer, you choose what evidence you present and how you present it.
+While evidence fundamentally boils down to a series of a series of premises, how you present these premises can effect the credence that the reader assigns to them and their ability to quickly digest the information.
+When writing academic papers, there are several common ways that you can present evidence:
+
+| method   | description                                                        | benefit | space |
+|----------|--------------------------------------------------------------------|---------|-------|
+| citation | include a reference to someone else who has demonstrated the point | low-mid | small |
+| inline evidence | a brief statement of experimental findings                  | low-mid | low |
+| logical arugment | structured formal logic to support your point              | mid     | mid |
+| cartoon  | illustrate a concept without real data                             | mid-high| large |
+| table    | structured numbers which represent your point                      | mid-high| large |
+| mathmatical model | a detailed, creible model of the behavior                 | mid-high| large |
+| figure   | graphical representation of your point with real data              | high    | large |
+| hand wave | do not say anything                  | none | free |
+
+As the writer, you have a fixed (and unknown) budget of attention from your reader.
+Your goal is to provide the most benefit to the arguments that you believe the reader will want the most support for within that budget.
+Things like tables, figures, and mathematical models can go a long way to convince your reader that your argument is accurate, but take substantial space on the page and for the reader to consume them.
+Things like citations and inline evidence provide little benefit on their own -- most reviewers do not follow references in my experience and may not take evidence presented at face value, but can be expressed quickly.
+While these values of benefit and space are subjective and differ from discipline to discipline, they can be indicative of how much people may pay attention to the evidence they present.
+
+One method though bears special attention, "hand waving".  Hand waving leaves an aspect of your argument for the reader to supply the argument on their own.  This is free, you don't have to write anything thus saving on your attention budget, but comes with substantial risk the reader will doubt it having no evidence.
+Another place where hand waving is used is when you want to ignore a orthogonal concern or something you expect the reader to know.
+How effective this is depends greatly on whether your audience agrees with you that the concern is truly orthogonal or is aware of it.
+For this reason, I have a love-hate relation with hand waving, you can't restate everything on a topic every time, but also don't want to inadequately support your argument either
+
++ For your argument, what pierces of evidence do you have?  What format(s) are appropriate for each aspect of your argument?
+{.activity}
+
+
 
 # Do not neglect the importance of structure
 
@@ -139,6 +178,9 @@ This index shows that tasks exist for users, the kernel, OpenMP, MPI, and Hadoop
 Yes, the user could search for each of these terms independently, words like "user" are likely often used all over the document.
 Providing an index can help the reader find the instances that are actually useful to them.
 
++ What structuring of your argument is most consistent and logical?  How does the ordering of points impact the strength of your argument?
+{.activity}
+
 # Consider Writing for the public
 
 Far too often, I read a paper in my own field that has so much mathematical notation or technical jargon and find myself questioning what it even meant.
@@ -155,6 +197,11 @@ This manifests itself in several concrete suggestions:
 + If you use notation and terminology, use it consistently.  Inconsistent notation not only can pollute the brains name space for notation wasting one of the 7 scarce places for temporary storage, but it also can lead to ambiguities in your argument which lead to misunderstanding.
 + Consider the importance of abstractions.  Remember the brain has limited short term storage.  Abstractions allow the reader to fit multiple related items the same unit of working memory.  Good abstractions are concise, coherent, and extensible.  In my opinion, there is substantial overlap between creating good object-oriented designs and creating good abstractions.  I would read [the short article "Principles of OOD" by Robert Martin](http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod) on object oriented design for some of the principles to consider.
 + Make your work self-contained. A key tool to make a paper self contained is to include background and related works sections.  A good background section allows the general public to have a _sufficient_ understanding of your topic to understand your writing.  In contrast, related work exists exists to demonstrate the _distinctiveness_ of a work relative to its competitors.
+
+>
+
++ How can you adapt your writing to improve how you write for the public?
+{.activity}
 
 # Writing a Learning to Learn
 
@@ -175,6 +222,7 @@ That doesn't mean that I stick exclusively to this outline.  For example, C++ do
 
 ## Changelog
 
-August 2020 - Added section on writing a learning to learn
++ February 2023 - Added section on using evidence
++ August 2020 - Added section on writing a learning to learn
 
 Hope this helps!

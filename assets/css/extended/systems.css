@@ -1,0 +1,38 @@
+
+:root {
+    --icon: rgb(245, 247, 73);
+    --activity: rgb(39, 93, 173);
+}
+
+.activity {
+    background-color: var(--code-bg);
+    position: relative;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.activity > li:nth-child(1) {
+    padding-top: .5em;
+    padding-bottom: .5em;
+    margin-left: .5em;
+}
+
+.activity > li {
+    padding-bottom: .5em;
+    margin-left: .5em;
+}
+
+.activity::before {
+    content: '\1F4A1';
+    width: 1em;
+    height: max(100%, 2ex);
+    position: absolute;
+    color: var(--icon);
+    background: var(--activity);
+    left: -1em;
+    font-size: 3rem;
+    padding: .2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

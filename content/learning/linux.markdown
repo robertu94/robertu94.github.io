@@ -157,6 +157,8 @@ The distributions that I recommend most often are:
 | [Gentoo](https://www.gentoo.org/)                  | If you have a highly customized workload that nothing else works for          |
 
 
++ What Linux distribution is well suited for your needs?  Where are you going to get key software that you need?
+{.activity}
 
 # Desktop Environments
 
@@ -208,7 +210,7 @@ Finally, chaining several small commands yields a combinatorial explosion of fun
 >  [Quoted from: UNIX Time-Sharing System: Foreword](https://doi.org/10.1002/j.1538-7305.1978.tb02135.x)
 
 Tools that adhere to guideline one are likely to have only one specific side effect if they have any at all.
-While tools that adhere to guideline two are [endomorphisms]({% post_url 2017-02-17-suprisingly-funtional %}) which means they are inherently compose-able.
+While tools that adhere to guideline two are [endomorphisms]({{< ref 2017-02-17-suprisingly-funtional >}}) which means they are inherently compose-able.
 Together tools that follow both guidelines one and two can be combined and pipelined without fear of unwanted side-effects.
 This creates a combinatorial exposition of functionality that provides great power to the user.
 
@@ -286,6 +288,8 @@ I'll elaborate on the choice between these in a later post, but I encourage new 
 
 It is also possible to use other lighter-weight tools that are often packaged by default with Linux distributions, but I don't encourage this.  Other tools don't always offer the room to grow and require the user to learn a different tool when they no longer meets their needs.  These editors scale to even large projects such as the Linux kernel with million lines of code.
 
++ Don Knuth and Donald McIlroy both famously wrote a program to count the nth most frequently used words and print out the words and their frequencies.  Knuth used a variant of Pascal taking over 10 pages.  McIlroy used composition of shell scripts taking only 6 lines.  When is shell scripting vs more traditional programming languages the better solution?
+{.activity}
 
 # Finding help and Debugging first steps
 

@@ -20,6 +20,9 @@ However, some things like political news are more inherently biased.  For these 
 
 When adding a new Podcast, listen to at least 3 non-holiday episodes before deciding to add a Podcast.  Listening to 3 Podcasts ensures that you get a aggregate perspective on the topics they cover and the quality of their show.  Many Podcasts have a year-end best of clip-show.  I personally don't enjoy these and just delete them.  Listening to non-holiday episodes helps weed out duds like these.  The one possible exception would be extremely long Podcasts, but that should be evaluated on a case by case basis.
 
++ Apply the "Jones Theory" to your intake areas, what is missing and what is over-represented?
+{.activity}
+
 # Keep a High Signal to Noise Ratio
 
 I have found for me the higher the amount of noise in my Podcast/RSS feed, the less likely I am to use it.  For that reason, I try to keep the signal to noise ratio as high as possible.
@@ -29,6 +32,9 @@ If you find yourself regularly skipping or avoiding a podcast, consider dropping
 Consider how long a Podcast is and how often it releases to the value your derive from it.  For example, there is a Podcast that I enjoy the content, but it releases 3 hours of content per weekday.  That is simply too much for me on a topic that is only tangential to my interests.  For that reason, I don't subscribe to that Podcast. Instead, I occasionally "pull" specific Podcasts from its feed when I have the time.  Choosing to "pull" rather than have the information "pushed" is one way to control these good, but overwhelming Podcasts.
 
 Another factor to consider with Podcasts with revolving guests is what is the quality of the guests.  Another Podcast I originally liked when listening to has revolving guests.  However, I found that I only like three of their ten or so revolving guests.  I found myself skipping their Podcast regularly so I dropped it.
+
++ What is the signal to noise ratio on what you consume now?  Are there better sources?
+{.activity}
 
 # Tools of the Trade
 

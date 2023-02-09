@@ -240,6 +240,9 @@ Too many times, I have seen systems that were never designed for anyone else to 
 They were undocumented, untested, and in many cases had to be substantially rewritten.
 Get their feedback early and often.
 
++ Who are the stakeholders and requirements for your system?
+{.activity}
+
 # Crafting a Design: Converting Requirements to an Architecture
 
 ## How do I get better at design? Study existing designs
@@ -251,7 +254,7 @@ The is true regardless of what field or task you are facing.
 You may be tempted to think that you are the first person to face a particular challenge.
 This is likely not true.
 Maybe you have different tools to work with, maybe you even have some unique problem that truly prohibits the most common solution, but that doesn't mean you are the first to face such a challenge.
-Solomon said it best, "There is nothing new under the sun."
+The "Teacher" or "Preacher" or Ecclesiastes said it best, "There is nothing new under the sun."
 You may have to look to completely different disciplines than the ones you exercise regularly, but more than likely you are not alone.
 
 I am constantly amazed how many "new" innovations are simply either better tooling or better marketing for a solution that was developed in the early days of UNIX.
@@ -535,7 +538,25 @@ If they do not, [Approval tests](https://approvaltests.com/) can be a quick way 
 Essentially, they take an application and assert that the output hasn't changed.
 Additionally there are a number of tools that can help you write Approval Tests quickly regardless of what language you use frequently.
 
+### Security and Threat Modeling: thinking about confidentiality, integrity, and availability,
 
+It is often very hard to secure a system after it has been designed and widely deployed.
+Therefore you should think about the security of your system upfront.
+The process of planning for security often involves threat modeling.
+Consider each of the valuable or private aspects of data that your system may interact with.
+This can be personal information, expensive computing or storage resources, proprietary information, or a service that you provide.
+For each ask:
+
++ Confidentiality:  how can private information be inadvertently shared by someone without authorization?  What would someone need to do to access this information?
++ Integrity: how could private information be forged or modified without authorization?  What would someone need to know to access this?
++ Availability: How could private information be made inaccessible? What could someone do to prevent users or systems with appropriate access from accessing the information?
+
+Now, just because there is a threat doesn't mean that you will implement a mitigation.
+Some mitigation are prohibitively expensive to implement relative to their cost to remediate.
+Balancing these concerns is key to implementing a secure system.
+
++ Consider the techniques (quality attributes, prototyping, diagramming, api reviews, rational expectations, refactoring, etc...) listed above to craft requirements into a design.  Which ones have you used?  How have they effected they ways that you design software?
+{.activity}
 
 ## What language/library should I use?
 
@@ -699,100 +720,7 @@ I currently recommend:
 + emacs -- another capable editor
 + vscode -- a light-weigh graphical editor
 
-<table>
- <thead>
-  <th scope="col">Editor</th>
-  <th scope="col">Vim</th>
-  <th scope="col">Emacs</th>
-  <th scope="col">Visual Stdio Code</th>
- </thead>
- <tbody>
-  <tr>
-   <th scope="row">Pros</th>
-   <td>
-    <ul>
-    <li>Ergonomic keyboard controls</li>
-    <li>Installed and runs almost everywhere</li>
-    </ul>
-   </td>
-   <td>
-    <ul>
-    <li>Emacs can be your entire workflow</li>
-    <li>Elisp is fully featured language</li>
-    </ul>
-   </td>
-   <td>Familiar Graphical Environment for new users while not pidgin holing you like an IDE</td>
-  </tr>
-  <tr>
-   <th scope="row">Cons</th>
-   <td>
-    <ul>
-      <li>The key bindings can be a nightmare to learn at first.</li>
-      <li>Vimscript is an awful language.</li>
-    </ul>
-   </td>
-   <td>
-    <ul>
-      <li>Emacs's learning curve is almost as steep as vim</li>
-      <li>Emacs constantly swaps files which is really frustrating on slow filesystems</li>
-    </ul>
-   </td>
-   <td>
-    <ul>
-      <li>Requires a graphical console</li>
-      <li>Uses the most memory and resources of the bunch</li>
-      <li>Extensions are written in JavaScript/TypeScript</li>
-    </ul>
-   </td>
-  </tr>
-  <tr>
-   <th scope="row">Common Misconception</th>
-   <td>
-    Vim doesn't have advanced features like macros, autocompletion, syntax highlighting, code-formatting.
-    In reality these features are hidden behind obscure keyboard shortcuts
-   </td>
-   <td>
-    Emacs key combos will hurt your hand.
-    You can rebind almost any key, and plugin "EVIL mode" makes emacs much more ergonomic
-   </td>
-   <td>
-    You can't use VS Code on remote machines.  In reality, it has built-in remote editing support that can edit files on other machines.
-   </td>
-  </tr>
-  <tr>
-   <th scope="row">Getting Started</th>
-   <td>
-     <code>vimtutor</code> the build-in vim getting started exercise
-   </td>
-   <td>
-     <ul>
-      <li><code>spacemacs</code> a emacs distribution with good defaults</li>
-      <li>the emacs tutorial, press <code>control+h</code> followed by <code>t</code> in emacs</li>
-     </ul>
-   </td>
-   <td>
-    Introductory videos on the help page
-   </td>
-  </tr>
-  <tr>
-   <th scope="row">Next Steps</th>
-   <td>
-    <ul>
-    <li>VimCasts - short videos on using vim</li>
-    <li>Practical Vim - a comprehensive book on vim tricks</li>
-    </ul>
-   </td>
-   <td>
-    <ul>
-     <li>learn elisp <code>control+h</code><code>i</code> then read choose <code>elisp</code></li>
-    </ul>
-   </td>
-   <td>
-    Read the more extensive product documentatoin from the welcome screeen
-   </td>
-  </tr>
- </tbody>
-</table>
+{{< editor_table >}}
 
 ### Debuggers
 
@@ -824,6 +752,8 @@ That is not a efficient use of your time, and it isn't a efficient use of the de
 Instead, postulate where you think the problem is, and stop there.
 If you don't know where the problem is, use watchpoints or back tracing to find the suspect state.
 You'll thank me later.
+
+You can find more about [GDB here]({{< ref gdb.markdown >}}).
 
 ### Profilers
 
@@ -1005,6 +935,9 @@ This requires some setup, but is incredibly powerful granting functions,
 looping, variables, string manipulation, and object orientation.
 However all of this flexibility makes validation harder.
 
++ What tools and libraries are part of your toolchain?  If you do not use one of these tools why not?  What would make your tool use more effective?
+{.activity}
+
 # Testing
 
 One of the most expensive aspects of software development is when software either doesn't do what is supposed to.
@@ -1073,6 +1006,9 @@ While the ultimate form of this where all software is verifiable mathematically 
 Static analysis has and continues to be powerful tool in proving the correctness of software.
 
 [^1]: Software that could prove that software always terminates with the correct result would require the prover to first determine that the software would terminate which has been proved in to be impossible in a computationally efficient way.  See the discussion in Cook, Stephen A. "The complexity of theorem-proving procedures." Proceedings of the third annual ACM symposium on Theory of computing. 1971.
+
++ What is the current state of tests and reviews in the system you use?  Do they catch bugs before you can?  Why or why not?
+{.activity}
 
 # Deployment
 
@@ -1229,6 +1165,7 @@ Please let me know if you have any feedback.
 
 ## Change Log
 
++ February 2023 - Added section on security, fixed table
 + January 2023 - Added section on libraries, updated sections on tools to explain why to use them.
 + October 2022 - Added section on comments
 + August 2020 - Added links to flame graphs.

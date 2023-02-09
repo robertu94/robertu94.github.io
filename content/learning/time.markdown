@@ -126,6 +126,11 @@ Working on an endless productivity grind while initially satisfying, can never, 
 Work, stuff, accomplishments, pleasure, knowledge, wisdom -- all of this will eventually pass away and you will be forgotten.
 Use these tools to make time for what is truly important.
 
+1. Try tracking your time for a week to the nearest 15 minutes.  What does it reveal about your preferences and focuses?  Does it match your goals for where you spend your time?  What granularity of time tracking is useful to you?
+2. Consider adopting a journaling system such as "building a second brain" or "bullet journaling" for 2 weeks.
+3. Consider the tasks in your task manager, are the tasks SMART and if not, what details do you tend to not include? why?
+{.activity}
+
 # Tools
 
 People often ask me what tools they should use for this.
@@ -144,6 +149,8 @@ I do however now use some software and tools for specific things:
 + ActivityWatch -- Cross platform automatic time tracking tool
 
 I hope this helps!
+
+
 
 # Changelog
 

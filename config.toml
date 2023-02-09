@@ -26,6 +26,9 @@ startLevel = 1
 [markup.highlight]
 guessSyntax = true
 
+[markup.goldmark.parser.attribute]
+block = true
+
 [params]
 env = "production" # to enable google analytics, opengraph, twitter-cards and schema.
 title = "Systems++"

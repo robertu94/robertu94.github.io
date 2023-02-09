@@ -58,6 +58,7 @@ CMake also respects GNU style envionment variables (i.e. `CXX`, `CC`, `CFLAGS`,
 `CXXFLAGS`, and `LDLIBS`) to pick up common defaults.
 
 
+
 # Key Commands
 
 Required boilerplate that must appear at the top of your top-level cmake
@@ -75,18 +76,23 @@ Basics
 + Basic generator expressions such as `$<BUILD_INTERFACE:>` vs `$<INSTALL_INTERFACE:>` for use with `target_include_directories`
 + `add_subdirectory` for code organization
 
-Adding 3rd party dependancies.  Do yourself a favor and put all dependancies imports at the top level so the scope is right for the whole project.
+Adding 3rd party dependencies.  Do yourself a favor and put all dependencies imports at the top level so the scope is right for the whole project.
 
 + `find_package` to import dependancies built using CMake and certain system dependancies such as threads, MPI, Python, and OpenMP.
 + `find_package(PkgConfig)` and `pkg_search_modules` to import dependencies described by pkg-config
-+ `FetchContent` download and provide dependencies as part of the build.
++ `FetchContent` download and provide dependencies as part of the build, but consider instead third party tools such as `spack`, `connan`, and `vcpackage`.
+
+I've written a guide on [CMake package dependencies here]({{< ref cmake_deps.markdown >}}).
+
++ How do you currently handle dependencies and builds in your system?  Is this portable to other machines where you would like to use this software?  If not, what do you need to change and why?
+{.activity}
 
 Build Options
 
 + `option` to add build options
 + `if` for basic control flow
 + `configure_file` to add a "configure file" which is typically header which has `#defines` for certain build system variables set with `#cmakedefine` or `#cmakedefine01`
-+ `target_add_sources` to add additional source files to a library after the fact.
++ `target_add_sources` to add additional source files to a library after the fact for example to compile in an optional plugin.
 
 Installation
 
@@ -94,6 +100,8 @@ Installation
 + `install(TARGETS)` to install your libraries and their export files 
 + `install(DIRECTORY)` to install your header files and data files
 + `include(CMakePackageConfigHelpers)` and `configure_package_config_file` and `write_basic_package_version_file` to make your package importable by others
+
+See this project for an example on [how to properly expose a CMake dependency](https://github.com/robertu94/libpressio-nvcomp/blob/4a599ab3136b1f8faeb0ad9cf5c8af719f739837/CMakeLists.txt#L62-L88)
 
 Testing
 
@@ -113,18 +121,25 @@ CMake provides most of what you want on its own, but a few tools are worth knowi
 + `spack` a dependencies manager for HPC software
 + `connan` and `vcpackage` a dependency managers more common in enterprise
 + `ccache` and `sccache` can be provided to `CMAKE_<Lang>_COMPILER_LAUNCHER` to dramatically speed up re-builds builds
-+ `ninja` is a much faster project builder than `Make`.  You can enable it with `-G` passed to cmake
++ `ninja` is a much faster project builder than `Make`.  You can enable it with `-G Ninja` passed to cmake
 + `ccmake` a terminal user interface for setting cmake build options
 + `clang-tidy` and `include-what-you-use` for extra static analysis can be used by setting the `<LANG>_CLANG_TIDY` and `<LANG>_INCLUDE_WHAT_YOU_USE`
-+ `Doxygen` for automatic documentation form the header-files of your project
++ `Doxygen` for automatic documentation form the header-files of your project.  Can be used automatically from CMake with `find_package(Doxygen)`
 
 # Important Concepts
 
 + `PUBLIC`, `INTERFACE` vs `PRIVATE` dependency and configurations
-+ `SHARED`, `STATIC`, `INTERFACE` vs `IMPORTED` libraries.  The later you will use directly only seldomly but is used for `find_package` internally.
++ `SHARED`, `STATIC`, `INTERFACE` vs `IMPORTED` libraries.  The later you will use directly only seldom but is used for `find_package` internally.
 + that `target_*` functions accumulate from everywhere they are used allowing code that adds specific features to be spread out
-+ Don't use globbing to add files to a build.  List them explictly for best performance
++ Don't use globbing to add files to a build.  List them explicitly for best performance
 
+## Debugging CMake
+
+CMake can be obtuse at times.  A few key commands can help:
+
++ `--trace` puts cmake into trace mode to print all calls made in a CMake build system.
++ `CMAKE_FIND_DEBUG_MODE` prints out extra information when finding a packages that can be used to track down how a variable was set.  Newer versions have a flag `--debug-find-pkg=` which can enable this for specific packages.
++ `message(WARNING ...)` print a warning message to the console with the specified message can be used for tracing and viewing values of  a variable at a point in the code
 
 # Advanced Topics
 
@@ -134,10 +149,12 @@ CMake provides most of what you want on its own, but a few tools are worth knowi
 
 # Where to learn more
 
-+ [The Offical CMake Documentation](https://cmake.org/cmake/help/latest/index.html)
++ [The Official CMake Documentation](https://cmake.org/cmake/help/latest/index.html)
+
 
 # Changelog
 
++ 2023-02-09 linked to other cmake resources added section on debugging
 + 2023-01-09 Added basic usage example
 + 2022-11-15 Created
 

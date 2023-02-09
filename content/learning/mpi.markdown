@@ -91,3 +91,10 @@ A few other major topics that may be deceptively simple, but actually provide su
 + Read "Using Advanced MPI" by Gropp et al. is a great next step after reading "Using MPI"
 + William "Bill" Gropp also has an excelent set of lecture slides on MPI that aren't too hard to find online.
 + Read the Standard -- as far as programming system standards go, this document is remarkably easy to read.
+
+>
+
++ What features have you used from MPI?  What aspects of MPI would simplify your distributed programs further?
+{.activity}
+
+# Changelog

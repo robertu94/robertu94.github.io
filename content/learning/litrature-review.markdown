@@ -29,7 +29,7 @@ Broadly speaking, I think effectively studying a new topic involves several step
 4. Record, Organize, and Categorize  -- How can I remember what I've learned?
 5. Focus and Refine Your Reading List, Update the Research Question(s) -- What should I look at next?
 
-If you are thinking this looks similar to the PQRST approach that I mentioned in the [Learning to Learn Reading post]({% link learning/reading.markdown %}), it does, but I think there are some different aspects to studying multiple works rather than just one that warrant studying this further.
+If you are thinking this looks similar to the PQRST approach that I mentioned in the [Learning to Learn Reading post]({{< ref reading.markdown >}}), it does, but I think there are some different aspects to studying multiple works rather than just one that warrant studying this further.
 For example, in doing a comprehensive study, doing comparisons and contrasts are more important.
 Most works by a single author will present a single point of view on a topic -- or at the very least favor a particular perspective.
 However by reading works by multiple authors, you can expose subtleties that wouldn't appear if you just reviewed one topic.
@@ -57,6 +57,11 @@ I often start with a variant of one of these questions:
 + How does this topic apply to some other topic?  One problem with academia is the apparent lack of application.  Focusing on an application from the beginning can improve this.  Many aspects of research involve applying some underlying skill or knowledge to a new topic.
 + How can I solve X problem?  This the fundamental engineering question. It may look like subset of the previous question, but has an important distinction: the previous question begins two or more  candidate topics and looks for a candidate problem.  The later begins with a problem and examines possible solutions.  Both approaches can yield valuable results.
 + What are the trade-offs for X? This is really the key scientific question. Understanding trade-offs can allow engineers and others to build upon your work to consider new topics and expose new tools.
+
+>
+
++ Try asking the questions above of the topic that you want to research.  What aspects of your topic did you discover when thinking about it systematically?
+{.activity}
 
 # How Do I Build a Reading List?
 
@@ -101,6 +106,9 @@ Indexing is the problem of making it easy to find a large number of documents of
 Summarizing is a similar problem, but slightly more verbose, it provides a good way to zero in on a specific resource on a topic of interest, but provides greater context.  Doing this well is challenging, if a summary is written two distinctly, it can be hard to find similar documents, but a summary that is too generic can not serve as a meaningful index.  Again, the goal is to minimize the time to find information you've previously ingested. Often times it is important to record not only what you found, but how and when you found it.  The more tags that you can associate with a piece of informant, the easier it will be to find later.  Additionally, this will often can enable you to find new information because often times information is found in clusters.
 
 Lastly is archiving.  Websites go down all the time, books go out of print or are damaged, and sometimes your ability to access certain resources changes over time.  Having a good record of information is useless if you cannot retrieve the information later.  It is often important to make a copy of the information that you found so that you can retrieve it later even if the source is hard to find.  However there can be costs to this, everything you store requires time to search through when you want to approach a topic.  It can often be important to have a tiered system of archival for documents that are more recently reverent versus those which are more less currently relevant.
+
++ Think about how you index and achieve your findings right now.  Can you quickly find resources that you identified before?  Why or why not?
+{.activity}
 
 
 # Closing Suggestions

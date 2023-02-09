@@ -21,8 +21,14 @@ Why run something on a super computer? Super computers can be used when the prob
 + Learn a language with good tooling for HPC, supported on your cluster. Writing software for one machine is hard; writing software for a team of machines with diverse and specialized hardware is harder. Using a language that has mature libraries to support different use cases will make things easier. 
   + [C/C++](learning/cpp.html)
   + [Python](learning/python.html)
-  + Fortran, Julia, and Scala (for big data) are also popular
+  + Fortran, [Julia]({{< ref  2022-12-15-three-neat-things-with-julia.markdown >}}), and Scala (for big data) are also popular
 + Learn how to schedule batch jobs and run interactively on your cluster. On super computers, you often need to request time to run a task rather than just running it. The software that allows you to request time is called the scheduler. Often it provides facilities to coordinate between jobs, monitor their progress, and to notify you when they are finished. 
++ Profile first to understand the bottlenecks of your applications. Learn how to user a profiling tool available on your system.
+
+>
+
++ Profile an application that you use on a super computing cluster.  What parts of it are slow?  How efficiently are you using the hardware capabilities of the machine?  What libraries or tools exist that could enable you to speed up and better utilize the machine?
+{.activity}
 
 # Common Frameworks and Their Alternatives
 
@@ -31,7 +37,7 @@ However truly performance portable code is largely an illusion. Each machine wil
 
 ## Inter-Node Parallelism -- MPI (Message Passing Interface)
 
-In HPC, The Message Passing Interface is the de-facto lower level programming framework for coordination between nodes. It provides relatively low level primitives that can be built upon to coordinate work amongst the cluster. Because of its importance in HPC, I plan to write a separate learning to learn on it because of its importance to HPC.  However for a deep dive to learn more about MPI consider reading the books "Using MPI" and "Using Advanced MPI" to get started followed by the MPI standards specifications for details as needed. 
+In HPC, The Message Passing Interface is the de-facto lower level programming framework for coordination between nodes. It provides relatively low level primitives that can be built upon to coordinate work amongst the cluster. Because of its importance in HPC, I plan to write a separate learning to learn on it because of its importance to HPC.  However for a deep dive to learn more about MPI consider reading the books "Using MPI" and "Using Advanced MPI" to get started followed by the MPI standards specifications for details as needed.   You can find more on [MPI here]({{< ref mpi.markdown >}})
 
 However since MPI is fairly low level, it has encouraged the development of higher level libraries to support applications real world usage. Two of the most notable are PETSc and HDF5. The former provides matrix math facilities and the latter IO. 
 
@@ -107,10 +113,15 @@ As mentioned above, often software needs to be refactored to achieve optimal per
 | futures                     | represents a handle to a async computation that can be waited upon and possibly canceled                                      |
 | queuing                     | place work to be done on a queue to be evaluated when resources are available                                                 |
 
++ Which if any of these patterns can you use to accelerate your program?
+{.activity}
 
-# Reproducibility
+# Reproduce-ability
 
 Broadly speaking there are two approaches to reproducible HPC programs. Use a specialized package management system that creates as close to a hermetic build as possible like Spack, or use a container runtime environment like singularity with all of your dependencies self contained. These approaches can be complementary and systems like Spack can build containers. 
+
++ What can you do to make your results more reproducible?
+{.activity}
 
 # What next?
 
@@ -129,4 +140,5 @@ To learn HPC I have a few recommendations:
 
 ## Change Notes
 
++ 2023 Added remarks on profiling
 + 2021 Initial Version

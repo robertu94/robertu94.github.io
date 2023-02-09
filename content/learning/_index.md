@@ -4,6 +4,11 @@ Learning is a life long process, and learning computer science is no different. 
 
 What order should I tackle these? The articles are grouped by topic, so you can start reading through them according to the topics you are interested in.  However, if you have no idea of where to start, consider reading the articles in "Meta" first.  These articles will better equip you to read and get something out of the other articles
 
+Along the way you will find activities added to each post formatted like this:
+
++ This is an activity designed to help you master the content in this section
+{.activity}
+
 Lastly, if you find the articles insufficient in some way, please [email me](mailto:rr.underwood94@gmail.com), and I'll try to make updates to fill out the missing information
 
 ## Meta 
@@ -20,6 +25,7 @@ Lastly, if you find the articles insufficient in some way, please [email me](mai
 + [Software Development]({{< ref development.markdown >}}) how to approach writing a software project using Linux
 + [HPC]({{< ref hpc.markdown >}}) how to write software for High Performance Computing
 + [Experiments]({{< ref experiments.markdown >}}) how to write empirical computer science experiments
++ [Software Teams]({{< ref software_for_teams.markdown >}}): how to lead and be an effective member of a software team
 
 ## Programming Languages
 
