@@ -77,6 +77,19 @@ Programming
 </header>
 <article class="post-entry tag-entry">
 <header class=entry-header>
+<h2>Poor Man's Parallelism
+</h2>
+</header>
+<div class=entry-content>
+<p>I really like orchestration tools such as Ansible or SaltStack. They can make running tasks on a group of machines a breeze. But sometimes you can’t or don’t want to install these tools on a machine. In cases like these, it is helpful to know how to parallelize some tasks in the shell.
+You can do this via Unix/shell job control:
+cmd="systemctl enable --now docker.service" hosts=(host{1..4}) for host in ${hosts[@]} do ssh & $host $cmd done However from experience, this can be very error prone....</p>
+</div>
+<footer class=entry-footer><span title="2017-01-08 10:58:14 -0500 -0500">January 8, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;462 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Poor Man's Parallelism" href=http://robertu94.github.io/2017/01/08/poor-mans-parallelism.html></a>
+</article>
+<article class="post-entry tag-entry">
+<header class=entry-header>
 <h2>Learning to Learn: GDB
 </h2>
 </header>
