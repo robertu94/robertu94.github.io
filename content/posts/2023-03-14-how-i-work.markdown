@@ -1,0 +1,128 @@
+---
+layout: post
+title:  "How I work: The Tools I Use"
+date:   2023-03-14
+tags: 
+- programming
+---
+
+From time to time I get a question of what tools I use for what jobs.  Here the tools I use to get things done:
+
+# Language Specific
+
+| Purpose                      | C++                         | Python                   | Julia                         | Rust                 |
+|------------------------------|-----------------------------|--------------------      |-------------------------      |----------------------|
+| Compiler/Interpeter          | gcc/clang                   | python:quick,ipython:long| julia                         | rustc,cargo          |
+| Profiler                     | perf/FlameGraphs + perftrace| cprofile:function, line_profiler:line  | BenchmarkTools.jl             | cargo                |
+| Debugger                     | GDB + mpigdb                | `*c++`, pdb              | `*c++` Debugger.jl:default,Cathulu.jl:metaprogramming | `*c++` rust-gdb      |
+| Build System                 | CMake,(meson, bazel) + m    | ??  + m                  | Pkg.jl, BinaryBuilder.jl + m  | cargo + m    |
+| Sanitizers                   | asan, msan, tsan, ubsan     | `*c++`                   | `*c++`                        | `*c++`, cargo        |
+| Cache                        | sccache                     |                          |                               | sccache              |
+| LSP                          | clangd                      | pyright                  | LanguageServer.jl             | rust-analyzer        |
+| Refactoring                  | clang-tools-extra +custom libtooling/clang-tidy        | (comby) ??                           | (comby) ??        | (comby) ??       |
+| Testing                      | Google Test                 | unittest/(py-test)       | Test.jl                       | cargo                |
+| Docs                         | Doxygen                     | sphinx                   | (Documenter.jl)               | cargo                |
+| Distribution                 | Container,spack             | Container,spack          | Container,spack               | Container,crates.io,spack |
+
+# Language-Agnostic 
+
+| Purpose                               | Tool  |
+|---------------------------------------|-------|
+| Server Distro                         | CentOS |
+| Workstation Distro                    | Fedora |
+| Filesystem                            | BTRFS:Fedora, ZFS:Centos |
+| Desktop                               | KDE Plasma |
+| Screenshots                           | Spectacle |
+| Container Engine                      | Docker/Podman |
+| Configuration Management              | Ansible |
+| Development Package Manager           | spack |
+| Desktop Software                      | flatpak:desktop-apps, dnf:system-software |
+| Source Control                        | git |
+| Source Code Splunking                 | sourcetrails:exploration??, ag/rip-grep:search, LSP:editor, ?? (sourcegraph) |
+| PDF Viewer                            | Okular |
+| Web Browser                           | FireFox |
+| File Browser                          | Dolphin |
+| File Transfer                         | Globus |
+| Text Editor                           | neovim |
+| Terminal                              | konsole |
+| Shell                                 | bash |
+| Prompt                                | starship |
+| `diff`/`git diff` Tool                | difftastic |
+| `find` Tool                           | fd-find |
+| `grep` Tool                           | ag/rip-grep |
+| Disk Usage `du`                       | dust |
+| `cat`                                 | bat |
+| cd                                    | zoxide |
+| Multiplexer                           | neovim |
+| Backup                                | restic:non-zfs, zfs:default |
+| VPN                                   | tailscale |
+| CI                                    | Jenkins/Gitlab:hosting, Dagger:abstraction |
+| Text Collaboration                    | Slack:work,Discord:home,Email:other |
+| Video Collaboration                   | Zoom |
+| Email                                 | GMail/Outlook |
+| Slides                                | Google Slides, Beamer:math-heavy | 
+| Documents                             | Google Docs:Default, Overleaf:Publications | 
+| Diagram Editing                       | Draw.io:refine, d2/graphviz:quick | 
+| Plotting                              | Plots.jl:static, Makie.jl:interactive | 
+| Bitmap Image Editing                  | Gimp | 
+| Vector Image Editing                  | Inkscape | 
+| Print Layout Editing (e.g. Posters)   | Scribus | 
+| Video Editing                         | Kdenlive | 
+| Audio Editing                         | Ardour:edit, pipewire:foundation, Carla:live | 
+| Task Management                       | Whiteboard:home, a paper journal:travel, Reminders:notification | 
+| Time Management                       | Activity Watch:Desktop, Screentime:Mobile | 
+| Calendaring                           | Google Calendar | 
+| Journaling                            | Vimwiki:default, a paper journal:travel, Good Notes:sketching, Drafts:mobile | 
+| Passwords                             | KeepassXC | 
+| Music                                 | Plex | 
+| Citations                             | Zotero | 
+| RSS                                   | Feedly | 
+| Podcasts                              | Overcast | 
+| Blog                                  | Hugo | 
+
+# Gaps
+
+There are a few places where I see gaps in the current ecosystem of development tools
+
++ A build system for Python with good support for native extensions that produces pip install-able packages.  There is not an easy way to build native extensions for python with complex C/C++ dependencies that is scalable and consistent.  See also [pypackaging-native](https://pypackaging-native.github.io/).  Python would learn a lot from Julia here in terms of ease of use.  I personally don't find Anaconda to be the answer here because you can't use `pip` the blessed installer for python to install packages from it you have to use `conda` ([which is/was very slow](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community)) or better yet the faster compatible `mamba` but [both still behaves poorly once `conda-forge` is used](https://stackoverflow.com/a/66963979).
++ Refactoring tools for any language that isn't Java or C++.  Comby may be that tool, but I am also hopeful for tools built on top of treesitter.
++ Sourcetrails was one of my favorite tools for exploring large software projects giving me ability to quickly visualize system dependencies.  Sourcetrails has been abandoned because it was A) too hard to maintain and B) for whatever reason couldn't find a good funding model.  I hope that a tool that could fit some of these needs could be built from either LSP servers generically.
+
+Monorepo/Package management tools for maintaining large multi-language applications.  The ideal tool would be able to
+
++ support C++, Python, Julia, Rust, and other languages well
++ isolate builds from system dependencies by building in a sandbox for reproducible builds
++ An escape hatch to import system dependencies
++ help with coordinated package releases (bumping versions, refactors, rebuilds)
++ execute builds in parallel at least locally, but preferably distributed as well and coordinate between packages (i.e. make's jobserver)
++ rebuild things only when needed
+
+Bazel, Pants, and Spack are the tools that are closest, but each lacks a key feature to really solve this for me.
+
+I've admired tools like [warp.dev](https://warp.dev) from afar because they are MacOS only.  I think there is room for an improved terminal like software with improved auto-completion, contextual documentation, intelligent folding/scroll-back, collaborative tools, and more sophisticated graphical capabilites has a place.
+Tools like Jupiter notebooks address some of these, but are really heavy weight but also don't embed things like vim easily.
+Terminal's like kitty are closer, but feel like they lack some polish compared to Warp or my current terminal editor Konsole.
+
+# Comments
+
++ I find I use the C++ tools even for languages like Python and Julia because they allow me to get down to the native code that is being run and understand the stack issues there.
++ I avoid ZFS on Fedora because Fedora runs too new a kernel for ZFS with Fedora to be really reliable.
++ CMake especially its complex scoping rules and string based typing leave things to be desired.
+  Meson is pleasant, but since CMake is ubiquitous and at least last time I tried, meson's CMake integration was imperfect for complex dependencies such as LLVM.
+  Bazel WORKSPACE files are verbose even for simple multi-language processes but is getting better with `bzlmod`. Bazel also makes it hard to use system provided packages or to install things using UNIX package conventions.
+  Spack requires the package definition to be seperate and has to be used with a language specific build tool.
+
+# Changelog
+
++ 2023-03-14  initial version
+
+# Key
+
++ `/` can be used interchangeable
++ `,` used in addition to for a specific sub purpose
++ `+` tool I developed on top of these
++ `()` runner up/under evaluation/contextual
++ `??` looking for a replacement
++ ` ` no tool needed
++ `*c++` I also use the C++ tools here
++ `:` context
