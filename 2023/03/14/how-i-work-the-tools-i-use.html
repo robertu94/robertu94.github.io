@@ -1,0 +1,484 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>How I work: The Tools I Use | systems++</title>
+<meta name=keywords content="programming">
+<meta name=description content="From time to time I get a question of what tools I use for what jobs. Here the tools I use to get things done:
+Language Specific    Purpose C++ Python Julia Rust     Compiler/Interpeter gcc/clang python:quick,ipython:long julia rustc,cargo   Profiler perf/FlameGraphs + perftrace cprofile:function, line_profiler:line BenchmarkTools.jl cargo   Debugger GDB + mpigdb *c++, pdb *c++ Debugger.jl:default,Cathulu.jl:metaprogramming *c++ rust-gdb   Build System CMake,(meson, bazel) + m ?">
+<meta name=author content="Robert Underwood">
+<link rel=canonical href=http://robertu94.github.io/2023/03/14/how-i-work-the-tools-i-use.html>
+<meta name=google-site-verification content="G-9KQE44SX6K">
+<link crossorigin=anonymous href=/assets/css/stylesheet.57f29198e62b3a8f07d37acaca0427bafb684416046b823f5a616bd858bb4af1.css integrity="sha256-V/KRmOYrOo8H03rKygQnuvtoRBYEa4I/WmFr2Fi7SvE=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.baa4f2053c75d0009e9309aae8f8a8959f5e0372e88f80cdf2951a9533d71ce2.js integrity="sha256-uqTyBTx10ACekwmq6PiolZ9eA3Loj4DN8pUalTPXHOI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=http://robertu94.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=http://robertu94.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=http://robertu94.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=http://robertu94.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=http://robertu94.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KQE44SX6K"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9KQE44SX6K',{anonymize_ip:!1})}</script>
+<meta property="og:title" content="How I work: The Tools I Use">
+<meta property="og:description" content="From time to time I get a question of what tools I use for what jobs. Here the tools I use to get things done:
+Language Specific    Purpose C++ Python Julia Rust     Compiler/Interpeter gcc/clang python:quick,ipython:long julia rustc,cargo   Profiler perf/FlameGraphs + perftrace cprofile:function, line_profiler:line BenchmarkTools.jl cargo   Debugger GDB + mpigdb *c++, pdb *c++ Debugger.jl:default,Cathulu.jl:metaprogramming *c++ rust-gdb   Build System CMake,(meson, bazel) + m ?">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://robertu94.github.io/2023/03/14/how-i-work-the-tools-i-use.html"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-03-14T00:00:00+00:00">
+<meta property="article:modified_time" content="2023-03-14T00:00:00+00:00"><meta property="og:site_name" content="Systems++">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="How I work: The Tools I Use">
+<meta name=twitter:description content="From time to time I get a question of what tools I use for what jobs. Here the tools I use to get things done:
+Language Specific    Purpose C++ Python Julia Rust     Compiler/Interpeter gcc/clang python:quick,ipython:long julia rustc,cargo   Profiler perf/FlameGraphs + perftrace cprofile:function, line_profiler:line BenchmarkTools.jl cargo   Debugger GDB + mpigdb *c++, pdb *c++ Debugger.jl:default,Cathulu.jl:metaprogramming *c++ rust-gdb   Build System CMake,(meson, bazel) + m ?">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"How I work: The Tools I Use","item":"http://robertu94.github.io/2023/03/14/how-i-work-the-tools-i-use.html"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"How I work: The Tools I Use","name":"How I work: The Tools I Use","description":"From time to time I get a question of what tools I use for what jobs. Here the tools I use to get things done:\nLanguage Specific    Purpose C++ Python Julia Rust     Compiler/Interpeter gcc/clang python:quick,ipython:long julia rustc,cargo   Profiler perf/FlameGraphs + perftrace cprofile:function, line_profiler:line BenchmarkTools.jl cargo   Debugger GDB + mpigdb *c++, pdb *c++ Debugger.jl:default,Cathulu.jl:metaprogramming *c++ rust-gdb   Build System CMake,(meson, bazel) + m ?","keywords":["programming"],"articleBody":"From time to time I get a question of what tools I use for what jobs. Here the tools I use to get things done:\nLanguage Specific    Purpose C++ Python Julia Rust     Compiler/Interpeter gcc/clang python:quick,ipython:long julia rustc,cargo   Profiler perf/FlameGraphs + perftrace cprofile:function, line_profiler:line BenchmarkTools.jl cargo   Debugger GDB + mpigdb *c++, pdb *c++ Debugger.jl:default,Cathulu.jl:metaprogramming *c++ rust-gdb   Build System CMake,(meson, bazel) + m ?? + m Pkg.jl, BinaryBuilder.jl + m cargo + m   Sanitizers asan, msan, tsan, ubsan *c++ *c++ *c++, cargo   Cache sccache   sccache   LSP clangd pyright LanguageServer.jl rust-analyzer   Refactoring clang-tools-extra +custom libtooling/clang-tidy (comby) ?? (comby) ?? (comby) ??   Testing Google Test unittest/(py-test) Test.jl cargo   Docs Doxygen sphinx (Documenter.jl) cargo   Distribution Container,spack Container,spack Container,spack Container,crates.io,spack    Language-Agnostic    Purpose Tool     Server Distro CentOS   Workstation Distro Fedora   Filesystem BTRFS:Fedora, ZFS:Centos   Desktop KDE Plasma   Screenshots Spectacle   Container Engine Docker/Podman   Configuration Management Ansible   Development Package Manager spack   Desktop Software flatpak:desktop-apps, dnf:system-software   Source Control git   Source Code Splunking sourcetrails:exploration??, ag/rip-grep:search, LSP:editor, ?? (sourcegraph)   PDF Viewer Okular   Web Browser FireFox   File Browser Dolphin   File Transfer Globus   Text Editor neovim   Terminal konsole   Shell bash   Prompt starship   diff/git diff Tool difftastic   find Tool fd-find   grep Tool ag/rip-grep   Disk Usage du dust   cat bat   cd zoxide   Multiplexer neovim   Backup restic:non-zfs, zfs:default   VPN tailscale   CI Jenkins/Gitlab:hosting, Dagger:abstraction   Text Collaboration Slack:work,Discord:home,Email:other   Video Collaboration Zoom   Email GMail/Outlook   Slides Google Slides, Beamer:math-heavy   Documents Google Docs:Default, Overleaf:Publications   Diagram Editing Draw.io:refine, d2/graphviz:quick   Plotting Plots.jl:static, Makie.jl:interactive   Bitmap Image Editing Gimp   Vector Image Editing Inkscape   Print Layout Editing (e.g. Posters) Scribus   Video Editing Kdenlive   Audio Editing Ardour:edit, pipewire:foundation, Carla:live   Task Management Whiteboard:home, a paper journal:travel, Reminders:notification   Time Management Activity Watch:Desktop, Screentime:Mobile   Calendaring Google Calendar   Journaling Vimwiki:default, a paper journal:travel, Good Notes:sketching, Drafts:mobile   Passwords KeepassXC   Music Plex   Citations Zotero   RSS Feedly   Podcasts Overcast   Blog Hugo    Gaps There are a few places where I see gaps in the current ecosystem of development tools\n A build system for Python with good support for native extensions that produces pip install-able packages. There is not an easy way to build native extensions for python with complex C/C++ dependencies that is scalable and consistent. See also pypackaging-native. Python would learn a lot from Julia here in terms of ease of use. I personally don’t find Anaconda to be the answer here because you can’t use pip the blessed installer for python to install packages from it you have to use conda (which is/was very slow) or better yet the faster compatible mamba but both still behaves poorly once conda-forge is used. Refactoring tools for any language that isn’t Java or C++. Comby may be that tool, but I am also hopeful for tools built on top of treesitter. Sourcetrails was one of my favorite tools for exploring large software projects giving me ability to quickly visualize system dependencies. Sourcetrails has been abandoned because it was A) too hard to maintain and B) for whatever reason couldn’t find a good funding model. I hope that a tool that could fit some of these needs could be built from either LSP servers generically.  Monorepo/Package management tools for maintaining large multi-language applications. The ideal tool would be able to\n support C++, Python, Julia, Rust, and other languages well isolate builds from system dependencies by building in a sandbox for reproducible builds An escape hatch to import system dependencies help with coordinated package releases (bumping versions, refactors, rebuilds) execute builds in parallel at least locally, but preferably distributed as well and coordinate between packages (i.e. make’s jobserver) rebuild things only when needed  Bazel, Pants, and Spack are the tools that are closest, but each lacks a key feature to really solve this for me.\nI’ve admired tools like warp.dev from afar because they are MacOS only. I think there is room for an improved terminal like software with improved auto-completion, contextual documentation, intelligent folding/scroll-back, collaborative tools, and more sophisticated graphical capabilites has a place. Tools like Jupiter notebooks address some of these, but are really heavy weight but also don’t embed things like vim easily. Terminal’s like kitty are closer, but feel like they lack some polish compared to Warp or my current terminal editor Konsole.\nComments  I find I use the C++ tools even for languages like Python and Julia because they allow me to get down to the native code that is being run and understand the stack issues there. I avoid ZFS on Fedora because Fedora runs too new a kernel for ZFS with Fedora to be really reliable. CMake especially its complex scoping rules and string based typing leave things to be desired. Meson is pleasant, but since CMake is ubiquitous and at least last time I tried, meson’s CMake integration was imperfect for complex dependencies such as LLVM. Bazel WORKSPACE files are verbose even for simple multi-language processes but is getting better with bzlmod. Bazel also makes it hard to use system provided packages or to install things using UNIX package conventions. Spack requires the package definition to be seperate and has to be used with a language specific build tool.  Changelog  2023-03-14 initial version  Key  / can be used interchangeable , used in addition to for a specific sub purpose + tool I developed on top of these () runner up/under evaluation/contextual ?? looking for a replacement   no tool needed *c++ I also use the C++ tools here : context  ","wordCount":"877","inLanguage":"en","datePublished":"2023-03-14T00:00:00Z","dateModified":"2023-03-14T00:00:00Z","author":{"@type":"Person","name":"Robert Underwood"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://robertu94.github.io/2023/03/14/how-i-work-the-tools-i-use.html"},"publisher":{"@type":"Organization","name":"systems++","logo":{"@type":"ImageObject","url":"http://robertu94.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=http://robertu94.github.io/ accesskey=h title="systems++ (Alt + H)">systems++</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=http://robertu94.github.io/about.html title="About Me">
+<span>About Me</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/guides.html title=Guides>
+<span>Guides</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/learning.html title="Learning To Learn">
+<span>Learning To Learn</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/presentations.html title=Presentations>
+<span>Presentations</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=http://robertu94.github.io/>Home</a></div>
+<h1 class=post-title>
+How I work: The Tools I Use
+</h1>
+<div class=post-meta><span title="2023-03-14 00:00:00 +0000 UTC">March 14, 2023</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;877 words&nbsp;·&nbsp;Robert Underwood
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>Table of Contents</span>
+</summary>
+<div class=inner><nav id=TableOfContents>
+<ul>
+<li><a href=#language-specific>Language Specific</a></li>
+<li><a href=#language-agnostic>Language-Agnostic</a></li>
+<li><a href=#gaps>Gaps</a></li>
+<li><a href=#comments>Comments</a></li>
+<li><a href=#changelog>Changelog</a></li>
+<li><a href=#key>Key</a></li>
+</ul>
+</nav>
+</div>
+</details>
+</div>
+<div class=post-content><p>From time to time I get a question of what tools I use for what jobs. Here the tools I use to get things done:</p>
+<h1 id=language-specific>Language Specific<a hidden class=anchor aria-hidden=true href=#language-specific>#</a></h1>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>C++</th>
+<th>Python</th>
+<th>Julia</th>
+<th>Rust</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compiler/Interpeter</td>
+<td>gcc/clang</td>
+<td>python:quick,ipython:long</td>
+<td>julia</td>
+<td>rustc,cargo</td>
+</tr>
+<tr>
+<td>Profiler</td>
+<td>perf/FlameGraphs + perftrace</td>
+<td>cprofile:function, line_profiler:line</td>
+<td>BenchmarkTools.jl</td>
+<td>cargo</td>
+</tr>
+<tr>
+<td>Debugger</td>
+<td>GDB + mpigdb</td>
+<td><code>*c++</code>, pdb</td>
+<td><code>*c++</code> Debugger.jl:default,Cathulu.jl:metaprogramming</td>
+<td><code>*c++</code> rust-gdb</td>
+</tr>
+<tr>
+<td>Build System</td>
+<td>CMake,(meson, bazel) + m</td>
+<td>?? + m</td>
+<td>Pkg.jl, BinaryBuilder.jl + m</td>
+<td>cargo + m</td>
+</tr>
+<tr>
+<td>Sanitizers</td>
+<td>asan, msan, tsan, ubsan</td>
+<td><code>*c++</code></td>
+<td><code>*c++</code></td>
+<td><code>*c++</code>, cargo</td>
+</tr>
+<tr>
+<td>Cache</td>
+<td>sccache</td>
+<td></td>
+<td></td>
+<td>sccache</td>
+</tr>
+<tr>
+<td>LSP</td>
+<td>clangd</td>
+<td>pyright</td>
+<td>LanguageServer.jl</td>
+<td>rust-analyzer</td>
+</tr>
+<tr>
+<td>Refactoring</td>
+<td>clang-tools-extra +custom libtooling/clang-tidy</td>
+<td>(comby) ??</td>
+<td>(comby) ??</td>
+<td>(comby) ??</td>
+</tr>
+<tr>
+<td>Testing</td>
+<td>Google Test</td>
+<td>unittest/(py-test)</td>
+<td>Test.jl</td>
+<td>cargo</td>
+</tr>
+<tr>
+<td>Docs</td>
+<td>Doxygen</td>
+<td>sphinx</td>
+<td>(Documenter.jl)</td>
+<td>cargo</td>
+</tr>
+<tr>
+<td>Distribution</td>
+<td>Container,spack</td>
+<td>Container,spack</td>
+<td>Container,spack</td>
+<td>Container,crates.io,spack</td>
+</tr>
+</tbody>
+</table>
+<h1 id=language-agnostic>Language-Agnostic<a hidden class=anchor aria-hidden=true href=#language-agnostic>#</a></h1>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>Tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Server Distro</td>
+<td>CentOS</td>
+</tr>
+<tr>
+<td>Workstation Distro</td>
+<td>Fedora</td>
+</tr>
+<tr>
+<td>Filesystem</td>
+<td>BTRFS:Fedora, ZFS:Centos</td>
+</tr>
+<tr>
+<td>Desktop</td>
+<td>KDE Plasma</td>
+</tr>
+<tr>
+<td>Screenshots</td>
+<td>Spectacle</td>
+</tr>
+<tr>
+<td>Container Engine</td>
+<td>Docker/Podman</td>
+</tr>
+<tr>
+<td>Configuration Management</td>
+<td>Ansible</td>
+</tr>
+<tr>
+<td>Development Package Manager</td>
+<td>spack</td>
+</tr>
+<tr>
+<td>Desktop Software</td>
+<td>flatpak:desktop-apps, dnf:system-software</td>
+</tr>
+<tr>
+<td>Source Control</td>
+<td>git</td>
+</tr>
+<tr>
+<td>Source Code Splunking</td>
+<td>sourcetrails:exploration??, ag/rip-grep:search, LSP:editor, ?? (sourcegraph)</td>
+</tr>
+<tr>
+<td>PDF Viewer</td>
+<td>Okular</td>
+</tr>
+<tr>
+<td>Web Browser</td>
+<td>FireFox</td>
+</tr>
+<tr>
+<td>File Browser</td>
+<td>Dolphin</td>
+</tr>
+<tr>
+<td>File Transfer</td>
+<td>Globus</td>
+</tr>
+<tr>
+<td>Text Editor</td>
+<td>neovim</td>
+</tr>
+<tr>
+<td>Terminal</td>
+<td>konsole</td>
+</tr>
+<tr>
+<td>Shell</td>
+<td>bash</td>
+</tr>
+<tr>
+<td>Prompt</td>
+<td>starship</td>
+</tr>
+<tr>
+<td><code>diff</code>/<code>git diff</code> Tool</td>
+<td>difftastic</td>
+</tr>
+<tr>
+<td><code>find</code> Tool</td>
+<td>fd-find</td>
+</tr>
+<tr>
+<td><code>grep</code> Tool</td>
+<td>ag/rip-grep</td>
+</tr>
+<tr>
+<td>Disk Usage <code>du</code></td>
+<td>dust</td>
+</tr>
+<tr>
+<td><code>cat</code></td>
+<td>bat</td>
+</tr>
+<tr>
+<td>cd</td>
+<td>zoxide</td>
+</tr>
+<tr>
+<td>Multiplexer</td>
+<td>neovim</td>
+</tr>
+<tr>
+<td>Backup</td>
+<td>restic:non-zfs, zfs:default</td>
+</tr>
+<tr>
+<td>VPN</td>
+<td>tailscale</td>
+</tr>
+<tr>
+<td>CI</td>
+<td>Jenkins/Gitlab:hosting, Dagger:abstraction</td>
+</tr>
+<tr>
+<td>Text Collaboration</td>
+<td>Slack:work,Discord:home,Email:other</td>
+</tr>
+<tr>
+<td>Video Collaboration</td>
+<td>Zoom</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>GMail/Outlook</td>
+</tr>
+<tr>
+<td>Slides</td>
+<td>Google Slides, Beamer:math-heavy</td>
+</tr>
+<tr>
+<td>Documents</td>
+<td>Google Docs:Default, Overleaf:Publications</td>
+</tr>
+<tr>
+<td>Diagram Editing</td>
+<td>Draw.io:refine, d2/graphviz:quick</td>
+</tr>
+<tr>
+<td>Plotting</td>
+<td>Plots.jl:static, Makie.jl:interactive</td>
+</tr>
+<tr>
+<td>Bitmap Image Editing</td>
+<td>Gimp</td>
+</tr>
+<tr>
+<td>Vector Image Editing</td>
+<td>Inkscape</td>
+</tr>
+<tr>
+<td>Print Layout Editing (e.g. Posters)</td>
+<td>Scribus</td>
+</tr>
+<tr>
+<td>Video Editing</td>
+<td>Kdenlive</td>
+</tr>
+<tr>
+<td>Audio Editing</td>
+<td>Ardour:edit, pipewire:foundation, Carla:live</td>
+</tr>
+<tr>
+<td>Task Management</td>
+<td>Whiteboard:home, a paper journal:travel, Reminders:notification</td>
+</tr>
+<tr>
+<td>Time Management</td>
+<td>Activity Watch:Desktop, Screentime:Mobile</td>
+</tr>
+<tr>
+<td>Calendaring</td>
+<td>Google Calendar</td>
+</tr>
+<tr>
+<td>Journaling</td>
+<td>Vimwiki:default, a paper journal:travel, Good Notes:sketching, Drafts:mobile</td>
+</tr>
+<tr>
+<td>Passwords</td>
+<td>KeepassXC</td>
+</tr>
+<tr>
+<td>Music</td>
+<td>Plex</td>
+</tr>
+<tr>
+<td>Citations</td>
+<td>Zotero</td>
+</tr>
+<tr>
+<td>RSS</td>
+<td>Feedly</td>
+</tr>
+<tr>
+<td>Podcasts</td>
+<td>Overcast</td>
+</tr>
+<tr>
+<td>Blog</td>
+<td>Hugo</td>
+</tr>
+</tbody>
+</table>
+<h1 id=gaps>Gaps<a hidden class=anchor aria-hidden=true href=#gaps>#</a></h1>
+<p>There are a few places where I see gaps in the current ecosystem of development tools</p>
+<ul>
+<li>A build system for Python with good support for native extensions that produces pip install-able packages. There is not an easy way to build native extensions for python with complex C/C++ dependencies that is scalable and consistent. See also <a href=https://pypackaging-native.github.io/>pypackaging-native</a>. Python would learn a lot from Julia here in terms of ease of use. I personally don&rsquo;t find Anaconda to be the answer here because you can&rsquo;t use <code>pip</code> the blessed installer for python to install packages from it you have to use <code>conda</code> (<a href=https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community>which is/was very slow</a>) or better yet the faster compatible <code>mamba</code> but <a href=https://stackoverflow.com/a/66963979>both still behaves poorly once <code>conda-forge</code> is used</a>.</li>
+<li>Refactoring tools for any language that isn&rsquo;t Java or C++. Comby may be that tool, but I am also hopeful for tools built on top of treesitter.</li>
+<li>Sourcetrails was one of my favorite tools for exploring large software projects giving me ability to quickly visualize system dependencies. Sourcetrails has been abandoned because it was A) too hard to maintain and B) for whatever reason couldn&rsquo;t find a good funding model. I hope that a tool that could fit some of these needs could be built from either LSP servers generically.</li>
+</ul>
+<p>Monorepo/Package management tools for maintaining large multi-language applications. The ideal tool would be able to</p>
+<ul>
+<li>support C++, Python, Julia, Rust, and other languages well</li>
+<li>isolate builds from system dependencies by building in a sandbox for reproducible builds</li>
+<li>An escape hatch to import system dependencies</li>
+<li>help with coordinated package releases (bumping versions, refactors, rebuilds)</li>
+<li>execute builds in parallel at least locally, but preferably distributed as well and coordinate between packages (i.e. make&rsquo;s jobserver)</li>
+<li>rebuild things only when needed</li>
+</ul>
+<p>Bazel, Pants, and Spack are the tools that are closest, but each lacks a key feature to really solve this for me.</p>
+<p>I&rsquo;ve admired tools like <a href=https://warp.dev>warp.dev</a> from afar because they are MacOS only. I think there is room for an improved terminal like software with improved auto-completion, contextual documentation, intelligent folding/scroll-back, collaborative tools, and more sophisticated graphical capabilites has a place.
+Tools like Jupiter notebooks address some of these, but are really heavy weight but also don&rsquo;t embed things like vim easily.
+Terminal&rsquo;s like kitty are closer, but feel like they lack some polish compared to Warp or my current terminal editor Konsole.</p>
+<h1 id=comments>Comments<a hidden class=anchor aria-hidden=true href=#comments>#</a></h1>
+<ul>
+<li>I find I use the C++ tools even for languages like Python and Julia because they allow me to get down to the native code that is being run and understand the stack issues there.</li>
+<li>I avoid ZFS on Fedora because Fedora runs too new a kernel for ZFS with Fedora to be really reliable.</li>
+<li>CMake especially its complex scoping rules and string based typing leave things to be desired.
+Meson is pleasant, but since CMake is ubiquitous and at least last time I tried, meson&rsquo;s CMake integration was imperfect for complex dependencies such as LLVM.
+Bazel WORKSPACE files are verbose even for simple multi-language processes but is getting better with <code>bzlmod</code>. Bazel also makes it hard to use system provided packages or to install things using UNIX package conventions.
+Spack requires the package definition to be seperate and has to be used with a language specific build tool.</li>
+</ul>
+<h1 id=changelog>Changelog<a hidden class=anchor aria-hidden=true href=#changelog>#</a></h1>
+<ul>
+<li>2023-03-14 initial version</li>
+</ul>
+<h1 id=key>Key<a hidden class=anchor aria-hidden=true href=#key>#</a></h1>
+<ul>
+<li><code>/</code> can be used interchangeable</li>
+<li><code>,</code> used in addition to for a specific sub purpose</li>
+<li><code>+</code> tool I developed on top of these</li>
+<li><code>()</code> runner up/under evaluation/contextual</li>
+<li><code>??</code> looking for a replacement</li>
+<li><code> </code> no tool needed</li>
+<li><code>*c++</code> I also use the C++ tools here</li>
+<li><code>:</code> context</li>
+</ul>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=http://robertu94.github.io/tags/programming.html>Programming</a></li>
+</ul>
+<nav class=paginav>
+<a class=next href=http://robertu94.github.io/2023/03/10/external-clang-tidy-modules-c-refactoring-for-the-common-project.html>
+<span class=title>Next »</span>
+<br>
+<span>External Clang-Tidy Modules! C++ Refactoring for the Common Project</span>
+</a>
+</nav>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2023 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>

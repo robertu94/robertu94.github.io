@@ -77,6 +77,18 @@ Programming
 </header>
 <article class="post-entry tag-entry">
 <header class=entry-header>
+<h2>How I work: The Tools I Use
+</h2>
+</header>
+<div class=entry-content>
+<p>From time to time I get a question of what tools I use for what jobs. Here the tools I use to get things done:
+Language Specific Purpose C++ Python Julia Rust Compiler/Interpeter gcc/clang python:quick,ipython:long julia rustc,cargo Profiler perf/FlameGraphs + perftrace cprofile:function, line_profiler:line BenchmarkTools.jl cargo Debugger GDB + mpigdb *c++, pdb *c++ Debugger.jl:default,Cathulu.jl:metaprogramming *c++ rust-gdb Build System CMake,(meson, bazel) + m ?...</p>
+</div>
+<footer class=entry-footer><span title="2023-03-14 00:00:00 +0000 UTC">March 14, 2023</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;877 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to How I work: The Tools I Use" href=http://robertu94.github.io/2023/03/14/how-i-work-the-tools-i-use.html></a>
+</article>
+<article class="post-entry tag-entry">
+<header class=entry-header>
 <h2>External Clang-Tidy Modules! C++ Refactoring for the Common Project
 </h2>
 </header>
@@ -180,19 +192,6 @@ Strategies for Reading in General My chemistry and physics teacher – Dr....</p
 </div>
 <footer class=entry-footer><span title="2018-08-08 08:00:00 -0500 -0500">August 8, 2018</span>&nbsp;·&nbsp;8 min&nbsp;·&nbsp;1548 words&nbsp;·&nbsp;Robert Underwood</footer>
 <a class=entry-link aria-label="post link to Learning to Learn: Reading" href=http://robertu94.github.io/learning/reading.html></a>
-</article>
-<article class="post-entry tag-entry">
-<header class=entry-header>
-<h2>Generic Cuda
-</h2>
-</header>
-<div class=entry-content>
-<p>GPU programming has the potential to make embarrassingly parallel tasks very quick. But what if you want to perform the same task on a variety of different types? In this post, I walk through a generic testing code that preforms a vector add on GPU and CPU to verify the correctness.
-The Test Harness Our main function is pretty simple:
-int main(int argc, char* argv[]) { check_type&lt;int>(); check_type&lt;long>(); check_type&lt;double>(); check_type&lt;float>(); return 0; } So how do we write check_type?...</p>
-</div>
-<footer class=entry-footer><span title="2018-05-12 08:00:14 -0500 -0500">May 12, 2018</span>&nbsp;·&nbsp;7 min&nbsp;·&nbsp;1378 words&nbsp;·&nbsp;Robert Underwood</footer>
-<a class=entry-link aria-label="post link to Generic Cuda" href=http://robertu94.github.io/2018/05/12/generic-cuda.html></a>
 </article>
 <footer class=page-footer>
 <nav class=pagination>
