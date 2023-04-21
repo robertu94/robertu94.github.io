@@ -51,8 +51,18 @@ packages:
         mpi: [cray-mpich]
   cuda:
     externals:
+      - spec: cuda@12.0.0
+        modules: [cudatoolkit-standalone/12.0.0]
+      - spec: cuda@11.8.0
+        modules: [cudatoolkit-standalone/11.8.0]
+      - spec: cuda@11.7.1
+        modules: [cudatoolkit-standalone/11.7.1]
       - spec: cuda@11.6.2
         modules: ['cudatoolkit-standalone/11.6.2']
+      - spec: cuda@11.4.4
+        modules: [cudatoolkit-standalone/11.4.4]
+      - spec: cuda@11.2.2
+        modules: [cudatoolkit-standalone/11.2.2]
     buildable: False
   libfabric:
     externals:
@@ -77,16 +87,14 @@ After that create `compilers.yaml` at `~/.spack/polaris/cray/compilers.yaml` wit
 - compiler:
     spec: gcc@11.2.0
     paths:
-      cc: cc
-      cxx: CC
-      f77: ftn
-      fc: ftn
+      cc: /opt/cray/pe/gcc/11.2.0/bin/gcc
+      cxx: /opt/cray/pe/gcc/11.2.0/bin/g++
+      f77: /opt/cray/pe/gcc/11.2.0/bin/gfortran
+      fc: /opt/cray/pe/gcc/11.2.0/bin/gfortran
     flags: {}
     operating_system: sles15
-    target: any
-    modules:
-    - PrgEnv-gnu
-    - gcc/11.2.0
+    target: x86_64
+    modules: ['libfabric/1.11.0.4.125', 'cray-mpich/8.1.16']
     environment: {}
     extra_rpaths: []
 ```
