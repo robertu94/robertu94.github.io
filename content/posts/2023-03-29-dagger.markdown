@@ -1,0 +1,101 @@
+---
+layout: post
+title:  "Refactoring CI/CD for a Moderately Large C++ Code Base"
+date:   2023-04-24
+tags: 
+- programming
+- CI/CD
+---
+
+CI/CD is a critical, but difficult to get right part of software engineering.
+You often want to test multiple distributions, multiple compilers on each commit, and you want that to be as fast as reasonably possible.
+This gets more complicated when you have large dependency trees that you want to remain consistent.
+Recently, I adapted the CI/CD system for a project that I maintain LibPressio to use Dagger -- a programmatic way to do CI/CD portable-ally across runner environments which made it easier to run our tests and verify correctness.
+
+# What is Dagger and why do I care?
+
+Fundamentally, [Dagger is a really awesome set of language bindings on top of buildkit](https://docs.dagger.io/) -- the library that tools like `docker`  and `buildah` use to build container images.
+What is this means is that there is an easy way to build code in an isolated fashion with great caching, easy to write parallelism, remote execution, ability to spin up on-demand side car services, and portable abstractions.
+
+Before you say, "but who cares? I have [`bazel`/`pants`/`make`/`ninja`/`cmake`/...]!".  If `bazel` or one of these other tools works for you, great! Use it.
+And sure `bazel` -- for example -- provides great caching and parallelism, but how is its error handling when you need to interact with a flaky remote service? What about if you need to run a database as  side car when testing your code?  What if part of your stack uses a language without `bazel` rules modules like `julia`?
+In short, `bazel` does not give you the whole story while Dagger being built on buildkit gives you the flexibility you need.
+What makes it even better is that the way that you interact with Dagger is through client SDKs that are generated automatically.
+This means that you can often just use the language of your choice (nodejs, python, rust, and Go) and the various clients generally have feature parity with each other so you aren't left out if you don't use Go.
+
+
+Why I really care is that it gives me flexibility to respond to changing CI environments.
+A few years ago, TravisCI drastically changed the availability of free CI/CD services and [disrupted a lot of those writing open source software and depending on Travis for free CI](https://www.jeffgeerling.com/blog/2020/travis-cis-new-pricing-plan-threw-wrench-my-open-source-works) including several that I work with.  Since then Github Actions has taken off as the generous free for open source alternative, but I question how long ultimately how long any of these offerings can last a free service -- its costs money to run CI/CD for everything from power and cooling to bandwidth and compute; money doe not grow on trees.  Ultimately as a user you want to write your CI/CD pipeline in a way so it's easy to port to new platforms and to be able to reproduce issues seen in CI locally so that you aren't beholden to whims and pricing of each CI/CD provider.  Dagger [gives you that](https://docs.dagger.io/145912/ci/).
+
+# Applying Dagger to LibPressio
+
+LibPressio is a C++ library with bindings in C/Python/Julia/Rust/etc... It abstracts away the details of compression libraries like BLOSC or SZ3 so users can focus on their applications, and compression libraries can be more easily adopted by applications.
+We have a moderate set of things that we do in CI/CD:
+
++ verify things build and pass tests on the latest Fedora, CentOS, and Ubuntu releases
++ verify we can build a `many_linux` container for python installers
++ verify that we can build with `spack`
++ build our pre-built container image using `spack`
+
+Integrating this into Dagger using the Python SDK was relatively straightforward, and only took about 238 lines of code.
+
+## Caching, Caching, Caching
+
+The  core of LibPressio has about 25,000 lines of C and C++ code, and there are about another 20,000-40,000 lines of code in other extension packages in the LibPressio ecosystem.
+LibPressio supports over 30 different compression schemes, and many of which as optional dependencies that require installing additional dependencies.
+Without any form of caching, building a full build of LibPressio with all of its optional direct dependencies (and their transitive dependencies) from source can take over 8 hours.
+That isn't a great developer experience, and would be an awful CI/CD experience where jobs simply cannot run that long on the free tiers.
+Caching is absolutely key so I pay careful attention to leverage caches in LibPressio using Dagger.
+There are a few key types of caches we integrate with Dagger:
+
++ `ccache`/`sccache` -- allows fast incremental compilation when source files are not changed, this really accelerates the implement fix, retry CI loop.
++ caching system packages (i.e. `dnf`/`apt`) -- not everyone has fast internet, caching downloads for `dnf` and `apt` can really speedup downloading system packages.
++ `spack buildcache` -- `spack` is a source-based package manager for high performance computing software.  In 2022 it [added a public binary cache](https://spack.io/spack-binary-packages/) which can drastically speed up installs.
+
+For each, we leverage Dagger's `with_mounted_cache` function to mount directories to contain these caches into the build environment.
+Additionally, we get to leverage the `buildkit` cache 
+
+Finally Dagger gives us fine control over cache invalidation.
+When we re-build each week, we want to invalid the caches for system packages and `spack`to test with new updates that may have changed, but if iterating on a fix locally, it's helpful to have these caches remain in tact.
+It's easy to use the ["cache-bursting"](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#run) techniques which use an environmental variable with a computed value in the build pipeline to decide when to invalidate a cache layer, and doing so is easier than the alternatives you would otherwise have to do in a `Dockerfile`.
+
+## Parallel Execution
+
+LibPressio has a lot of code that needs to get build on every commit.
+Building in parallel enables getting the best use of the available hardware.
+There are two key levels of parallelism and coordination to consider.
+First is the parallel building of separable build pipelines. Second is de-conflicting execution between pipelines.
+
+The former is simple with Dagger, simply use your languages underlying `async`/`await` system to await key tasks.
+Dagger will handle executing the directed acyclic graph of your program with as much parallelism as possible.
+You should even be able to distribute builds with a distributed [buildkit in Kubernetes](https://github.com/moby/buildkit#consistent-hashing) -- something I hope to try soon.
+
+The second requires a bit more work, but is possible.
+Yes, you can pass `-j` flags to `make`, `ninja`, or `spack` to run multiple tasks in these system in parallel -- that part is easy.
+What makes this harder is when you want to run multiple of these concurrently without them all stomping on one another.
+For this I turn to flags like `-l` in `make` and `ninja` that instruct the system to wait until the system load average is below a certain level before starting new tasks.
+This isn't ideal because it causes bubbles in the execution pipeline, but also isn't dagger's fault.
+What would be more ideal would be to expose something like a POSIX `jobserver` in to the container through a mounted pipe to coordinate job slots among all of the separate instances, which should be possible, but not where I started with my implementation because I would need to figure out how to pipe it through to tools like `spack`.
+
+# What I would like to automate next
+
+Dagger is already providing great benefit with what I've automated right now, but there are a few more things that I hope to do in the near future:
+
++ Dagger also provides mechanisms to handle secrets (i.e. GitHub tokens, slack tokens) in a portable way.  I hope to use this soon to handle things like automatically updating the docs hosted on github pages, or pinging a slack channel when a build fails.
++ build our tutorial container image from our container image -- this should not be hard, just something else to do.
++ I'd really like to automate the opening PRs to `spack`to bump versions of the various packages in the libpressio ecosystem as they are updated and dependencies are changed.  This is a tedious, but relatively easy task making it prime for future automation.  This part will require a little thinking both to do the CI but also to think about how to best collect the various changes across repos into a single PR.
+
+
+# Where are the gaps?
+
+There are a few areas that I think where Dagger could improve as project to enable some more complex workflows.
+
++ support GPU software -- while in principle running code that requires GPU to execute in container is possible, there are some nuances about doing this in dagger that [will require some sorting out](https://github.com/dagger/dagger/issues/4675).
++ MacOS and Windows -- fundamentally Dagger is a CI/CD tool for containers.  Containers share the OS kernel making doing cross platform development where supporting multiple OSes out of reach of the current implementation.  However it shouldn't be completely impossible.  There have for years been tools like [docker-osx](https://github.com/sickcodes/Docker-OSX) that allow running a VM in a container.  I would love to see this [kind of feature integrated into Dagger's platform](https://github.com/dagger/dagger/issues/3158) -- even if only as a extension or library with the same syntax -- to implement CI/CD for Windows and MacOS with the same great UX.
+
+
+I hope this help!
+
+# Changelog
+
++ 2023-04-24 created post
