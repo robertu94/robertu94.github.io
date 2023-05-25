@@ -76,6 +76,19 @@ Recent Updates ">
 </div>
 <article class=post-entry>
 <header class=entry-header>
+<h2>Spack on Ubuntu 20.04
+</h2>
+</header>
+<div class=entry-content>
+<p>Spack installations can be really slow on some platforms, however, there are pre-built packages for ubuntu 20.04
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test sudo apt update apt install gcc-11 spack mirror add spack-build-cache-develop https://binaries.spack.io/develop spack buildcache keys --install --trust And now you have spack pre-compiled goodness for your packages!
+You can see the spack cache index for details for what packages are pre-built for which platforms.</p>
+</div>
+<footer class=entry-footer><span title="2023-05-25 00:00:00 +0000 UTC">May 25, 2023</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;63 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Spack on Ubuntu 20.04" href=http://robertu94.github.io/guides/ubuntu.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
 <h2>Spack on Crusher
 </h2>
 </header>
@@ -189,19 +202,12 @@ mkdir -p ~/git git clone https://github.com/spack/spack git/spack-polaris git cl
 <footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;303 words&nbsp;·&nbsp;Robert Underwood</footer>
 <a class=entry-link aria-label="post link to Spack on Polaris" href=http://robertu94.github.io/guides/polaris.html></a>
 </article>
-<article class=post-entry>
-<header class=entry-header>
-<h2>Spack on Theta
-</h2>
-</header>
-<div class=entry-content>
-<p>tl;dr Put the following in your .bashrc
-function use_build { # other ALCF machines if hostname | grep theta &>/dev/null; then echo "loading theta spack" module swap PrgEnv-intel PrgEnv-gnu module swap gcc/11.2.0 source ${HOME}/git/spack-theta/share/spack/setup-env.sh export CRAYPE_LINK_TYPE=dynamic export clustername=theta export HTTP_PROXY=http://theta-proxy.tmi.alcf.anl.gov:3128 export HTTPS_PROXY=http://theta-proxy.tmi.alcf.anl.gov:3128 export http_proxy=http://theta-proxy.tmi.alcf.anl.gov:3128 export https_proxy=http://theta-proxy.tmi.alcf.anl.gov:3128 fi export SPACK_USER_CONFIG_PATH="$HOME/.spack/$clustername" export SPACK_USER_CACHE_PATH="$SPACK_USER_CONFIG_PATH" } Then run
-mkdir -p ~/git git clone https://github.com/spack/spack git/spack-theta git clone https://github.com/robertu94/spack_packages git/robertu94_packages git clone https://github.com/mochi-hpc/mochi-spack-packages git/mochi-spack-packages source ~/....</p>
-</div>
-<footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;304 words&nbsp;·&nbsp;Robert Underwood</footer>
-<a class=entry-link aria-label="post link to Spack on Theta" href=http://robertu94.github.io/guides/theta.html></a>
-</article>
+<footer class=page-footer>
+<nav class=pagination>
+<a class=next href=http://robertu94.github.io/guides/page/2.html>Next&nbsp;&nbsp;»
+</a>
+</nav>
+</footer>
 </main>
 <footer class=footer>
 <span>&copy; 2023 <a href=http://robertu94.github.io/>systems++</a></span>
