@@ -1,0 +1,118 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>Dethroning LaTeX: What Would It Take? | systems++</title>
+<meta name=keywords content>
+<meta name=description content="As an academic, you write a lot of papers. If you contribute to the disciplines of Math, Computer Science, or some domains of physical sciences, you&rsquo;ve probably used LaTeX &ndash; a typesetting language &ndash; through a tool like Overleaf. What&rsquo;s nice about LaTeX is that it attempts to separate concerns: Authors with minimal effort can port the text and structure of a document from one style to another. It generally produces much more ascetically pleasing output by default than what most authors would do on their own.">
+<meta name=author content="Robert Underwood">
+<link rel=canonical href=http://robertu94.github.io/2023/07/02/dethroning-latex-what-would-it-take.html>
+<meta name=google-site-verification content="G-9KQE44SX6K">
+<link crossorigin=anonymous href=/assets/css/stylesheet.57f29198e62b3a8f07d37acaca0427bafb684416046b823f5a616bd858bb4af1.css integrity="sha256-V/KRmOYrOo8H03rKygQnuvtoRBYEa4I/WmFr2Fi7SvE=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.baa4f2053c75d0009e9309aae8f8a8959f5e0372e88f80cdf2951a9533d71ce2.js integrity="sha256-uqTyBTx10ACekwmq6PiolZ9eA3Loj4DN8pUalTPXHOI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=http://robertu94.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=http://robertu94.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=http://robertu94.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=http://robertu94.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=http://robertu94.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KQE44SX6K"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9KQE44SX6K',{anonymize_ip:!1})}</script>
+<meta property="og:title" content="Dethroning LaTeX: What Would It Take?">
+<meta property="og:description" content="As an academic, you write a lot of papers. If you contribute to the disciplines of Math, Computer Science, or some domains of physical sciences, you&rsquo;ve probably used LaTeX &ndash; a typesetting language &ndash; through a tool like Overleaf. What&rsquo;s nice about LaTeX is that it attempts to separate concerns: Authors with minimal effort can port the text and structure of a document from one style to another. It generally produces much more ascetically pleasing output by default than what most authors would do on their own.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://robertu94.github.io/2023/07/02/dethroning-latex-what-would-it-take.html"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-07-02T00:00:00+00:00">
+<meta property="article:modified_time" content="2023-07-02T00:00:00+00:00"><meta property="og:site_name" content="Systems++">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Dethroning LaTeX: What Would It Take?">
+<meta name=twitter:description content="As an academic, you write a lot of papers. If you contribute to the disciplines of Math, Computer Science, or some domains of physical sciences, you&rsquo;ve probably used LaTeX &ndash; a typesetting language &ndash; through a tool like Overleaf. What&rsquo;s nice about LaTeX is that it attempts to separate concerns: Authors with minimal effort can port the text and structure of a document from one style to another. It generally produces much more ascetically pleasing output by default than what most authors would do on their own.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Dethroning LaTeX: What Would It Take?","item":"http://robertu94.github.io/2023/07/02/dethroning-latex-what-would-it-take.html"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Dethroning LaTeX: What Would It Take?","name":"Dethroning LaTeX: What Would It Take?","description":"As an academic, you write a lot of papers. If you contribute to the disciplines of Math, Computer Science, or some domains of physical sciences, you\u0026rsquo;ve probably used LaTeX \u0026ndash; a typesetting language \u0026ndash; through a tool like Overleaf. What\u0026rsquo;s nice about LaTeX is that it attempts to separate concerns: Authors with minimal effort can port the text and structure of a document from one style to another. It generally produces much more ascetically pleasing output by default than what most authors would do on their own.","keywords":[],"articleBody":"As an academic, you write a lot of papers. If you contribute to the disciplines of Math, Computer Science, or some domains of physical sciences, you’ve probably used LaTeX – a typesetting language – through a tool like Overleaf. What’s nice about LaTeX is that it attempts to separate concerns: Authors with minimal effort can port the text and structure of a document from one style to another. It generally produces much more ascetically pleasing output by default than what most authors would do on their own. It handles formatting of three things that generally are extremely frustrating in other tools: citations/bibliography, cross-references, footnotes/endnotes, equations, and embedded code listings. When used with a source control like Git it provides one of the best change review and tracking mechanisms of any document platform.\nBut LaTeX is not perfect. It can be downright frustrating if the defaults don’t quite work correctly. LaTeX does a poor job with orphan control (creating large spaces in the document to keep a short part of a paragraph from starting or ending a column). This is especially poor in the presence of multiple figures. Providing manual hints like vspace are more likely to make the problem worse than solve the issue. The ability to be able to change styles depends significantly on the quality of the template author. Writing these templates is not trivial and not well documented. The style templates that are commonly used in LaTeX are by default black and white and often use the same font. Customizing these is harder than one might expect. LaTeX’s error messages are notoriously obtuse and difficult to debug. Overleaf – the Google Docs of LaTeX has long compilation cycles – especially with longer documents when many authors are editing simultaneously. With the primary output being PDFs, adding features like interactivity, video elements, audio elements, and accessibility features like alternative text are non-trivial.\nThere is an opportunity for improvement. Google Docs has three key limitations to be used for next-generation scientific writing: its inability to handle cross-references, its lack of sophisticated equation or source code embedding, and its ease in accidentally overriding a style in a way that makes it hard to port from one style to another. others might advocate Jupyter Notebooks, which while not a document preparation platform, provides a mechanism to easily embed figures, interactive elements, and more in between cells. It however lacks features like cross-references and biography support.\nThere is however one format that could truly support these features: the modern web. The web has interactivity through JavaScript. It has had excellent support for cross-references since the introduction of the anchor tag. It even has an approach to citations through DOI and services like ArXiV. There are excellent web editing tools ranging from highly textual to highly visual, and the appearance is easily customizable with modern CSS features like CSS grid. There are even collaborative multi-player editing environments for the web with editors like Zed and VSCode LiveShare. Even equations, diagrams, and source code can be addressed with libraries like MathJax, d2/Mermaid.js, and highlight.js. It’s even more accessible, debuggable, and automatable than LaTeX.\nNow I can almost hear my colleagues now, “You can be serious!! No one likes HTML!” That criticism is likely somewhat fair, but is LaTeX actually better? You still have “begin” and “end” tags for most environments. Objections of this form seem to be largely syntactic and based on the preference for lack of angle brackets. And in many cases, you can use Markdown like the academic optimized zettlr and render to HTML which is even more syntactically light than HTML or LaTeX. You might say, “LaTeX produces documents that are so pretty!”To which I respond, most of the work that goes into making the documents so the beauty comes into the generating of templates, not the authors, and when the templates fail you, debugging them is a nightmare in LaTeX but is possible because of excellent developer tools in modern web browsers. Still, others might say “But LaTeX generates documents that are PDF/A compliant and can be more easily archived and more consistently viewed across systems!”. You can fairly easily get around this restriction by incorporating print styles into the journal/conference-wide style sheet and browser and producing a PDF where required.\nIt’s about time we move academic writing into the 20th century and adopt the modern web as our typesetting platform.\n","wordCount":"731","inLanguage":"en","datePublished":"2023-07-02T00:00:00Z","dateModified":"2023-07-02T00:00:00Z","author":{"@type":"Person","name":"Robert Underwood"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://robertu94.github.io/2023/07/02/dethroning-latex-what-would-it-take.html"},"publisher":{"@type":"Organization","name":"systems++","logo":{"@type":"ImageObject","url":"http://robertu94.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=http://robertu94.github.io/ accesskey=h title="systems++ (Alt + H)">systems++</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=http://robertu94.github.io/about.html title="About Me">
+<span>About Me</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/guides.html title=Guides>
+<span>Guides</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/learning.html title="Learning To Learn">
+<span>Learning To Learn</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/presentations.html title=Presentations>
+<span>Presentations</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=http://robertu94.github.io/>Home</a></div>
+<h1 class=post-title>
+Dethroning LaTeX: What Would It Take?
+</h1>
+<div class=post-meta><span title="2023-07-02 00:00:00 +0000 UTC">July 2, 2023</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;731 words&nbsp;·&nbsp;Robert Underwood
+</div>
+</header>
+<div class=post-content><p>As an academic, you write a lot of papers. If you contribute to the disciplines of Math, Computer Science, or some domains of physical sciences, you&rsquo;ve probably used LaTeX &ndash; a typesetting language &ndash; through a tool like <a href=https://overleaf.com/>Overleaf</a>. What&rsquo;s nice about LaTeX is that it attempts to separate concerns: Authors with minimal effort can port the text and structure of a document from one style to another. It generally produces much more ascetically pleasing output by default than what most authors would do on their own. It handles formatting of three things that generally are extremely frustrating in other tools: citations/bibliography, cross-references, footnotes/endnotes, equations, and embedded code listings. When used with a source control like Git it provides one of the best change review and tracking mechanisms of any document platform.</p>
+<p>But LaTeX is not perfect. It can be downright frustrating if the defaults don&rsquo;t quite work correctly. LaTeX does a poor job with orphan control (creating large spaces in the document to keep a short part of a paragraph from starting or ending a column). This is especially poor in the presence of multiple figures. Providing manual hints like <code>vspace</code> are more likely to make the problem worse than solve the issue. The ability to be able to change styles depends significantly on the quality of the template author. Writing these templates is not trivial and not well documented. The style templates that are commonly used in LaTeX are by default black and white and often use the same font. Customizing these is harder than one might expect. LaTeX&rsquo;s error messages are notoriously obtuse and difficult to debug. Overleaf – the Google Docs of LaTeX has long compilation cycles &ndash; especially with longer documents when many authors are editing simultaneously. With the primary output being PDFs, adding features like interactivity, video elements, audio elements, and accessibility features like alternative text are non-trivial.</p>
+<p>There is an opportunity for improvement. Google Docs has three key limitations to be used for next-generation scientific writing: its inability to handle cross-references, its lack of sophisticated equation or source code embedding, and its ease in accidentally overriding a style in a way that makes it hard to port from one style to another. others might advocate <a href=https://jupyter.org/>Jupyter Notebooks</a>, which while not a document preparation platform, provides a mechanism to easily embed figures, interactive elements, and more in between cells. It however lacks features like cross-references and biography support.</p>
+<p>There is however one format that could truly support these features: the modern web. The web has interactivity through JavaScript. It has had excellent support for cross-references since the introduction of the anchor tag. It even has an approach to citations through DOI and services like ArXiV. There are excellent web editing tools ranging from highly textual to highly visual, and the appearance is easily customizable with modern CSS features like CSS grid. There are even collaborative multi-player editing environments for the web with editors like <a href=https://zed.dev/>Zed</a> and <a href=https://code.visualstudio.com/learn/collaboration/live-share>VSCode LiveShare</a>. Even equations, diagrams, and source code can be addressed with libraries like MathJax, d2/Mermaid.js, and highlight.js. It&rsquo;s even more accessible, debuggable, and automatable than LaTeX.</p>
+<p>Now I can almost hear my colleagues now, “You can be serious!! No one likes HTML!” That criticism is likely somewhat fair, but is LaTeX actually better? You still have “begin” and “end” tags for most environments. Objections of this form seem to be largely syntactic and based on the preference for lack of angle brackets. And in many cases, you can use Markdown like the <a href=https://www.zettlr.com/features>academic optimized zettlr</a> and render to HTML which is even more syntactically light than HTML or LaTeX. You might say, “LaTeX produces documents that are so pretty!”To which I respond, most of the work that goes into making the documents so the beauty comes into the generating of templates, not the authors, and when the templates fail you, debugging them is a nightmare in LaTeX but is possible because of excellent developer tools in modern web browsers. Still, others might say “But LaTeX generates documents that are PDF/A compliant and can be more easily archived and more consistently viewed across systems!”. You can fairly easily get around this restriction by incorporating <a href=https://developer.mozilla.org/en-US/docs/Web/Guide/Printing>print styles</a> into the journal/conference-wide style sheet and browser and producing a PDF where required.</p>
+<p>It’s about time we move academic writing into the 20th century and adopt the modern web as our typesetting platform.</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+</ul>
+<nav class=paginav>
+<a class=next href=http://robertu94.github.io/2023/04/24/how-i-work-killer-libraries.html>
+<span class=title>Next »</span>
+<br>
+<span>How I Work: Killer Libraries</span>
+</a>
+</nav>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2023 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>
