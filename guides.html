@@ -76,6 +76,19 @@ Recent Updates ">
 </div>
 <article class=post-entry>
 <header class=entry-header>
+<h2>What to support if you are supporting
+</h2>
+</header>
+<div class=entry-content>
+<p>Dependencies matter a lot in terms of who can easily install and use your software. However there are trade-offs in what features are provided by each version and the availability of these versions. This presents an opinionated take on what these trade-offs are so one can know what can be widely supported.
+Last update: 2023-09-12
+Major Linux Distros Distro Standard EoL CentOS-7 compatible July 2024 CentOS-8 compatible December 2021* CentOS-8 stream May 2024 CentOS-9 stream May 2027* Ubuntu 16....</p>
+</div>
+<footer class=entry-footer><span title="2023-09-12 00:00:00 +0000 UTC">September 12, 2023</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;1011 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to What to support if you are supporting" href=http://robertu94.github.io/guides/dependencies.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
 <h2>Spack on Ubuntu 20.04
 </h2>
 </header>
@@ -160,7 +173,7 @@ How to add the dependency Adding a dependency in CMake is pretty straight forwar
 <p>Setting up spack The way that I use spack, there are 6 major steps to configuring spack:
 Determine what system compiler, python, and MPI you will use Telling spack how to find your compiler Telling spack find major system dependencies such as MPI and OpenSSL as external dependencies Configuring preferred providers for virtual dependencies and target architectures Configuring spack to use a binary cache if it will matter Setting up a shell shortcut for loading spack What system dependencies to use Spack does a pretty good job “living off the land” using what ever dependencies you may need....</p>
 </div>
-<footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;669 words&nbsp;·&nbsp;Robert Underwood</footer>
+<footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;725 words&nbsp;·&nbsp;Robert Underwood</footer>
 <a class=entry-link aria-label="post link to Shortcut Guide for Configuring Spack for a New HPC System" href=http://robertu94.github.io/guides/spack.html></a>
 </article>
 <article class=post-entry>
@@ -188,19 +201,6 @@ mkdir -p ~/git git clone https://github.com/spack/spack git/spack-cooley git clo
 </div>
 <footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;242 words&nbsp;·&nbsp;Robert Underwood</footer>
 <a class=entry-link aria-label="post link to Spack on Cooley" href=http://robertu94.github.io/guides/cooley.html></a>
-</article>
-<article class=post-entry>
-<header class=entry-header>
-<h2>Spack on Polaris
-</h2>
-</header>
-<div class=entry-content>
-<p>tl;dr Put the following in your .bashrc
-function use_build { # other ALCF machines if hostname -f | grep polaris &>/dev/null; then echo "loading polaris spack" module swap PrgEnv-nvhpc PrgEnv-gnu module load cudatoolkit-standalone source ${HOME}/git/spack-theta/share/spack/setup-env.sh export CRAYPE_LINK_TYPE=dynamic export clustername=polaris fi export SPACK_USER_CONFIG_PATH="$HOME/.spack/$clustername" export SPACK_USER_CACHE_PATH="$SPACK_USER_CONFIG_PATH" } Then run
-mkdir -p ~/git git clone https://github.com/spack/spack git/spack-polaris git clone https://github.com/robertu94/spack_packages git/robertu94_packages git clone https://github.com/mochi-hpc/mochi-spack-packages git/mochi-spack-packages source ~/.bashrc use_build spack compiler find # for extra packages like libpressio and thallium spack repo add ~/git/robertu94_packages spack repo add ~/git/mochi-spack-packages First create packages....</p>
-</div>
-<footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;303 words&nbsp;·&nbsp;Robert Underwood</footer>
-<a class=entry-link aria-label="post link to Spack on Polaris" href=http://robertu94.github.io/guides/polaris.html></a>
 </article>
 <footer class=page-footer>
 <nav class=pagination>
