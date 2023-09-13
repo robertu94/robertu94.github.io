@@ -90,6 +90,17 @@ I like to have a single command to load spack and any MPI or compiler modules th
 I often call use build.
 
 
+## Setting LD_LIBRARY_PATH when it is needed
+
+If you have a spack envionment where you need LD_LIBRARY_PATH (e.g. to build or run with a Makfile).
+Then you can use the following commands to have spack add these variables, run `despacktivate` and then `sspack env activate /path/to/env` to reactivate it.
+
+```bash
+spack config add modules:prefix_inspections:lib:[LD_LIBRARY_PATH]
+spack config add modules:prefix_inspections:lib64:[LD_LIBRARY_PATH]
+```
+
+
 # Updating Spack
 
 I generally recommend rebuilding your spack envirionments whenever you update spack's major version
