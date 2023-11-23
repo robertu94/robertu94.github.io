@@ -124,6 +124,7 @@ For widest compatibility, avoid features newer than 3.6, however when CentOS7 is
 + **3.9** Added `|` for `dict`, `list` instead of `List` in types, and is much faster and more
 + **3.10** Added `match` pattern matching, parenthesized context managers, type `|` operator,  and more
 + **3.11** Added exception groups, tomllib, variatic generics, Self type, string literal type, is much faster and more
++ **3.12** Added `Path.walk`, improved f-strings, type alias, `sys.monitoring`, `collections.abc.Buffer`
 
 ## Julia
 
