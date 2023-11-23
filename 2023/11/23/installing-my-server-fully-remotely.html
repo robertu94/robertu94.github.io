@@ -1,0 +1,250 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>Installing My Server Fully Remotely | systems++</title>
+<meta name=keywords content="server administration">
+<meta name=description content="I run a small tower server in my house to provide services that I use for software development, recently CentOS-8-Stream reached end of life. Since this server distribution doesn&rsquo;t support in-place updates, updating requires reinstalling with a new version of the CentOS-9-Stream. This post documents the challenges that I hit along the way.
+Challenge 1: My server is older than all of my monitors I purchased my server used during the pandemic.">
+<meta name=author content="Robert Underwood">
+<link rel=canonical href=http://robertu94.github.io/2023/11/23/installing-my-server-fully-remotely.html>
+<meta name=google-site-verification content="G-9KQE44SX6K">
+<link crossorigin=anonymous href=/assets/css/stylesheet.57f29198e62b3a8f07d37acaca0427bafb684416046b823f5a616bd858bb4af1.css integrity="sha256-V/KRmOYrOo8H03rKygQnuvtoRBYEa4I/WmFr2Fi7SvE=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.baa4f2053c75d0009e9309aae8f8a8959f5e0372e88f80cdf2951a9533d71ce2.js integrity="sha256-uqTyBTx10ACekwmq6PiolZ9eA3Loj4DN8pUalTPXHOI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=http://robertu94.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=http://robertu94.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=http://robertu94.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=http://robertu94.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=http://robertu94.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KQE44SX6K"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9KQE44SX6K',{anonymize_ip:!1})}</script>
+<meta property="og:title" content="Installing My Server Fully Remotely">
+<meta property="og:description" content="I run a small tower server in my house to provide services that I use for software development, recently CentOS-8-Stream reached end of life. Since this server distribution doesn&rsquo;t support in-place updates, updating requires reinstalling with a new version of the CentOS-9-Stream. This post documents the challenges that I hit along the way.
+Challenge 1: My server is older than all of my monitors I purchased my server used during the pandemic.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://robertu94.github.io/2023/11/23/installing-my-server-fully-remotely.html"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-11-23T12:17:00-05:00">
+<meta property="article:modified_time" content="2023-11-23T12:17:00-05:00"><meta property="og:site_name" content="Systems++">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Installing My Server Fully Remotely">
+<meta name=twitter:description content="I run a small tower server in my house to provide services that I use for software development, recently CentOS-8-Stream reached end of life. Since this server distribution doesn&rsquo;t support in-place updates, updating requires reinstalling with a new version of the CentOS-9-Stream. This post documents the challenges that I hit along the way.
+Challenge 1: My server is older than all of my monitors I purchased my server used during the pandemic.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Installing My Server Fully Remotely","item":"http://robertu94.github.io/2023/11/23/installing-my-server-fully-remotely.html"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Installing My Server Fully Remotely","name":"Installing My Server Fully Remotely","description":"I run a small tower server in my house to provide services that I use for software development, recently CentOS-8-Stream reached end of life. Since this server distribution doesn\u0026rsquo;t support in-place updates, updating requires reinstalling with a new version of the CentOS-9-Stream. This post documents the challenges that I hit along the way.\nChallenge 1: My server is older than all of my monitors I purchased my server used during the pandemic.","keywords":["server administration"],"articleBody":"I run a small tower server in my house to provide services that I use for software development, recently CentOS-8-Stream reached end of life. Since this server distribution doesn’t support in-place updates, updating requires reinstalling with a new version of the CentOS-9-Stream. This post documents the challenges that I hit along the way.\nChallenge 1: My server is older than all of my monitors I purchased my server used during the pandemic. While my server has serial line and VGA outputs, however after my wife and I moved, none of our remaining monitors support either of these inputs. So, how am I going to connect to the server to see the settings in the BIOS in order to perform the installation. IPMI to the rescue. For those who don’t know, IPMI is a remote management protocol that connects to a special piece of hardware installed in many enterprise grade servers. In my Dell server, IPMI is banded iDRAC, but works the same way.\nFirst we need to install and configure ipmi on the server\n# interactive shell for IPMI sudo dnf install ipmitool openipmi # interactive shell for IPMI sudo ipmitool shell Next we need to configure ipmi for remote access on the sever itself\nipmi_channelid=1 ipmi_userid=1 ipmi_ipaddr=192.168.1.120 sudo ipmitool lan set $ipmi_channelid ipsrc static sudo ipmitool lan set $ipmi_channelid ipaddr $ipmi_ipaddr sudo ipmitool lan set $ipmi_channelid netmask 255.255.255.0 sudo ipmitool lan set $ipmi_channelid defgw 192.168.1.1 sudo ipmitool lan set $ipmi_channelid arp respond on sudo ipmitool lan set $ipmi_channelid access on sudo ipmitool lan print 1 sudo ipmitool user set name $ipmi_userid root sudo ipmitool user set password $ipmi_userid #privilege 4 is admin privileges need for things like power control and console access sudo ipmitool channel setaccess $ipmi_channelid $ipmi_userid link=on ipmi=on callin=on privilege=4 sudo ipmitool user enable $ipmi_userid sudo ipmitool user list sudo ipmitool lan set $ipmi_channelid auth USER MD5 Now we can acesss ipmi from the over network:\nipmitool -I lanplus -H $ipmi_ipaddr -U $ipmiuser shell # floppy is the boot device used for any USB on this system chassis bootdev floppy chassis power cycle sol activate However, my linux ISO doesn’t configure the serial port for installation so we need to modify grub so that the serial console is configured for the install, and we can then access the actual installation media over VNC\n#Installing from a serial console, start a VNC server to run the grahical install # add this to the end of the kernel command line console=tty0 console=ttyS0,115200 inst.vnc And finally we can install the server over VNC which works as normal.\nChallenge 2: Re-configuring Tailscale I use tailscale for remote management of my server and so things like backups work outside of the house. When I did this, I set this up last, but in hindsight it should have been one of the first ones to redo because I want all the services to be accessible over tailscale which only happens if the tailscale0 tunnel exists when the services bind. However, I don’t want to connect yet until I re-setup the home directories when I configure ZFS\ndnf config-manager --add-repo https://pkgs.tailscale.com/stable/centos/9/tailscale.repo dnf install tailscale sysetmctl enable --now tailscaled tailscale up # edit machine name in tailscale so \"magic-dns\" works firewall-cmd --zone=public --add-interface=tailscale0 systemctl restart sshd Challenge 3: Re-configuring Samba Samba comes next after Tailscale because the permissions and packages for samba need to be installed so that the ZFS user shares are made public when ZFS comes back on line.\ndnf install -y samba samba-client systemctl enable --now smb nmb #add and enable the samba user (different from the Linux user) firewall-cmd --permanent --zone=public --add-service=samba firewall-cmd --zone=public --add-service=samba setsebool -P samba_enable_home_dirs # setup of users appears below Challenge 4: Reconnecting my ZFS array and recreating users ZFS is where all the user data is stored. Now I just need to reload it.\ndnf install https://zfsonlinux.org/epel/zfs-release-2-3$(rpm --eval \"%{dist}\").noarcupdate dnf install -y epel-release dnf install -y kernel-devel dnf install -y zfs modprobe zfs zpool import tank # edit /etc/passwd to point the user home directories on /tank usermod $USER -d /tank/$USER # re-add the other service account users with the old UID/GIDs groupadd plex -g 1003 useradd plex -u 1003 -g plex #finish setting up SAMBA users because I think this needs the home directories smbpasswd -a $USER smbpasswd -e $USER Challenge 5: Reconfiguring LibVirt I have a few odd VMs on the server and libvirt/cockpit machine is how I manage them.\ndnf install -y libvirt cockpit-machines systemctl enable --now libvirt.socket Challenge 6: Restart services The remaining services I use rely on podman. Because I am lazy, I have a folder called docker in my home directory. In this are sub directories that contain scripts called up.sh that download the container and re-setup the service and set appropriate firewall rules.\ndnf install vim podman-docker systemctl start podman.socket for i in docker/* do cd $i ./up.sh cd ../.. done Hope you learned something!\n","wordCount":"816","inLanguage":"en","datePublished":"2023-11-23T12:17:00-05:00","dateModified":"2023-11-23T12:17:00-05:00","author":{"@type":"Person","name":"Robert Underwood"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://robertu94.github.io/2023/11/23/installing-my-server-fully-remotely.html"},"publisher":{"@type":"Organization","name":"systems++","logo":{"@type":"ImageObject","url":"http://robertu94.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=http://robertu94.github.io/ accesskey=h title="systems++ (Alt + H)">systems++</a>
+<div class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</div>
+</div>
+<ul id=menu>
+<li>
+<a href=http://robertu94.github.io/about.html title="About Me">
+<span>About Me</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/guides.html title=Guides>
+<span>Guides</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/learning.html title="Learning To Learn">
+<span>Learning To Learn</span>
+</a>
+</li>
+<li>
+<a href=http://robertu94.github.io/presentations.html title=Presentations>
+<span>Presentations</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=http://robertu94.github.io/>Home</a></div>
+<h1 class=post-title>
+Installing My Server Fully Remotely
+</h1>
+<div class=post-meta><span title="2023-11-23 12:17:00 -0500 -0500">November 23, 2023</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;816 words&nbsp;·&nbsp;Robert Underwood
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>Table of Contents</span>
+</summary>
+<div class=inner><nav id=TableOfContents>
+<ul>
+<li><a href=#challenge-1-my-server-is-older-than-all-of-my-monitors>Challenge 1: My server is older than all of my monitors</a></li>
+<li><a href=#challenge-2-re-configuring-tailscale>Challenge 2: Re-configuring Tailscale</a></li>
+<li><a href=#challenge-3-re-configuring-samba>Challenge 3: Re-configuring Samba</a></li>
+<li><a href=#challenge-4-reconnecting-my-zfs-array-and-recreating-users>Challenge 4: Reconnecting my ZFS array and recreating users</a></li>
+<li><a href=#challenge-5-reconfiguring-libvirt>Challenge 5: Reconfiguring LibVirt</a></li>
+<li><a href=#challenge-6-restart-services>Challenge 6: Restart services</a></li>
+</ul>
+</nav>
+</div>
+</details>
+</div>
+<div class=post-content><p>I run a small tower server in my house to provide services that I use for
+software development, recently CentOS-8-Stream reached end of life.
+Since this server distribution doesn&rsquo;t support in-place updates, updating
+requires reinstalling with a new version of the CentOS-9-Stream. This post
+documents the challenges that I hit along the way.</p>
+<h1 id=challenge-1-my-server-is-older-than-all-of-my-monitors>Challenge 1: My server is older than all of my monitors<a hidden class=anchor aria-hidden=true href=#challenge-1-my-server-is-older-than-all-of-my-monitors>#</a></h1>
+<p>I purchased my server used during the pandemic. While my server has serial line
+and VGA outputs, however after my wife and I moved, none of our remaining
+monitors support either of these inputs. So, how am I going to connect to the
+server to see the settings in the BIOS in order to perform the installation.
+IPMI to the rescue. For those who don&rsquo;t know, IPMI is a remote management
+protocol that connects to a special piece of hardware installed in many
+enterprise grade servers. In my Dell server, IPMI is banded iDRAC, but works
+the same way.</p>
+<p>First we need to install and configure ipmi on the server</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># interactive shell for IPMI</span>
+sudo dnf install ipmitool openipmi
+
+<span class=c1># interactive shell for IPMI</span>
+sudo ipmitool shell
+</code></pre></div><p>Next we need to configure ipmi for remote access on the sever itself</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=nv>ipmi_channelid</span><span class=o>=</span><span class=m>1</span>
+<span class=nv>ipmi_userid</span><span class=o>=</span><span class=m>1</span>
+<span class=nv>ipmi_ipaddr</span><span class=o>=</span>192.168.1.120
+
+sudo ipmitool lan <span class=nb>set</span> <span class=nv>$ipmi_channelid</span> ipsrc static
+sudo ipmitool lan <span class=nb>set</span> <span class=nv>$ipmi_channelid</span> ipaddr <span class=nv>$ipmi_ipaddr</span>
+sudo ipmitool lan <span class=nb>set</span> <span class=nv>$ipmi_channelid</span> netmask 255.255.255.0
+sudo ipmitool lan <span class=nb>set</span> <span class=nv>$ipmi_channelid</span> defgw 192.168.1.1
+sudo ipmitool lan <span class=nb>set</span> <span class=nv>$ipmi_channelid</span> arp respond on
+sudo ipmitool lan <span class=nb>set</span> <span class=nv>$ipmi_channelid</span> access on
+sudo ipmitool lan print <span class=m>1</span>
+
+sudo ipmitool user <span class=nb>set</span> name <span class=nv>$ipmi_userid</span> root
+sudo ipmitool user <span class=nb>set</span> password <span class=nv>$ipmi_userid</span>
+
+<span class=c1>#privilege 4 is admin privileges need for things like power control and console access</span>
+sudo ipmitool channel setaccess <span class=nv>$ipmi_channelid</span> <span class=nv>$ipmi_userid</span> <span class=nv>link</span><span class=o>=</span>on <span class=nv>ipmi</span><span class=o>=</span>on <span class=nv>callin</span><span class=o>=</span>on <span class=nv>privilege</span><span class=o>=</span><span class=m>4</span>
+sudo ipmitool user <span class=nb>enable</span> <span class=nv>$ipmi_userid</span>
+sudo ipmitool user list
+
+sudo ipmitool lan <span class=nb>set</span> <span class=nv>$ipmi_channelid</span> auth USER MD5
+</code></pre></div><p>Now we can acesss ipmi from the over network:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>ipmitool -I lanplus -H <span class=nv>$ipmi_ipaddr</span> -U <span class=nv>$ipmiuser</span> shell
+
+<span class=c1># floppy is the boot device used for any USB on this system</span>
+chassis bootdev floppy
+chassis power cycle
+sol activate
+</code></pre></div><p>However, my linux ISO doesn&rsquo;t configure the serial port for installation so we
+need to modify grub so that the serial console is configured for the install,
+and we can then access the actual installation media over VNC</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>#Installing from a serial console, start a VNC server to run the grahical install
+# add this to the end of the kernel command line
+console=tty0 console=ttyS0,115200 inst.vnc
+</code></pre></div><p>And finally we can install the server over VNC which works as normal.</p>
+<h1 id=challenge-2-re-configuring-tailscale>Challenge 2: Re-configuring Tailscale<a hidden class=anchor aria-hidden=true href=#challenge-2-re-configuring-tailscale>#</a></h1>
+<p>I use tailscale for remote management of my server and so things like backups work outside of the house.
+When I did this, I set this up last, but in hindsight it should have been one of the first ones to redo
+because I want all the services to be accessible over tailscale which only happens if the <code>tailscale0</code> tunnel
+exists when the services bind. However, I don&rsquo;t want to connect yet until I re-setup the home directories
+when I configure ZFS</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>dnf config-manager --add-repo https://pkgs.tailscale.com/stable/centos/9/tailscale.repo
+dnf install tailscale
+sysetmctl <span class=nb>enable</span> --now tailscaled
+tailscale up
+<span class=c1># edit machine name in tailscale so &#34;magic-dns&#34; works</span>
+firewall-cmd --zone<span class=o>=</span>public --add-interface<span class=o>=</span>tailscale0
+systemctl restart sshd
+</code></pre></div><h1 id=challenge-3-re-configuring-samba>Challenge 3: Re-configuring Samba<a hidden class=anchor aria-hidden=true href=#challenge-3-re-configuring-samba>#</a></h1>
+<p>Samba comes next after Tailscale because the permissions and packages for samba need to be installed
+so that the ZFS user shares are made public when ZFS comes back on line.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>dnf install -y samba samba-client
+systemctl <span class=nb>enable</span> --now smb nmb
+
+<span class=c1>#add and enable the samba user (different from the Linux user)</span>
+firewall-cmd --permanent --zone<span class=o>=</span>public --add-service<span class=o>=</span>samba
+firewall-cmd --zone<span class=o>=</span>public --add-service<span class=o>=</span>samba
+setsebool -P samba_enable_home_dirs
+
+<span class=c1># setup of users appears below</span>
+</code></pre></div><h1 id=challenge-4-reconnecting-my-zfs-array-and-recreating-users>Challenge 4: Reconnecting my ZFS array and recreating users<a hidden class=anchor aria-hidden=true href=#challenge-4-reconnecting-my-zfs-array-and-recreating-users>#</a></h1>
+<p>ZFS is where all the user data is stored. Now I just need to reload it.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>dnf install https://zfsonlinux.org/epel/zfs-release-2-3<span class=k>$(</span>rpm --eval <span class=s2>&#34;%{dist}&#34;</span><span class=k>)</span>.noarcupdate
+dnf install -y epel-release
+dnf install -y kernel-devel
+dnf install -y zfs
+modprobe zfs
+zpool import tank
+<span class=c1># edit /etc/passwd to point the user home directories on /tank</span>
+usermod <span class=nv>$USER</span> -d /tank/<span class=nv>$USER</span>
+
+<span class=c1># re-add the other service account users with the old UID/GIDs</span>
+groupadd plex -g <span class=m>1003</span>
+useradd plex -u <span class=m>1003</span> -g plex
+
+<span class=c1>#finish setting up SAMBA users because I think this needs the home directories</span>
+smbpasswd -a <span class=nv>$USER</span>
+smbpasswd -e <span class=nv>$USER</span>
+</code></pre></div><h1 id=challenge-5-reconfiguring-libvirt>Challenge 5: Reconfiguring LibVirt<a hidden class=anchor aria-hidden=true href=#challenge-5-reconfiguring-libvirt>#</a></h1>
+<p>I have a few odd VMs on the server and libvirt/cockpit machine is how I manage them.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>dnf install -y libvirt cockpit-machines
+systemctl <span class=nb>enable</span> --now libvirt.socket
+</code></pre></div><h1 id=challenge-6-restart-services>Challenge 6: Restart services<a hidden class=anchor aria-hidden=true href=#challenge-6-restart-services>#</a></h1>
+<p>The remaining services I use rely on podman. Because I am lazy, I have a
+folder called <code>docker</code> in my home directory. In this are sub directories that
+contain scripts called <code>up.sh</code> that download the container and re-setup the
+service and set appropriate firewall rules.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>dnf install vim podman-docker
+systemctl start podman.socket
+<span class=k>for</span> i in docker/*
+<span class=k>do</span>
+    <span class=nb>cd</span> <span class=nv>$i</span>
+    ./up.sh
+    <span class=nb>cd</span> ../..
+<span class=k>done</span>
+</code></pre></div><p>Hope you learned something!</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=http://robertu94.github.io/tags/server-administration.html>server administration</a></li>
+</ul>
+<nav class=paginav>
+<a class=next href=http://robertu94.github.io/2023/07/02/dethroning-latex-what-would-it-take.html>
+<span class=title>Next »</span>
+<br>
+<span>Dethroning LaTeX: What Would It Take?</span>
+</a>
+</nav>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2023 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>
