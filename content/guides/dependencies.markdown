@@ -29,17 +29,19 @@ Last update: 2023-09-12
 
 # Tooling Versions
 
-| Tool    | Ubuntu 18.04 | Ubuntu 20.04 | Ubuntu 22.04 | CentOS 7 | CentOS 8        | CentOS 9 Stream | Fedora |
-|---------|--------------|--------------|--------------|----------|-----------------|-----------------|--------|
-| gcc     | 7.5.0        |  9.4.0       | 11.4.0       | 4.8.5    | 8.5.0           | 11.3            | 13     |
-| clang   | 6.0.0        |  10.0.0      | 14.0.0       | 3.4.2    | 15.0.0          | 16.0            | 16     |
-| cmake   | 3.10.2       |  3.16.3      | 3.22.1       | 3.17.5   | 3.20            | 3.20            | 3.27   |
-| python3 | 3.6.9        |  3.8.10      | 3.10.0       | 3.6.8    | 3.6-3.9         | 3.9,3.11        | 3.11   |
-| julia   | n/a          |  1.4.1`#`    | n/a          | n/a      | n/a             | n/a             | 1.9.2  |
-| cargo   | 1.65.0       |  1.66.1      | 1.66.1       | 1.72.0   | 1.66.1          | 1.61.1          | 1.72.0 |
-| swig    | 1.65.0       |  4.0         | 4.0          | 3.0.12   | 3.0.12          | 3.0.12          | 4.1.1  |
+| Tool     | Ubuntu 18.04 | Ubuntu 20.04 | Ubuntu 22.04 | CentOS 7 | CentOS 8        | CentOS 9 Stream | Fedora  |
+|----------|--------------|--------------|--------------|----------|-----------------|-----------------|---------|
+| gcc      | 7.5.0        |  9.4.0       | 11.4.0       | 4.8.5    | 8.5.0           | 11.3            | 13      |
+| clang    | 6.0.0        |  10.0.0      | 14.0.0       | 3.4.2    | 15.0.0          | 16.0            | 16      |
+| cmake    | 3.10.2       |  3.16.3      | 3.22.1       | 3.17.5   | 3.20            | 3.20            | 3.27    |
+| python3  | 3.6.9        |  3.8.10      | 3.10.0       | 3.6.8    | 3.6-3.9         | 3.9,3.11        | 3.11    |
+| julia    | n/a          |  1.4.1`#`    | n/a          | n/a      | n/a             | n/a             | 1.9.2   |
+| cargo    | 1.65.0       |  1.66.1      | 1.66.1       | 1.72.0   | 1.66.1          | 1.61.1          | 1.72.0  |
+| swig     | 1.65.0       |  4.0         | 4.0          | 3.0.12   | 3.0.12          | 3.0.12          | 4.1.1   |
+| nvcc `*` | 9.1          |  10.1        | 11.5.0       | n/a`*`   | n/a `*`         | n/a `*`         | n/a `*` |
 
 `#` has known issues and upstream [recommends avoiding using this version](https://old.reddit.com/r/Julia/comments/ubdva0/what_happened_to_julia_on_ubuntu_2204_repos/i65xf8n/)
+`*` CentOS, and Fedora do not package CUDA themselves, but instead rely on Nvidia to provide the package which provides the newest version.
 
 # Language Features
 
@@ -105,6 +107,7 @@ If you need to do things with CUDA try to stick to CMake 3.20 or newer which has
 + **3.25** improvements to presets, `block` scoping, try_compile doesn't need a binary directory, cufile
 + **3.26** imagemagick imported targets, Python "Stable ABI" targets 
 + **3.27** Cuda Object libraries, FindDoxygen config file support, FindCUDA (old and deprecated) removed
++ **3.28** Cmake modules support is stable but not supported compilers until GCC 14 and LLVM 16 and using the Ninja generator, CMAKE_HIP_PLATFORM to compile hip code using Nvidia GPUs, CrayClang, many commands became `JOB_SEVER_AWARE` to better support nested builds.
 
 
 ### Swig
@@ -113,6 +116,38 @@ Swig 3 is widely available, but Swig 4 is not -- try to avoid C++14 in swig wrap
 
 + **4.0** Added C++11 STL container support to Python, and better support for C++14 code
 + **3.0** Added C++11 language support
+
+### Cuda
+
+CUDA places requirements on your GCC/clang version, but also places requirements on supported hardware.
+This [note has much more detail](https://gist.github.com/ax3l/9489132).
+
+When using NVCC:
+
+| cuda version | max gcc | sm versions       |
+|--------------|---------|-------------------|
+| **8.1**      | 5.3     | 2-6.x             |
+| **9.1**      | 6       | 4-7.2             |
+| **11.5**     | 11      | 3.5-8.6           |
+| **12.0**     | 12.1    | 4-9               |
+| **12.1-3**   | 12.2    | 4-9               |
+
+It is also possible to use clang++ to compile cuda
+
+| clang version | cuda release | sm versions  |
+|---------------|--------------|--------------|
+| 6             | 7-9          | 3-7.0        |
+| 10            | 7-10.1       | 3-7.5        |
+| 14            | 7-11.0       | 3-8.0        |
+| 15            | 7-11.5       | 3-8.6        |
+| 16            | 7-11.8       | 3-9.0        |
+
+In newer versions of cuda, this command outputs your compute version.
+
+```bash
+nvidia-smi --query-gpu=compute_cap --format=csv
+```
+
 
 ## Python
 
@@ -125,6 +160,22 @@ For widest compatibility, avoid features newer than 3.6, however when CentOS7 is
 + **3.10** Added `match` pattern matching, parenthesized context managers, type `|` operator,  and more
 + **3.11** Added exception groups, tomllib, variatic generics, Self type, string literal type, is much faster and more
 + **3.12** Added `Path.walk`, improved f-strings, type alias, `sys.monitoring`, `collections.abc.Buffer`
+
+### Manylinux
+
+Python's pip uses `manylinux` containers to provide broadly compatible binaries for use with python.
+Until CentOS7 is end of life, consider building a manylinux2014 based build if possible.
+
+| Version                       | GCC  | Python                   | Base        |
+|-------------------------------|------|--------------------------|-------------|
+| manylinux_2_28                | 12   | 3.8.10+, 3.9.5+, 3.10.0+ | Almalinux 8 |
+| manylinux2014/manylinux_2_17  | 10   | 3.7.8+, 3.8.4+, 3.9.0+   | CentOS 7    |
+
+PEP 599 defines manylinux2014 and I expect this will be end of life when CentOS7 that it is based on does.
+PEP 600 defines manylinux_x_y where x==glibc_major version, y==glibc_minor_version.
+There are docker containers that provide build envionments for these packages that should be preferred.
+One should also check the `auditwheel` command to ensure that the compiled library does not link to a disallowed library.
+
 
 ## Julia
 
@@ -142,4 +193,5 @@ Hope this helps!
 
 # Changelog
 
++ 2024-02-22: added python and cuda and updated cmake
 + 2023-09-12: Created
