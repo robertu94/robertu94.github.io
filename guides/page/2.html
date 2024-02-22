@@ -76,6 +76,19 @@ Recent Updates ">
 </div>
 <article class=post-entry>
 <header class=entry-header>
+<h2>Spack on Cooley
+</h2>
+</header>
+<div class=entry-content>
+<p>tl;dr Put the following in your .bashrc
+function use_build { # other ALCF machines if hostname | grep cooley &>/dev/null || hostname | grep cc &> /dev/null; then soft add +gcc-8.2.0 soft add +cmake-3.20.4 soft add +cuda-11.0.2 soft add +mvapich2 source ${HOME}/git/spack-cooley/share/spack/setup-env.sh export clustername=cooley fi export SPACK_USER_CONFIG_PATH="$HOME/.spack/$clustername" export SPACK_USER_CACHE_PATH="$SPACK_USER_CONFIG_PATH" } Then run
+mkdir -p ~/git git clone https://github.com/spack/spack git/spack-cooley git clone https://github.com/robertu94/spack_packages git/robertu94_packages source ~/.bashrc use_build spack compiler find # for extra packages like libpressio spack repo add ~/git/robertu94_packages First create packages....</p>
+</div>
+<footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;242 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Spack on Cooley" href=http://robertu94.github.io/guides/cooley.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
 <h2>Spack on Polaris
 </h2>
 </header>
@@ -121,7 +134,7 @@ For Linux Ubuntu apt update apt install podman Fedora dnf install podman </p>
 </footer>
 </main>
 <footer class=footer>
-<span>&copy; 2023 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>&copy; 2024 <a href=http://robertu94.github.io/>systems++</a></span>
 <span>
 Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &

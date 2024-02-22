@@ -84,7 +84,7 @@ Recent Updates ">
 Last update: 2023-09-12
 Major Linux Distros Distro Standard EoL CentOS-7 compatible July 2024 CentOS-8 compatible December 2021* CentOS-8 stream May 2024 CentOS-9 stream May 2027* Ubuntu 16....</p>
 </div>
-<footer class=entry-footer><span title="2023-09-12 00:00:00 +0000 UTC">September 12, 2023</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;1020 words&nbsp;·&nbsp;Robert Underwood</footer>
+<footer class=entry-footer><span title="2023-09-12 00:00:00 +0000 UTC">September 12, 2023</span>&nbsp;·&nbsp;7 min&nbsp;·&nbsp;1303 words&nbsp;·&nbsp;Robert Underwood</footer>
 <a class=entry-link aria-label="post link to What to support if you are supporting" href=http://robertu94.github.io/guides/dependencies.html></a>
 </article>
 <article class=post-entry>
@@ -191,16 +191,16 @@ mkdir -p ~/git git clone https://github.com/spack/spack git/spack-bebop git clon
 </article>
 <article class=post-entry>
 <header class=entry-header>
-<h2>Spack on Cooley
+<h2>Spack on Bebop
 </h2>
 </header>
 <div class=entry-content>
 <p>tl;dr Put the following in your .bashrc
-function use_build { # other ALCF machines if hostname | grep cooley &>/dev/null || hostname | grep cc &> /dev/null; then soft add +gcc-8.2.0 soft add +cmake-3.20.4 soft add +cuda-11.0.2 soft add +mvapich2 source ${HOME}/git/spack-cooley/share/spack/setup-env.sh export clustername=cooley fi export SPACK_USER_CONFIG_PATH="$HOME/.spack/$clustername" export SPACK_USER_CACHE_PATH="$SPACK_USER_CONFIG_PATH" } Then run
-mkdir -p ~/git git clone https://github.com/spack/spack git/spack-cooley git clone https://github.com/robertu94/spack_packages git/robertu94_packages source ~/.bashrc use_build spack compiler find # for extra packages like libpressio spack repo add ~/git/robertu94_packages First create packages....</p>
+use_build() { if hostname | grep "^i" &>/dev/null; then echo "loading improv spack" module load gcc/13.2.0 module load openmpi/5.0.1-gcc-13.2.0 source $HOME/git/spack-improv/share/spack/setup-env.sh source $HOME/git/spack-improv/share/spack/spack-completion.bash export clustername=improv fi #other LCRC Machines export SPACK_USER_CONFIG_PATH="$HOME/.spack/$clustername" export SPACK_USER_CACHE_PATH="$SPACK_USER_CONFIG_PATH" } Then run
+mkdir -p ~/git git clone https://github.com/spack/spack git/spack-improv git clone https://github.com/robertu94/spack_packages git/robertu94_packages source ~/.bashrc use_build spack compiler find # for extra packages like libpressio spack repo add ~/git/robertu94_packages First create packages....</p>
 </div>
-<footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;242 words&nbsp;·&nbsp;Robert Underwood</footer>
-<a class=entry-link aria-label="post link to Spack on Cooley" href=http://robertu94.github.io/guides/cooley.html></a>
+<footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;199 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Spack on Bebop" href=http://robertu94.github.io/guides/improv.html></a>
 </article>
 <footer class=page-footer>
 <nav class=pagination>
@@ -210,7 +210,7 @@ mkdir -p ~/git git clone https://github.com/spack/spack git/spack-cooley git clo
 </footer>
 </main>
 <footer class=footer>
-<span>&copy; 2023 <a href=http://robertu94.github.io/>systems++</a></span>
+<span>&copy; 2024 <a href=http://robertu94.github.io/>systems++</a></span>
 <span>
 Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
