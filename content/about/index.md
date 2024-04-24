@@ -5,7 +5,7 @@ permalink: /about/
 ---
 
 I am a Post-Doctoral Appointee at Argonne National Laboratory under Franck Cappello, Sheng Di and Bogdan Nicolae.
-My particular **research interests** are lossy compression, distributed systems, and operating systems.
+My particular **research interests** are lossy compression, science data and evaluation for AI, distributed systems, and systems programming.
 
 Academics
 ---------
@@ -20,9 +20,12 @@ My **publications** can be found on my Google Scholar page [here][googlescholar]
 <div itemscope itemtype="https://schema.org/Person">My ORCID ID is <a itemprop="sameAs" content="https://orcid.org/0000-0002-1464-729X" href="https://orcid.org/0000-0002-1464-729X" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">https://orcid.org/0000-0002-1464-729X</a></div>
 
 
-While at pursuing my PhD:
+Some highlights of my career include:
 
-+ (Ongoing) I developed [LibPressio][libpressio] a library to abstract the differences between lossless and lossy compressors and their configurations.
++ (2024-Ongoing) I am the co-Lead for the Data team in AuroraGPT. Argonne's effort to develop a LLM specialized for scientific use cases
++ (2019-Ongoing) I developed [LibPressio][libpressio] a library to abstract the differences between lossless and lossy compressors and their configurations.
++ (2023) I was awarded an Laboratory Directed Research and Development grant along with Viktor Niktin on the topic of streaming lossy compression for tomographic data.
++ (2022) I started a postdoctoral position at Argonne National Laboratory
 + (2019) I was selected for the [US Department of Energy Office of Science Graduate Student Research Program][scgsr] award to study at [Argonne National Laboratory][argonne] under Dr. Franck Cappello.
 + (2018) I taught a Fall section of [Introduction to Operating Systems (CPSC 3220)][cpsc3220].
 + (2017 - 2020) I was awarded the [National Research Traineeship in Resilient Infrastructure and Environmental Systems fellowship][ries].
@@ -30,15 +33,6 @@ While at pursuing my PhD:
 In Undergrad, I was the Vice President of the [Clemson Chapter][clemsonacm] of the Association for Computing Machinery.
 I was competed in our programming team as well as with [CU Cyber][cucyber] -- our cyber security team.  
 
-Experience
-----------
-
-I have worked on a variety of different projects both personal and professional.
-Professionally, I have interned for Unitrends and Boeing in software development roles.
-Most of my projects are in C, C++, or Python.
-I served as the principal author for the [Clemson ACM Programming Team][acm-hp] and the [CUCyber][cyber-hp] Hackpacks.
-These documents are tools for competing in ACM algorithm and security competitions respectfully.
-I also have developed a series of presentations on a variety of computer science topics.
 
 
 Outside Computer Science
