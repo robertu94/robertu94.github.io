@@ -94,7 +94,7 @@ If you need to do things with CUDA try to stick to CMake 3.20 or newer which has
 + **3.12** Added `cmake --build`, `<PackageName>_ROOT` for `find_package`, many improvements to `FindSwig`
 + **3.13** Added `cmake -S ... -B ...` to set source and build dirs, `target_link_libraries` can now be called on targets from different directories., more improvements to `Swig`
 + **3.14** Added `get_filename_component()`, `install(FILES)`/`install(DIRECTORIES)` now uses GNUInstallDirs by default, `FtechContent_MakeAvailable()`, numpy support in `FindPython`
-+ **3.15** Improved Python lookups and `Python3::Module`, `$<COMPILE_LANGUAGE:>` with a single language, 
++ **3.15** Improved Python lookups and `Python3::Module`, `$<COMPILE_LANGUAGE:>` with a single language, `--install`
 + **3.16** Added support for unity builds
 + **3.17** Added Ninja multi-config, `CMAKE_FIND_DEBUG_MODE`, `FindCUDAToolkit`, 
 + **3.18** `add_library` can now create Alias targets (useful for FetchContent), `CMAKE_CUDA_ARCHITECTURES`, FindLapack imported target, improvements to GoogleTest test discovery

@@ -84,18 +84,19 @@ packages:
 After that create `compilers.yaml` at `~/.spack/polaris/cray/compilers.yaml` with:
 
 ```yaml
-- compiler:
-    spec: gcc@11.2.0
-    paths:
-      cc: /opt/cray/pe/gcc/11.2.0/bin/gcc
-      cxx: /opt/cray/pe/gcc/11.2.0/bin/g++
-      f77: /opt/cray/pe/gcc/11.2.0/bin/gfortran
-      fc: /opt/cray/pe/gcc/11.2.0/bin/gfortran
-    flags: {}
-    operating_system: sles15
-    target: x86_64
-    modules: ['libfabric/1.11.0.4.125', 'cray-mpich/8.1.16']
-    environment: {}
+compilers:                                                                                                                                
+- compiler:                                                                                                                               
+    spec: gcc@12.3.0                                                                                                                      
+    paths:                                                                                                                                
+      cc: /usr/bin/gcc-12                                                                                                                 
+      cxx: /usr/bin/g++-12                                                                                                                
+      f77: /usr/bin/gfortran-12                                                                                                           
+      fc: /usr/bin/gfortran-12                                                                                                            
+    flags: {}                                                                                                                             
+    operating_system: sles15                                                                                                              
+    target: x86_64                                                                                                                        
+    modules: ['libfabric/1.15.2.0', 'cray-mpich/8.1.28']                                                                                  
+    environment: {}                                                                                                                       
     extra_rpaths: []
 ```
 
