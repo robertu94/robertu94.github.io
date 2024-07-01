@@ -97,7 +97,7 @@ mkdir -p ~/git git clone https://github.com/spack/spack git/spack-cooley git clo
 function use_build { # other ALCF machines if hostname -f | grep polaris &>/dev/null; then echo "loading polaris spack" module swap PrgEnv-nvhpc PrgEnv-gnu module load cudatoolkit-standalone source ${HOME}/git/spack-theta/share/spack/setup-env.sh export CRAYPE_LINK_TYPE=dynamic export clustername=polaris fi export SPACK_USER_CONFIG_PATH="$HOME/.spack/$clustername" export SPACK_USER_CACHE_PATH="$SPACK_USER_CONFIG_PATH" } Then run
 mkdir -p ~/git git clone https://github.com/spack/spack git/spack-polaris git clone https://github.com/robertu94/spack_packages git/robertu94_packages git clone https://github.com/mochi-hpc/mochi-spack-packages git/mochi-spack-packages source ~/.bashrc use_build spack compiler find # for extra packages like libpressio and thallium spack repo add ~/git/robertu94_packages spack repo add ~/git/mochi-spack-packages First create packages....</p>
 </div>
-<footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;303 words&nbsp;·&nbsp;Robert Underwood</footer>
+<footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;310 words&nbsp;·&nbsp;Robert Underwood</footer>
 <a class=entry-link aria-label="post link to Spack on Polaris" href=http://robertu94.github.io/guides/polaris.html></a>
 </article>
 <article class=post-entry>
