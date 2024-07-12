@@ -76,6 +76,18 @@ Recent Updates ">
 </div>
 <article class=post-entry>
 <header class=entry-header>
+<h2>Spack on Perlmutter
+</h2>
+</header>
+<div class=entry-content>
+<p>tl;dr module load spack git clone https://github.com/robertu94/spack_packages robertu94_packages spack repo add ./robertu94_packages What makes this machine special? the team at NERSC works hard to maintain an up to date and customized spack environment. Unless you have a need for something special use theirs For the longer version see the guide on [configuring spack]({% link _guides/spack.markdown %})
+Changelog 2024-07-12 created this document </p>
+</div>
+<footer class=entry-footer><span title="2024-07-11 00:00:00 +0000 UTC">July 11, 2024</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;61 words&nbsp;·&nbsp;Robert Underwood</footer>
+<a class=entry-link aria-label="post link to Spack on Perlmutter" href=http://robertu94.github.io/guides/perlmutter.html></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
 <h2>What to support if you are supporting
 </h2>
 </header>
@@ -183,24 +195,11 @@ Determine what system compiler, python, and MPI you will use Telling spack how t
 </header>
 <div class=entry-content>
 <p>tl;dr Put the following in your .bashrc
-use_build() { if hostname | grep bebop &>/dev/null; then echo "loading bebop spack" module load gcc/10.2.0-z53hda3 module load intel-mpi/2019.10.317-qn674hj module load intel-mkl/2020.4.304 source $HOME/git/spack-bebop/share/spack/setup-env.sh source $HOME/git/spack-bebop/share/spack/spack-completion.bash export clustername=bebop fi #other LCRC Machines export SPACK_USER_CONFIG_PATH="$HOME/.spack/$clustername" export SPACK_USER_CACHE_PATH="$SPACK_USER_CONFIG_PATH" } Then run
-mkdir -p ~/git git clone https://github.com/spack/spack git/spack-bebop git clone https://github.com/robertu94/spack_packages git/robertu94_packages source ~/.bashrc spack compiler find # for extra packages like libpressio spack repo add ~/git/robertu94_packages First create packages....</p>
+use_build() { if hostname | grep bebop &>/dev/null; then echo "loading bebop spack" module load gcc/11.4.0 module load intel-oneapi-mpi/2021.12.1-tjkrnei module load intel-oneapi-mkl/2024.0.0-jfwrhz5 source $HOME/git/spack-bebop/share/spack/setup-env.sh source $HOME/git/spack-bebop/share/spack/spack-completion.bash export clustername=bebop fi #other LCRC Machines export SPACK_USER_CONFIG_PATH="$HOME/.spack/$clustername" export SPACK_USER_CACHE_PATH="$SPACK_USER_CONFIG_PATH" } Then run
+mkdir -p ~/git git clone https://github.com/spack/spack git/spack-bebop git clone https://github.com/robertu94/spack_packages git/robertu94_packages source ~/.bashrc # for extra packages like libpressio spack repo add ~/git/robertu94_packages Bebop provides default configurations for packages and compilers so you are ready to go!...</p>
 </div>
-<footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;216 words&nbsp;·&nbsp;Robert Underwood</footer>
+<footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;202 words&nbsp;·&nbsp;Robert Underwood</footer>
 <a class=entry-link aria-label="post link to Spack on Bebop" href=http://robertu94.github.io/guides/bebop.html></a>
-</article>
-<article class=post-entry>
-<header class=entry-header>
-<h2>Spack on Bebop
-</h2>
-</header>
-<div class=entry-content>
-<p>tl;dr Put the following in your .bashrc
-use_build() { if hostname | grep "^i" &>/dev/null; then echo "loading improv spack" module load gcc/13.2.0 module load openmpi/5.0.1-gcc-13.2.0 source $HOME/git/spack-improv/share/spack/setup-env.sh source $HOME/git/spack-improv/share/spack/spack-completion.bash export clustername=improv fi #other LCRC Machines export SPACK_USER_CONFIG_PATH="$HOME/.spack/$clustername" export SPACK_USER_CACHE_PATH="$SPACK_USER_CONFIG_PATH" } Then run
-mkdir -p ~/git git clone https://github.com/spack/spack git/spack-improv git clone https://github.com/robertu94/spack_packages git/robertu94_packages source ~/.bashrc use_build spack compiler find # for extra packages like libpressio spack repo add ~/git/robertu94_packages First create packages....</p>
-</div>
-<footer class=entry-footer><span title="2022-07-19 00:00:00 +0000 UTC">July 19, 2022</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;199 words&nbsp;·&nbsp;Robert Underwood</footer>
-<a class=entry-link aria-label="post link to Spack on Bebop" href=http://robertu94.github.io/guides/improv.html></a>
 </article>
 <footer class=page-footer>
 <nav class=pagination>
