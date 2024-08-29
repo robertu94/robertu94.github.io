@@ -88,6 +88,43 @@ Here are some common mistakes that I have seen:
 + What is the purpose of your document?  What is the argument presented by your document?  Does the argument support your purpose or is their missing or extraneous information?
 {.activity}
 
+# Writing Scientific Papers
+
+So what is the argument of scientific papers?
+Scientific papers argue for their own acceptance by the community.
+Papers ought to be accepted if and only if they are *interesting*, *novel*, *important*, *self-contained*, and *correct*.
+*Interesting* speaks to the technical challenge/intellectual merit of the work and is most frequently addressed in the "problem formulation", "design", and "evaluation" sections of the paper.
+*Novel* speaks how the work innovates compared to its peers and is most frequently addressed in the related work section of the paper.
+*Importance* speaks to the meaningfulness of the work and to its broader impacts and is most frequently addressed in the "introduction", "evaluation", and "conclusion" sections of the paper.
+*Self-contained* speaks to the interpret-ability and reproduce-ability of the work and is most frequently addressed in the "background", "methodology" and "evaluation" sections of the paper.
+*Correct* speaks to the methodology  of the work and is most frequently addressed in a "methods" section where you include the boring but necessary details to reproduce your work (e.g. OS version, Compiler version etc...) but also the "evaluation" section as you explain each experiment.
+
+It is important to note that each of these topics is discussed at multiple points in the paper.
+The order that you make the case for your paper may not necessarily be a strict ordering of topics from interesting to novel, to important, etc...
+The topics may be intermingled in order to optimize the ordering of the paper to reduce forward references or to combine treatments of similar topics.
+However, do not be afraid to repeat yourself some.
+Some repetition encourages that a topic is available where different readers may look for it.
+
+Beyond these criterion, the best papers are also *enjoyable*, *concise*, and *skim-able*.
+No one enjoys reading a overly long or dry paper 
+Appropriate use of varying style and format, and in some cases a vibrant illustrative metaphor or playful title can help reduce the imposing nature of a ``wall of text'' to make the paper more enjoyable.
+Lastly, one of my first managers told me early on that ``your manager thinks in pictures'' which I also think describes many scientists and speaks to the *skim-ablity* of paper.
+The idea being that when we study how experts in their fields read documents we find that they seldom read top to bottom; they jump straight to the sections that will impact them.
+Therefore, skim-able papers can be read in two un-intuitive ways:
+
+1. By reading only the figures and captions (or formula in math heavy venues) in the paper without missing the key ideas of the paper.
+2. By reading only the first sentences of every paragraph.
+
+## Aside: Writing Journal Extensions
+
+In computer science specifically, there is the notion of a journal extension.
+These are longer versions of papers that are published in journals after a conference paper is published.
+Generally these need to have at least 30% new content relative to the original.
+
+I have two pet-pieves about journal extensions:
+
+1. Always provide a diff from the original conference paper to the journal extension -- this makes it far easier for the reviewer to judge if you have provided sufficient new material.
+2. Always re-write the sections of the paper where the arguments has changed on account of your new extensions.  This should almost certanly happen in the introduction, conclusion, and evaluation, but other sections may need to change as well.
 
 # Using Evidence
 

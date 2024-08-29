@@ -14,14 +14,11 @@ Last update: 2023-09-12
 
 | Distro              | Standard EoL     |
 |---------------------|------------------|
-| CentOS-7 compatible | July 2024        |
 | CentOS-8 compatible | December 2021`*` |
-| CentOS-8 stream     | May 2024         |
 | CentOS-9 stream     | May 2027`*`      |
-| Ubuntu 16.04        | April 2021       |
-| Ubuntu 18.04        | April 2023       |
 | Ubuntu 20.04        | April 2025       |
 | Ubuntu 22.04        | April 2027       |
+| Ubuntu 24.04        | April 2029       |
 
 + Ubuntu LTS releases generally get 5 years of standard support
 + Fedora releases generally get ~1 year of support
@@ -29,16 +26,17 @@ Last update: 2023-09-12
 
 # Tooling Versions
 
-| Tool     | Ubuntu 18.04 | Ubuntu 20.04 | Ubuntu 22.04 | CentOS 7 | CentOS 8        | CentOS 9 Stream | Fedora  |
-|----------|--------------|--------------|--------------|----------|-----------------|-----------------|---------|
-| gcc      | 7.5.0        |  9.4.0       | 11.4.0       | 4.8.5    | 8.5.0           | 11.3            | 13      |
-| clang    | 6.0.0        |  10.0.0      | 14.0.0       | 3.4.2    | 15.0.0          | 16.0            | 16      |
-| cmake    | 3.10.2       |  3.16.3      | 3.22.1       | 3.17.5   | 3.20            | 3.20            | 3.27    |
-| python3  | 3.6.9        |  3.8.10      | 3.10.0       | 3.6.8    | 3.6-3.9         | 3.9,3.11        | 3.11    |
-| julia    | n/a          |  1.4.1`#`    | n/a          | n/a      | n/a             | n/a             | 1.9.2   |
-| cargo    | 1.65.0       |  1.66.1      | 1.66.1       | 1.72.0   | 1.66.1          | 1.61.1          | 1.72.0  |
-| swig     | 1.65.0       |  4.0         | 4.0          | 3.0.12   | 3.0.12          | 3.0.12          | 4.1.1   |
-| nvcc `*` | 9.1          |  10.1        | 11.5.0       | n/a`*`   | n/a `*`         | n/a `*`         | n/a `*` |
+| Tool     | Ubuntu 20.04 | Ubuntu 22.04 |Ubuntu 24.04 |  CentOS 8        | CentOS 9 Stream | Fedora  |
+|----------|--------------|--------------|-------------|------------------|-----------------|---------|
+| gcc      |  9.4.0       | 11.4.0       | 13.2.0      |  8.5.0           | 11.3            | 14.2.1      |
+| clang    |  10.0.0      | 14.0.0       | 18.1.3      |  15.0.0          | 16.0            | 18.1.6      |
+| cmake    |  3.16.3      | 3.22.1       | 3.28.3      |  3.20            | 3.20            | 3.28.2    |
+| python3  |  3.8.10      | 3.10.0       | 3.12.3      |  3.6-3.9         | 3.9,3.11        | 3.12    |
+| julia    |  1.4.1`#`    | n/a          | n/a         |  n/a             | n/a             | 1.11.0-beta1   |
+| cargo    |  1.66.1      | 1.66.1       | 1.75.0      |  1.66.1          | 1.61.1          | 1.80.1  |
+| swig     |  4.0         | 4.0          | 4.2.0       |  3.0.12          | 3.0.12          | 4.2.1   |
+| nvcc `*` |  10.1        | 11.5.0       | 12.0.140    |  n/a `*`         | n/a `*`         | n/a `*` |
+| numpy    |  1.17.4      | 1.21.5       | 1.26.4      |  1.14.3          | 1.20.1          | 1.26.4  |
 
 `#` has known issues and upstream [recommends avoiding using this version](https://old.reddit.com/r/Julia/comments/ubdva0/what_happened_to_julia_on_ubuntu_2204_repos/i65xf8n/)
 `*` CentOS, and Fedora do not package CUDA themselves, but instead rely on Nvidia to provide the package which provides the newest version.
@@ -53,8 +51,7 @@ While Clang originally led for compliance, increassingly GCC is getting newer fe
 
 ### C++14
 
-Generally C++14 language features can be used safely on all but the oldest systems (e.g. CentOS7).
-With one minor exception, C++14 library features can be used on all but the oldest systems (e.g. CentOS7), but complete support requires a much newer version for GCC.
+You can safely assume that C++14 is supported on all major distributions.
 
 | Compiler | C++14 (language full) | C++14 (language 90%) | Missing | C++14 (library full) | C++14 (library 90%) | Missing |
 |----------|-----------------------|----------------------|---------|----------------------|---------------------|---------|
@@ -63,7 +60,8 @@ With one minor exception, C++14 library features can be used on all but the olde
 
 ### C++17
 
-Generally C++17 language features are supported on all but the oldest systems (e.g. CentOS7).
+C++17 language features are supported on all major distributions.
+
 C++17 library features require very new compilers to implement fully and are not widely available on LTS systems.  The most common things to lag behind being parallel parallel algorithms, so-called special math functions used in statistics, and OS assisted features like hardware interference size.  In many cases these can be "poly filled"
 
 | Compiler | C++17 (language full) | C++17 (language 90%) | Missing | C++17 (library full) | C++17 (library 90%) | Missing |
@@ -73,15 +71,33 @@ C++17 library features require very new compilers to implement fully and are not
 
 ### C++20
 
-C++20 language features are not not fully implemented in even the newest compilers.  The biggest holdout is modules and features like consteval.
-C++20 library features are even more sparsely implemented, but are now fully implemented in GCC 14 starting to be available in "cutting edge distros" such as Fedora.
+C++20 language features are not not fully implemented in even the newest compilers.  The biggest holdout is modules and features like consteval, but compilers that implement 90% of the features are present in recent LTSes.
 
-| Compiler | C++20 (language full) | C++20 (language 90%) | Missing | C++20 (library full) | C++20 (library 90%) | Missing |
-|----------|-----------------------|----------------------|---------|----------------------|---------------------|---------|
-| GCC/libstdc++ | 11`*`               | 10                   | Only partial support for Modules add in 11, using enum, `operator<=>(...)=default`, consteval| 14 | 11 | `calendar`, text formatting, atomics |
-| Clang/libc++ | No               | 17                   | Modules, Coroutines, Non-type template parameters| No | No | atomics, source location, `operator<=>` |
+C++20 library features are more sparsely implemented, but are now fully implemented in GCC 14 and 90% implemented as of clang 18 starting to be available in "cutting edge distros" such as Fedora and some LTSes.
 
-It is too early to start looking at C++23 compiler conformance.
+| Compiler     | C++20 (language full) | C++20 (language 90%) | Missing                                                                                      | C++20 (library full) | C++20 (library 90%) | Missing |
+|--------------|-----------------------|----------------------|----------------------------------------------------------------------------------------------|----------------------|---------------------|---------|
+| GCC/libstdc++| 11`*`                 | 10                   | Only partial support for Modules add in 11, using enum, `operator<=>(...)=default`, consteval| 14                   | 11                  | `calendar`, text formatting, atomics |
+| Clang/libc++ | No                    | 17                   | Modules, Coroutines, Non-type template parameters                                            | No                   | 18                  | atomics, source location, `operator<=>` |
+
+`*` full support for modules is the lone holdout.
+
+
+### C++23
+
+Bleeding edge compilers now have 90% support for C++23 language features.
+
+Library features are not widely implemented in compilers, however some major constexpr features (e.g. constexpr unique_ptr, optional, variant) as well as some new vocabulary types like std::expected now have support.
+
+
+| Compiler     | C++20 (language full) | C++20 (language 90%) | Missing                                                                                      | C++20 (library full) | C++20 (library 90%) | Missing |
+|--------------|-----------------------|----------------------|----------------------------------------------------------------------------------------------|----------------------|---------------------|---------|
+| GCC/libstdc++| No                    | 15                   | lifetime extensions for range `for` loops, scope for training lambda return types            | No                   | No                  | lots    |
+| Clang/libc++ | No                    | 19                   | sized float types, CTAD from inherited constructors, pointers in costexprs,                  | No                   | No                  | lots    |
+
+### C++26
+
+It is too early to start looking at C++26 compiler conformance.
 
 ### CMake 
 
@@ -114,6 +130,8 @@ If you need to do things with CUDA try to stick to CMake 3.20 or newer which has
 
 Swig 3 is widely available, but Swig 4 is not -- try to avoid C++14 in swig wrapped interfaces.
 
++ **4.2** Many improvements for std::array, std::map, std::string_view, python3.12
++ **4.1** Added move semantics support improved, many new languages supported (e.g. Node 18, Php 8, Python 3.11)
 + **4.0** Added C++11 STL container support to Python, and better support for C++14 code
 + **3.0** Added C++11 language support
 
@@ -131,6 +149,8 @@ When using NVCC:
 | **11.5**     | 11      | 3.5-8.6           |
 | **12.0**     | 12.1    | 4-9               |
 | **12.1-3**   | 12.2    | 4-9               |
+| **12.1-3**   | 12.2    | 4-9               |
+| **12.4-5**   | 13.2    | 4-9               |
 
 It is also possible to use clang++ to compile cuda
 
@@ -141,6 +161,7 @@ It is also possible to use clang++ to compile cuda
 | 14            | 7-11.0       | 3-8.0        |
 | 15            | 7-11.5       | 3-8.6        |
 | 16            | 7-11.8       | 3-9.0        |
+| 17            | 7-12.1       | 3-9.0        |
 
 In newer versions of cuda, this command outputs your compute version.
 
@@ -160,22 +181,32 @@ For widest compatibility, avoid features newer than 3.6, however when CentOS7 is
 + **3.10** Added `match` pattern matching, parenthesized context managers, type `|` operator,  and more
 + **3.11** Added exception groups, tomllib, variatic generics, Self type, string literal type, is much faster and more
 + **3.12** Added `Path.walk`, improved f-strings, type alias, `sys.monitoring`, `collections.abc.Buffer`
++ **3.13** Added improved interpreter and error messages, jit bytecode interpreter for faster hot functions, `copy.replace`. Experimental support for noGIL python
 
 ### Manylinux
 
 Python's pip uses `manylinux` containers to provide broadly compatible binaries for use with python.
-Until CentOS7 is end of life, consider building a manylinux2014 based build if possible.
 
 | Version                       | GCC  | Python                   | Base        |
 |-------------------------------|------|--------------------------|-------------|
 | manylinux_2_28                | 12   | 3.8.10+, 3.9.5+, 3.10.0+ | Almalinux 8 |
-| manylinux2014/manylinux_2_17  | 10   | 3.7.8+, 3.8.4+, 3.9.0+   | CentOS 7    |
 
-PEP 599 defines manylinux2014 and I expect this will be end of life when CentOS7 that it is based on does.
 PEP 600 defines manylinux_x_y where x==glibc_major version, y==glibc_minor_version.
 There are docker containers that provide build envionments for these packages that should be preferred.
 One should also check the `auditwheel` command to ensure that the compiled library does not link to a disallowed library.
 
+### Numpy
+
++ 1.17 `__array_function__` support, `random` module made more modular
++ 1.18 64 bit BLAS/LAPACK support
++ 1.19 dropped support for python < 3.6
++ 1.20 Numpy added typing support, wider use of SIMD, start of dtype refactor
++ 1.21 more type annotations, more SIMD
++ 1.22 most of main numpy is typed, array api and C support for dlpack supported
++ 1.23 python support for dlpack
++ 1.26 support array_api v0.2022.12, but fft not supported for now; new build flags
++ 2.0 many changes to the public/private api, changes to C functions, many performance improvements
++ 2.1 support for array_api v2023.12, prelimiary support for GIL free python
 
 ## Julia
 
@@ -187,11 +218,14 @@ There have been significant reductions in time to first plot in recent versions
 + **1.7** property destructuring, `@atomic`, reproducible RNG, libblastrampoline
 + **1.8** const on fields in mutable structs, `SIGUSR1` profiling
 + **1.9** `:interactive` threads, `jl_adopt_thread`, `Iterators.flatmap`, Package Extensions
++ **1.10** CartesianIndex can now broadcast, vastly improved package compilation times
++ **1.11** new `Memory` type, `public` keyword, `@main` for an opt-in entrypoint, greedy `Threads.@threads`
 
 
 Hope this helps!
 
 # Changelog
 
++ 2024-08-28: comprehensive updates, addeed numpy to tracking
 + 2024-02-22: added python and cuda and updated cmake
 + 2023-09-12: Created

@@ -79,6 +79,9 @@ As mentioned above, often software needs to be refactored to achieve optimal per
 | pattern                     | problem                                                                                                                       |
 |-----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
 | map/embarrassingly parallel | perform many completely independent problems                                                                                  |
+| broadcast                   | send from one source to many targets
+| scatter/gather              | distribute or collect factions of work from a collection of nodes
+| scan                        | combine many associative operations keeping all reuslts                                                                       |
 | reduce                      | combine many associative operations                                                                                           |
 | repository                  | need common configuration shared across nodes                                                                                 |
 | divide and conquer          | problems that can be partitioned into independent sub problems                                                                |
