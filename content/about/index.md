@@ -4,7 +4,7 @@ title: About Me
 permalink: /about/
 ---
 
-I am a Post-Doctoral Appointee at Argonne National Laboratory under Franck Cappello, Sheng Di and Bogdan Nicolae.
+I am an Assistant Computer Scientist at Argonne National Laboratory under Franck Cappello.
 My particular **research interests** are lossy compression, science data and evaluation for AI, distributed systems, and systems programming.
 
 Academics
@@ -22,10 +22,11 @@ My **publications** can be found on my Google Scholar page [here][googlescholar]
 
 Some highlights of my career include:
 
++ (2024-Ongoing) I accepted a position as Assistant Computer Scientist at Argonne National Laboratory
 + (2024-Ongoing) I am the co-Lead for the Data team in AuroraGPT. Argonne's effort to develop a LLM specialized for scientific use cases
 + (2019-Ongoing) I developed [LibPressio][libpressio] a library to abstract the differences between lossless and lossy compressors and their configurations.
 + (2023) I was awarded an Laboratory Directed Research and Development grant along with Viktor Niktin on the topic of streaming lossy compression for tomographic data.
-+ (2022) I started a postdoctoral position at Argonne National Laboratory
++ (2022) I started a postdoctoral position at Argonne National Laboratory under Franck Cappello, Sheng Di, and Bogdan Nicolae
 + (2019) I was selected for the [US Department of Energy Office of Science Graduate Student Research Program][scgsr] award to study at [Argonne National Laboratory][argonne] under Dr. Franck Cappello.
 + (2018) I taught a Fall section of [Introduction to Operating Systems (CPSC 3220)][cpsc3220].
 + (2017 - 2020) I was awarded the [National Research Traineeship in Resilient Infrastructure and Environmental Systems fellowship][ries].
