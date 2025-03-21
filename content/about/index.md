@@ -7,11 +7,14 @@ permalink: /about/
 I am an Assistant Computer Scientist at Argonne National Laboratory under Franck Cappello.
 My particular **research interests** are lossy compression, science data and evaluation for AI, distributed systems, and systems programming.
 
+Some specific topics I have worked on include: AI for Science focusing on identifying, leveraging, and evaluating the semantic content of scientific datasets. Lossy compression for scientific data with an interest in interface design, optimization to preserve user qualities of interest, accelerator implementations, the use of compilers in compression pipelines, prediction and modeling of compression ratio performance. Data management including novel uses of checkpointing and lineages of data states beyond fault recovery to accelerate computation as applied to AI inference, model training, and other areas.
+
 Academics
 ---------
 
 You can find my full CV [here][cv].
 
+I completed a postdoc at Argonne National Laboratory in October 2024 focusing on AI, lossy compression, and data management.
 I earned my PhD at Clemson University studying Computer Science in December 2021.
 I am previously worked with the [Data Intensive Computing Environments (DICE) Lab][dice] and [Fault Tolerant HPC Lab (FTHPC)][fthpc] studying error bounded lossy compression under my adviors Dr. Amy Apon, Dr. Jon C. Calhoun, and Dr. Franck Cappello.
 

@@ -16,6 +16,7 @@ Last update: 2023-09-12
 |---------------------|------------------|
 | CentOS-8 compatible | December 2021`*` |
 | CentOS-9 stream     | May 2027`*`      |
+| OpenSUSE Leap 15.6  | December 2025    |
 | Ubuntu 20.04        | April 2025       |
 | Ubuntu 22.04        | April 2027       |
 | Ubuntu 24.04        | April 2029       |
@@ -26,20 +27,21 @@ Last update: 2023-09-12
 
 # Tooling Versions
 
-| Tool     | Ubuntu 20.04 | Ubuntu 22.04 |Ubuntu 24.04 |  CentOS 8        | CentOS 9 Stream | Fedora  |
-|----------|--------------|--------------|-------------|------------------|-----------------|---------|
-| gcc      |  9.4.0       | 11.4.0       | 13.2.0      |  8.5.0           | 11.3            | 14.2.1      |
-| clang    |  10.0.0      | 14.0.0       | 18.1.3      |  15.0.0          | 16.0            | 18.1.6      |
-| cmake    |  3.16.3      | 3.22.1       | 3.28.3      |  3.20            | 3.20            | 3.28.2    |
-| python3  |  3.8.10      | 3.10.0       | 3.12.3      |  3.6-3.9         | 3.9,3.11        | 3.12    |
-| julia    |  1.4.1`#`    | n/a          | n/a         |  n/a             | n/a             | 1.11.0-beta1   |
-| cargo    |  1.66.1      | 1.66.1       | 1.75.0      |  1.66.1          | 1.61.1          | 1.80.1  |
-| swig     |  4.0         | 4.0          | 4.2.0       |  3.0.12          | 3.0.12          | 4.2.1   |
-| nvcc `*` |  10.1        | 11.5.0       | 12.0.140    |  n/a `*`         | n/a `*`         | n/a `*` |
-| numpy    |  1.17.4      | 1.21.5       | 1.26.4      |  1.14.3          | 1.20.1          | 1.26.4  |
+| Tool     | Ubuntu 20.04 | Ubuntu 22.04 |Ubuntu 24.04 |  CentOS 8        | CentOS 9 Stream | SUSELeap       |Fedora       |
+|----------|--------------|--------------|-------------|------------------|-----------------|----------------|-------------|
+| gcc      |  9.4.0       | 11.4.0       | 13.2.0      |  8.5.0           | 11.3            | 7.5.0`^` to 14 | 14.2.1      |
+| clang    |  10.0.0      | 14.0.0       | 18.1.3      |  15.0.0          | 16.0            | 17.0.6         | 18.1.6      |
+| cmake    |  3.16.3      | 3.22.1       | 3.28.3      |  3.20            | 3.20            | 3.28.3         | 3.28.2      |
+| python3  |  3.8.10      | 3.10.0       | 3.12.3      |  3.6-3.9         | 3.9,3.11        | 3.6.15         | 3.12        |
+| julia    |  1.4.1`#`    | n/a          | n/a         |  n/a             | n/a             | 1.0.3`#`       | 1.11.0-beta1|
+| cargo    |  1.66.1      | 1.66.1       | 1.75.0      |  1.66.1          | 1.61.1          | 1.82.0         | 1.80.1      |
+| swig     |  4.0         | 4.0          | 4.2.0       |  3.0.12          | 3.0.12          | 4.1.1          | 4.2.1       |
+| nvcc `*` |  10.1        | 11.5.0       | 12.0.140    |  n/a `*`         | n/a `*`         | n/a `*`        | n/a `*`     |
+| numpy    |  1.17.4      | 1.21.5       | 1.26.4      |  1.14.3          | 1.20.1          | 1.17.3         | 1.26.4      |
 
-`#` has known issues and upstream [recommends avoiding using this version](https://old.reddit.com/r/Julia/comments/ubdva0/what_happened_to_julia_on_ubuntu_2204_repos/i65xf8n/)
+`#1` has known issues and upstream [recommends avoiding using this version](https://old.reddit.com/r/Julia/comments/ubdva0/what_happened_to_julia_on_ubuntu_2204_repos/i65xf8n/)
 `*` CentOS, and Fedora do not package CUDA themselves, but instead rely on Nvidia to provide the package which provides the newest version.
+`^` OpenSUSE Leap provides many gcc compilers, the default is 7.5.0
 
 # Language Features
 
@@ -47,7 +49,7 @@ Last update: 2023-09-12
 
 For more information consult [cppreference.com](https://cppreference.com)
 C++ is divided into language and library features.  Generally Language features are implemented before library features.
-While Clang originally led for compliance, increassingly GCC is getting newer features sooner.
+While Clang originally led for compliance, increasingly GCC is getting newer features sooner.
 
 ### C++14
 
@@ -124,6 +126,9 @@ If you need to do things with CUDA try to stick to CMake 3.20 or newer which has
 + **3.26** imagemagick imported targets, Python "Stable ABI" targets 
 + **3.27** Cuda Object libraries, FindDoxygen config file support, FindCUDA (old and deprecated) removed
 + **3.28** Cmake modules support is stable but not supported compilers until GCC 14 and LLVM 16 and using the Ninja generator, CMAKE_HIP_PLATFORM to compile hip code using Nvidia GPUs, CrayClang, many commands became `JOB_SEVER_AWARE` to better support nested builds.
++ **3.29** `CMAKE_INSTALL_PREFIX` env variable, ctest jobserver support
++ **3.30** c++26 support, Backtrace module support, free threaded python support
++ **3.31** OpenMP CUDA support, `cmake_pkg_config` to avoid native pkg-config dependency
 
 
 ### Swig
