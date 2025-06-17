@@ -29,11 +29,6 @@
 {{- end }}
 
 {{- if .Content }}
-<div class="post-content">
-  {{- if not (.Param "disableAnchoredHeadings") }}
-  {{- partial "anchored_headings.html" .Content -}}
-  {{- else }}{{ .Content }}{{ end }}
-</div>
 {{- end }}
 
 {{- $pages := union .RegularPages .Sections }}
@@ -70,16 +65,14 @@
 {{- end }}
 
 <article class="{{ $class }}">
-  {{- $isHidden := (site.Params.cover.hidden | default site.Params.cover.hiddenInList) }}
-  {{- partial "cover.html" (dict "cxt" . "IsHome" true "isHidden" $isHidden) }}
-  <header class="entry-header">
-    <h2>
+  <header class="mt-6 flex max-w-prose flex-row">
+    <h2 class="text-xl font-semibold">
       {{- .Title }}
       {{- if .Draft }}<sup><span class="entry-isdraft">&nbsp;&nbsp;[draft]</span></sup>{{- end }}
     </h2>
   </header>
   {{- if (ne (.Param "hideSummary") true) }}
-  <div class="entry-content">
+  <div class="prose py-1 dark:prose-invert">
     <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
   </div>
   {{- end }}
@@ -97,7 +90,6 @@
             <p>Slides need to be ported to the new website</p>
         {{ end }}
     {{ end }}
-    {{- partial "post_meta.html" . -}}
   </footer>
   {{- end }}
 
