@@ -1,0 +1,3 @@
+summaryLength=10
+[outputs]
+home=["HTML", "RSS", "JSON"]

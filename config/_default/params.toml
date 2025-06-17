@@ -1,0 +1,10 @@
+enableSearch = true
+[article]
+showTableOfContents = true
+showWordCount = true
+[homepage]
+layout = "post"
+showRecent= true
+[list]
+showSummary=true
+showTableOfContents = true

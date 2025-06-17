@@ -1,0 +1,12 @@
+[[main]]
+    name = "Blog"
+    pageRef = "posts"
+[[main]]
+    name = "Learning To Learn"
+    pageRef = "/learning/"
+[[main]]
+    name = "Guides"
+    pageRef = "/guides/"
+[[main]]
+    name = "About"
+    pageRef = "/about/"

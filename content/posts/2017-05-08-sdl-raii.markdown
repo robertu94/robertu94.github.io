@@ -1,0 +1,107 @@
+---
+layout: post
+title:  "Resource Acquisition is Initialization and SDL"
+date:   2017-05-08 05:30:14 -0500
+tags: 
+- c++
+- programming
+---
+
+Recently, I was working on a project for [2D Game Development][malloy] where I had to use SDL 2.0.
+SDL 2.0 is a family of media libraries designed for writing cross platform games in C.
+However it can be difficult to remember where various resources are allocated and deallocated.
+Resource Acquisition is Initialization (RAII) is a common pattern in C++ programming that solves this problem.
+So I wrote a series of wrappers for SDL 2.0 that use RAII and various other improvements.
+
+## RAII and `std::shared_ptr`
+
+One of the key reasons for the wrapper was to take advantage of RAII.
+It is fairly common in SDL to have code like so (*constants provided for clarity*):
+
+
+```c++
+SDL_Init(SDL_INIT_VIDEO);
+SDL_Window* window = SDL_CreateWindow("animation", posX, posY, WIDTH, HEIGHT, 0)
+SDL_Renderer* renderer = SDL_CreateRenderer(window, FIRST_WINDOW, SDL_RENDERER_PRESENTVSYNC);
+/* use pointers */
+SDL_DestroyRenderer(renderer); //order matters to prevent memory leaks
+SDL_DestroyWindow(window);
+SDL_Quit();
+```
+
+In my library it looks more like this:
+
+```c++
+auto lib = std::make_shared<SDLInit>(SDL_INIT_VIDEO);
+auto window = std::make_shared<SDLWindow>("animation", posX, posY, WIDTH, HEIGHT, 0);
+auto renderer = std::make_shared<SDLRenderer>(window, FIRST_WINDOW, SDL_RENDERER_PRESENTVSYNC); 
+/* use pointers */
+```
+
+Here RAII and shared pointers in each of the classes ensure that each relevant class initialized correctly prior to use.
+And also the reference counting of std::shared\_ptr ensures that they are freed when no longer used in an order that prevents leaks.
+
+## SDLRect
+
+One of the core data classes used in SDL is the `SDL_Rect`.
+SDL provides several methods that all operate on `SDL_Rect`s.
+Providing them as methods on the class greatly reduced duplication and simplified user code.
+Additionally, `std::make_{shared,unique}` don't understand struct aggregate initialization.
+So I grouped them the constructors and methods into a class and provided constructors
+
+```c++
+struct SDLRect: public SDL_Rect {
+	SDLRect();
+	//aggregate initialization and make_{shared,unique} don't mix; provide a constructor
+	SDLRect(int x, int y, int w, int h);	
+	SDLRect(SDL_Rect const&);	
+
+	SDLRect intersectionRect(SDL_Rect const& rhs) const;
+	SDLRect unionRect(SDL_Rect const& rhs) const;
+	double dist(SDL_Rect const& rhs) const;
+	bool encloses(SDL_Rect const& rhs) const;
+	double angle(SDL_Rect const& pos) const;
+
+	bool empty() const;
+	bool hasIntersection(SDL_Rect const& rhs) const;
+	bool operator==(SDL_Rect const&) const;
+};
+```
+
+Also for those unfamiliar with c++, structs are just classes with a default public access permission.
+I choose to make SDLRect a struct to preserve API compatibility with the SDL\_Rect used extensively in SDL.
+
+Now before you run away screaming, "But SDL\_Rect has a non-virtual destructor!".
+Yes it does, but in this case, the subclass allocates no additional memory from that of the base class.
+So this code does not contain a memory leak.
+
+## Exceptions for Error Handling
+
+On of the other major design decisions that I made in my wrapper was to replace error code checking with exceptions.
+The basis of this effort was creating a class called SDLException.
+
+```c++
+class SDLException: public std::exception
+{
+public:
+	SDLException();
+	virtual ~SDLException() noexcept;
+	virtual const char * what() const noexcept=0;
+};
+
+std::ostream & operator<< (std::ostream & out, const SDLException & e)
+{
+	return out << e.what() << " " << SDL_GetError();
+}
+```
+
+Then for each type of failure in the SDLWrappers library, I created a subclass that printed a better error in context of what failed.
+Some would argue that using exceptions introduce additional overhead because the exception must be checked.
+However, if you create the equivalent code C style code that checks the error messages, I've found there isn't much difference.
+In addition, you written 100s of lines less code by using exceptions.
+
+Well that wraps up this post.
+Happy programming!
+
+
+[malloy]: brianmalloy.com

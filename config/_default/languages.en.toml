@@ -1,0 +1,4 @@
+[params]
+description = "Thoughts and Musings of a Computer Scientist"
+[params.author]
+name="Robert Underwood"
