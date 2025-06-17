@@ -3,6 +3,9 @@ languageCode = 'en-us'
 title = 'Systems++'
 ignoreLogs = ['warning-goldmark-raw-html']
 
+[markup.tableOfContents]
+startLevel=1
+endLevel=2
 [markup.goldmark.parser]
 autoHeadingID = true
 autoHeadingIDType = "github"

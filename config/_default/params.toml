@@ -1,4 +1,6 @@
 enableSearch = true
+[header]
+layout = "hybrid"
 [article]
 showTableOfContents = true
 showWordCount = true

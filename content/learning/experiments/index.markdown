@@ -38,15 +38,25 @@ One of the most common mistakes I see in empirical computer science is to ignore
 
 There are a few key principles to keep in mind:
 
-*Consider the 3Rs* - randomness, replication, and reduction of noise. When designing experiments as much as is practicable you should repeat the experiments, reduce the effects of non-studied factors, and randomize what you can’t control.
+### Consider the 3Rs
 
-*Consider your assumptions and consequences of violation*. Every statistical method has assumptions and consequences of violation. The most common consequence is so called “liberal inference” which means that your experiment could give misleading results. Careful attention to assumptions can protect you from false conclusions.
+randomness, replication, and reduction of noise. When designing experiments as much as is practicable you should repeat the experiments, reduce the effects of non-studied factors, and randomize what you can’t control.
 
-*Know the basis of Statistical Inference*. Statistical Inference is the process of inferring the probability of the truth of some claim based on the results of some experiment. These methods can be either parametric and non-parametric. Parametric methods make assumptions about the distribution of the values of your observations. Non-parametric make fewer or weaker assumptions. One of the benefits of parametric methods is that they offer stronger evidence of a claim (I.e. require fewer replicas to draw a conclusion) than non parametric methods. The benefit of non parametric methods is that they make fewer assumptions and can be used validly in more cases.
+### Consider your assumptions and consequences of violation
 
-*Know some basics of Experimental Designs*. There are several common designs including factorial, Latin squares/hyper cubes.  When the experimental design space becomes large, tools such as orthogonal arrays can reduce the testing space. These methods can help provide structure that can help you avoid violating certain assumptions and keep the cost of your experiments down.
+Every statistical method has assumptions and consequences of violation. The most common consequence is so called “liberal inference” which means that your experiment could give misleading results. Careful attention to assumptions can protect you from false conclusions.
 
-*Choose an appropriate Sample size*. Statistical Inference offers a trade off between the rate of false positives and the sample size. Tests that require smaller sample sizes are called more powerful but often require more strict assumptions.
+### Know the basis of Statistical Inference
+
+Statistical Inference is the process of inferring the probability of the truth of some claim based on the results of some experiment. These methods can be either parametric and non-parametric. Parametric methods make assumptions about the distribution of the values of your observations. Non-parametric make fewer or weaker assumptions. One of the benefits of parametric methods is that they offer stronger evidence of a claim (I.e. require fewer replicas to draw a conclusion) than non parametric methods. The benefit of non parametric methods is that they make fewer assumptions and can be used validly in more cases.
+
+### Know some basics of Experimental Designs
+
+There are several common designs including factorial, Latin squares/hyper cubes.  When the experimental design space becomes large, tools such as orthogonal arrays can reduce the testing space. These methods can help provide structure that can help you avoid violating certain assumptions and keep the cost of your experiments down.
+
+### Choose an appropriate Sample size
+
+Statistical Inference offers a trade off between the rate of false positives and the sample size. Tests that require smaller sample sizes are called more powerful but often require more strict assumptions.
 
 There is a lot more to statistics than what I can cover here. It’s worth reading a book or two on statistics methods. One such book is “A first course in design and analysis of experiments” by Gary W. Oehlert.
 
@@ -86,27 +96,48 @@ Code like this can be easily parallelize and distributed using something like a 
 
 
 
-*Know how to accurately measure things*. Measuring fine grained timing can be a nuanced process. First, for sub-millisecond timings, the clock resolution can matter. Second, not all clocks are monotonic. Third, some clocks have high measurement overhead for the first three cases in c++ you generally want the `std::chrono::steady_clock` in Python the equivalent is `time.perf_counter_ns` . Fourth, your compiler may optimize away your benchmark unless you force it to keep it (Google Benchmark has a function called `benchmark::DoNotOptimize`) which generally does the right thing). Fifth, other processes may interfere with your measurement (especially print statements) so avoid doing expensive operations during your benchmark timings. Lastly not all clocks can measure all processes, for example the C++ clock functions cannot measure the timing of Cuda operations accurately because they cannot observe device state.
+### Know how to accurately measure things
 
-*Know your scheduler* A common mistake that I see new students make is to run all jobs interactively, and not make use of the scheduler to run their job. Additionally your scheduler can do many things for you such as email you when your job finishes, start one job after a previous job finishes, handle process pinning and resource allocation and more. Its worth reading what it is capable of.
+Measuring fine grained timing can be a nuanced process. First, for sub-millisecond timings, the clock resolution can matter. Second, not all clocks are monotonic. Third, some clocks have high measurement overhead for the first three cases in c++ you generally want the `std::chrono::steady_clock` in Python the equivalent is `time.perf_counter_ns` . Fourth, your compiler may optimize away your benchmark unless you force it to keep it (Google Benchmark has a function called `benchmark::DoNotOptimize`) which generally does the right thing). Fifth, other processes may interfere with your measurement (especially print statements) so avoid doing expensive operations during your benchmark timings. Lastly not all clocks can measure all processes, for example the C++ clock functions cannot measure the timing of Cuda operations accurately because they cannot observe device state.
 
-*Know a higher level programming language*. Systems programming languages like C,C++ and Rust are remarkably powerful and useful tools for writing benchmarks and experiments. However not all parts of the experimental process need this level of performance. For example plotting and data scraping tasks often aren’t as well suited to lower level languages and require large volumes of code for simple tasks. Likewise only recently has C++ gained higher level abstraction for Cartesian iteration. Prefer a higher level language for these tasks when possible.
+### Know your scheduler
+A common mistake that I see new students make is to run all jobs interactively, and not make use of the scheduler to run their job. Additionally your scheduler can do many things for you such as email you when your job finishes, start one job after a previous job finishes, handle process pinning and resource allocation and more. Its worth reading what it is capable of.
 
-*Understand sources of variability and control them if possible*.  Computer systems have many sources of variability. This could be clock variability, interference variability, seed variability, or process variability. Many, but not all of these sources of variability can be mitigated with appropriate steps. Attempt to control this variability if it is practical to do so.
+### Know a higher level programming language
 
-*Output as much context as possible*. Especially with long running tasks having appropriate debugging information is key to reduce the number of run, interpret, modify cycles to a minimum. In doing so, remember what the system can record for you such as core dumps when the system crashes. Some context to specifically record include timestamps, task ids (if they are deterministic), complete error messages, error status, and progress indicators.
+Systems programming languages like C,C++ and Rust are remarkably powerful and useful tools for writing benchmarks and experiments. However not all parts of the experimental process need this level of performance. For example plotting and data scraping tasks often aren’t as well suited to lower level languages and require large volumes of code for simple tasks. Likewise only recently has C++ gained higher level abstraction for Cartesian iteration. Prefer a higher level language for these tasks when possible.
 
-*Know a distributed programming framework*. For many problems running code on a single node isn’t enough. You want to be able to run experiments over several nodes collaboratively. While it is possible to do this with TCP/IP, it isn’t often the best way. In HPC the tool of choice is often MPI which provides both tools that are easy to start with and provides room to grow. However, other choices include RPC systems such as Mochi and GRPC.
+### Understand sources of variability and control them if possible
 
-*Make the testing environment reproducible (spack, docker, etc…)*.  Reproducibility is a crisis in science; do not contribute to this crisis.  Tools from industry like containers can make that much easier.  Docker/Podman is my favorite, and is reasonably easy to use.  Generally these tools boil down to writing a specialized script that reproduces your environment exactly which can then be shipped to users in the form of a compressed archive.  Sometimes (especially when specialized hardware is involved) this is easier said than done.  You might need a different version of software depending on your hardware platform.  Spack is a powerful package manager that can help you solve some of these more complicated dependencies, but warrants its own post.  Together these tools give you a powerful platform to run experiments easily on diverse machines.  Tools like singularity let you run containers on HPC systems.
+ Computer systems have many sources of variability. This could be clock variability, interference variability, seed variability, or process variability. Many, but not all of these sources of variability can be mitigated with appropriate steps. Attempt to control this variability if it is practical to do so.
 
-*Prefer parseable output, but sometimes you can’t*.  See the next section on writing parsable outputs.  However, because many HPC libraries write to stdout/stderr, you can’t assume that you will have these to yourself. MPI implementations can be especially loud (for good reason) when they don’t believe that they are configured correctly.
+### Output as much context as possible
 
-*Validate on small cases first if possible*.  Waiting on the scheduler to run your job can be painful.  If possible, have some small subset that you can verify works “correctly” before jumping to a supercomputer where your runtime environment becomes more complex and queuing times slow your ability to iterate on your experiments. Many supercomputers also charge for every execution and the costs can add up quickly. 
+Especially with long running tasks having appropriate debugging information is key to reduce the number of run, interpret, modify cycles to a minimum. In doing so, remember what the system can record for you such as core dumps when the system crashes. Some context to specifically record include timestamps, task ids (if they are deterministic), complete error messages, error status, and progress indicators.
 
-*Write the code to do partial writes, and resume-able in case the code crashes*. There are few things more frustrating than for code to run for a few hours, crash (or timeout), and not have any results to show for it. It is often preferable to write results incrementally as your experiment is running than waiting until the end. This also often lets you use a pattern known as checkpoint restart where you resume execution at the state after your last failed/incomplete run. This makes it far easier to restart your job later to finish what’s left rather than start over from scratch. This is often as easy as partitioning the output into non overlapping regions or ids and writing the output. If this can’t be done a master process can be delegated to store the output
+### Know a distributed programming framework
 
-*Write the code to handle error conditions as gracefully as possible*. Likewise thinking about the error propagation boundaries for your code. In the pseudo code above placing a mandatory error propagation boundary just outside calls  do_experiment will do what you want: isolate a fault from one experiment from another experiment allowing as many experiments to continue as possible without a crash in one experiment affecting other experiments. This can be tricky. Things like MPI have the  default behavior of terminating the world on a signal. Other things like HDF5 with many blocking function calls might not catch that other threads of execution finished in a error state and will block indefinitely. This long tail of failures to tolerate can be constructed incrementally as you encounter them.
+For many problems running code on a single node isn’t enough. You want to be able to run experiments over several nodes collaboratively. While it is possible to do this with TCP/IP, it isn’t often the best way. In HPC the tool of choice is often MPI which provides both tools that are easy to start with and provides room to grow. However, other choices include RPC systems such as Mochi and GRPC.
+
+### Make the testing environment reproducible (spack, docker, etc…)
+
+ Reproducibility is a crisis in science; do not contribute to this crisis.  Tools from industry like containers can make that much easier.  Docker/Podman is my favorite, and is reasonably easy to use.  Generally these tools boil down to writing a specialized script that reproduces your environment exactly which can then be shipped to users in the form of a compressed archive.  Sometimes (especially when specialized hardware is involved) this is easier said than done.  You might need a different version of software depending on your hardware platform.  Spack is a powerful package manager that can help you solve some of these more complicated dependencies, but warrants its own post.  Together these tools give you a powerful platform to run experiments easily on diverse machines.  Tools like singularity let you run containers on HPC systems.
+
+### Prefer parseable output, but sometimes you can’t
+
+ See the next section on writing parsable outputs.  However, because many HPC libraries write to stdout/stderr, you can’t assume that you will have these to yourself. MPI implementations can be especially loud (for good reason) when they don’t believe that they are configured correctly.
+
+### Validate on small cases first if possible
+
+ Waiting on the scheduler to run your job can be painful.  If possible, have some small subset that you can verify works “correctly” before jumping to a supercomputer where your runtime environment becomes more complex and queuing times slow your ability to iterate on your experiments. Many supercomputers also charge for every execution and the costs can add up quickly. 
+
+### Write the code to do partial writes, and resume-able in case the code crashes
+
+There are few things more frustrating than for code to run for a few hours, crash (or timeout), and not have any results to show for it. It is often preferable to write results incrementally as your experiment is running than waiting until the end. This also often lets you use a pattern known as checkpoint restart where you resume execution at the state after your last failed/incomplete run. This makes it far easier to restart your job later to finish what’s left rather than start over from scratch. This is often as easy as partitioning the output into non overlapping regions or ids and writing the output. If this can’t be done a master process can be delegated to store the output
+
+### Write the code to handle error conditions as gracefully as possible
+
+Likewise thinking about the error propagation boundaries for your code. In the pseudo code above placing a mandatory error propagation boundary just outside calls  do_experiment will do what you want: isolate a fault from one experiment from another experiment allowing as many experiments to continue as possible without a crash in one experiment affecting other experiments. This can be tricky. Things like MPI have the  default behavior of terminating the world on a signal. Other things like HDF5 with many blocking function calls might not catch that other threads of execution finished in a error state and will block indefinitely. This long tail of failures to tolerate can be constructed incrementally as you encounter them.
 
 As an aside: sigsegv or its cousins sigfpe and sigbus are often implemented as catch-able signal but the mechanisms for recovering from it in standard C/C++ fully and correctly are limited or non-existent. Even if you think you can recover correctly from these signals don’t; you probably shouldn’t and should let the entire C runtime restart instead. What is easier and arguably better is to use another program (ie bash/python scripts) to handle this particular fault boundary. 
 
@@ -196,32 +227,46 @@ with MPICommExecutor() as pool:
 
 ## Writing parsing code
 
-*When parsing the results of experiments it is often helpful to do so in ways that are machine parse-able*. While you almost certainly could write a domain specific language that often isn’t the best use of your time or resources. Sticking to a few well established formats can tremendously simplify the task ahead of you.
+### When parsing the results of experiments it is often helpful to do so in ways that are machine parse-able
 
-+ CSV is ubiquitous and easy to generate. For this reason it is usually the first thing I reach for as long as the data isn’t hierarchical or non-scalar in nature. 
-+ JSON is usually the next step that I reach for when I need simple arrays or basic hierarchies represented in my output. There are decent JSON parsing libraries in nearly every language which makes it easy to work with. 
-+ Google’s protobuf is also not a bad option when JSON parsing speed is a limitation and you have a stable schema. While not as common in HPC it does a decent job of representing complex scalars and moderate hierarchies in ways that can be checked against a schema for validity. 
-+ HDF5 as a structured, scalable data container. If you need to store large tensors (higher dimensional matrices) of data with hierarchical relationships, it is one of the few games in town. It also tends to have decent support in a variety of languages.
-+ SQLite can be another highly portable output format when your data is highly relational. It is also supported on nearly every platform under the sun. 
-+ Binary files - writing a binary flat file is a possibility when the data format is relatively simple (ie a single large array), and nearly all languages support this. However it is seldom the best format because it doesn’t communicate some subtleties like endianness and and dimensionality that formats like HDF5 provide in addition to features like compression or attributes. 
-+ regular expressions are a powerful tool of last resort for getting data out of your experiments. However needing a regular expression is often a suggestion that your output would benefit from greater structure and/or isolation. There are great websites that can help you rapidly prototype and validate your regular expressions for a variety of regular expression dialects. 
+While you almost certainly could write a domain specific language that often isn’t the best use of your time or resources. Sticking to a few well established formats can tremendously simplify the task ahead of you.
 
-*When using tabular outputs like CSV use one row per experiment, one column per field*. This makes it much easier to do joins and parsing of your experimental results to other tables of data much easier. If possible avoid literal new line characters or field delimitors in fields (especially error message fields) instead either 1 know how to escape them or replace them with characters without special interpretations. 
++ **CSV** is ubiquitous and easy to generate. For this reason it is usually the first thing I reach for as long as the data isn’t hierarchical or non-scalar in nature. 
++ **JSON** is usually the next step that I reach for when I need simple arrays or basic hierarchies represented in my output. There are decent JSON parsing libraries in nearly every language which makes it easy to work with. 
++ **Google’s protobuf** is also not a bad option when JSON parsing speed is a limitation and you have a stable schema. While not as common in HPC it does a decent job of representing complex scalars and moderate hierarchies in ways that can be checked against a schema for validity. 
++ **HDF5** as a structured, scalable data container. If you need to store large tensors (higher dimensional matrices) of data with hierarchical relationships, it is one of the few games in town. It also tends to have decent support in a variety of languages.
++ **SQLite** can be another highly portable output format when your data is highly relational. It is also supported on nearly every platform under the sun. 
++ **Binary files** - writing a binary flat file is a possibility when the data format is relatively simple (ie a single large array), and nearly all languages support this. However it is seldom the best format because it doesn’t communicate some subtleties like endianness and and dimensionality that formats like HDF5 provide in addition to features like compression or attributes. 
++ **Free-Form Text** can be parsed with regular expressions as tool of last resort for getting data out of your experiments. However needing a regular expression is often a suggestion that your output would benefit from greater structure and/or isolation. There are great websites that can help you rapidly prototype and validate your regular expressions for a variety of regular expression dialects. 
 
-*When using tabular data include a column for errors or execution irregularities*. Experimental errors happen. Having a way built in to both filter in/out and summarize these kinds or errors can save you a lot of time trying to interpret your results and issues encountered during your experiments. 
+### When using tabular outputs like CSV use one row per experiment, one column per field
 
-*Parsing code often doesn’t benefit as much from parallelism so don’t worry about this upfront*. Serial execution is a good enough place to start. An exception to this is where your data is a large tensor in which case parallel HDF5 is your friend for scalable IO performance. 
+This makes it much easier to do joins and parsing of your experimental results to other tables of data much easier. If possible avoid literal new line characters or field delimitors in fields (especially error message fields) instead either 1 know how to escape them or replace them with characters without special interpretations. 
+
+### When using tabular data include a column for errors or execution irregularities
+
+Experimental errors happen. Having a way built in to both filter in/out and summarize these kinds or errors can save you a lot of time trying to interpret your results and issues encountered during your experiments. 
+
+### Parsing code often doesn’t benefit as much from parallelism so don’t worry about this upfront
+
+Serial execution is a good enough place to start. An exception to this is where your data is a large tensor in which case parallel HDF5 is your friend for scalable IO performance. 
 
 
 Since the previous example used csv and wrote to a dedicated file, we don't even have to write the parsing code, we can just use `pandas.read_csv`
 
 ## Writing plotting/analysis code
 
-*Choose a language which has mature tools for this.* Unless you are doing sophisticated 3D graphics where libraries like VTK or OpenGL or Vulcan are required, you can accomplish a lot more a lot faster with libraries in Python (Seaborn/Matplotlib) or Julia (Makie/ Plots.jl). C++ is not the best tool for every job.
+### Choose a language which has mature tools for this.
 
-*Separate plotting/analysis from parsing parsing the log files*.  Often one of these tasks will take much longer than you’d expect. By separating these tasks, you can work with the clean data more iteration and quickly drill in on a plot that does what you want. 
+less you are doing sophisticated 3D graphics where libraries like VTK or OpenGL or Vulcan are required, you can accomplish a lot more a lot faster with libraries in Python (Seaborn/Matplotlib) or Julia (Makie/ Plots.jl). C++ is not the best tool for every job.
 
-*Prefer vector graphics for 2D plots*. Vector graphics automatically scale to arbitrary resolution because they are described as a series of equations rather than a “map” of colors. In many plotting libraries this is as simple as choosing an eps or svg format output. 
+### Separate plotting/analysis from parsing parsing the log files
+
+ Often one of these tasks will take much longer than you’d expect. By separating these tasks, you can work with the clean data more iteration and quickly drill in on a plot that does what you want. 
+
+### Prefer vector graphics for 2D plots
+
+Vector graphics automatically scale to arbitrary resolution because they are described as a series of equations rather than a “map” of colors. In many plotting libraries this is as simple as choosing an eps or svg format output. 
 
 
 A simple script that plots the runtime for each might look like this:

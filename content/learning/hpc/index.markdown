@@ -72,31 +72,32 @@ SuiteSparse is a collection of primitives and solvers for sparse matrices and ve
 
 You probably don't use these directly, instead use a higher level library like Eigen or PETSc if you need distributed computing.
 
-## Patterns for Parallel Computing
+# Patterns for Parallel Computing
 
 As mentioned above, often software needs to be refactored to achieve optimal performance. Here are a list of patterns that are commonly used to adapt software for parallel and distributed environments. 
 
-### Fundamental Patterns
+## Fundamental Patterns
 
 | pattern                                                                   | problem                                                                                                                       |
 |---------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
 | [enumeration and grouping](learning/patterns#enumeration-and-grouping)    | identify and group parallel resources                                                                                         |
 | [send/recv](learning/patterns#sendrecv)                                   | point to point communication                                                                                                  |
-| [broadcast/scatter/gather](learning/patterns/#scattergatherbroadcastallgatheralltoallbarrier)    | distribute or collect factions of work from a collection of nodes                                      |
+| [collectives](learning/patterns/#collectives)    | distribute or collect factions of work from a collection of nodes                                      |
 | functors/map                | perform many completely independent problems                                                                                  |
 | catamorphisms/reduce/scan                              | combine many associative operations                                                                |
 | anamorphisms/hylomorphisms/divide and conquer          | problems that can be partitioned into independent sub problems                                     |
 | sorting                     | permute elements into a specified order                                                                                       |
 
-### Advanced Patterns
+## Advanced Patterns
 
 | pattern                     | problem                                                                                                                       |
 |-----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
 | linear algebra and BLAS     | mathmatical primitives operations                                                                                             |
+| graph operations      | scalable grpah operations                                                                                             |
 | pipeline                    | a series of steps that need to be preformed in order, but otherwise are independent                                           |
 | grid/stencil problems       | calculations on a grid of values                                                                                              |
 
-### Strategy
+## Strategy Patterns
 
 | pattern                     | problem                                                                                                                       |
 |-----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
@@ -107,15 +108,18 @@ As mentioned above, often software needs to be refactored to achieve optimal per
 | speculative execution       | compute a result before it is needed in anticipation of needing it, and discarding it if unused                               |
 | operator fusion and reordering | combine and reorder multiple operations to improve performance of the collection                                           |
 
-### Load Balancing
+## Load Balancing Patterns
 
+| pattern                     | problem                                                                                                                       |
+|-----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
 | move execution              | move computation to data to increase locality                                                                                 |
 | batching                    | rather than doing many small operations, group them to do more work at once                                                   |
 | work stealing                | balance imbalanced workloads by shifting work from overutilized processors to underutilized ones                             |
 | exponential back-off        | avoid contention by backing off a progressively increasing amount of time on each timeout                                     |
 | caching                     | store the results of expensive calculations/load/stores in faster storage for reuse                                           |
+| jitter                     | randomize the time for certain operations to reduce contention                                           |
 
-### Resource Management
+## Resource Management
 
 | pattern                     | problem                                                                                                                       |
 |-----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
@@ -140,7 +144,7 @@ As mentioned above, often software needs to be refactored to achieve optimal per
 | merkel trees                    | upon failure, partially rebuild the application using new resources                                                           |
 | algorithm based fault tolerance | upon failure, partially rebuild the application using new resources                                                           |
 
-### Approximation
+## Approximation Patterns
 
 | pattern                     | problem                                                                                                                       |
 |-----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
@@ -151,7 +155,7 @@ As mentioned above, often software needs to be refactored to achieve optimal per
 | sampling                    | use a reduced number of states to approximate the entire state to save compute/disk/memory/bandwidth                          |
 | dimensionality reduction    | project the state into a lower dimensional representation to save compute/disk/memory/bandwidth                               |
 
-### Synchronization Patterns
+## Synchronization Patterns
 
 | pattern                     | problem                                                                                                                       |
 |-----------------------------|-------------------------------------------------------------------------------------------------------------------------------|

@@ -288,7 +288,7 @@ Without some mechanism to communicate between physically distinct hardware, para
   * GASNet based Languages (e.g. Chapel, upc++)  
   * Device \<-\> Host in GPU Programing (e.g. OpenMP Target, CUDA, SYCL, etc…)
 
-## **Scatter/Gather/Broadcast/AllGather/AllToAll/Barrier**
+## **Collectives**
 
 ### **Intent**
 
