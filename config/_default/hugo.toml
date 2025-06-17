@@ -1,3 +1,7 @@
 summaryLength=10
 [outputs]
 home=["HTML", "RSS", "JSON"]
+
+[services]
+  [services.googleAnalytics]
+    id = 'G-9KQE44SX6K'
