@@ -1,0 +1,34 @@
+baseURL = 'https://robertu94.github.io/'
+languageCode = 'en-us'
+title = 'Systems++'
+ignoreLogs = ['warning-goldmark-raw-html']
+
+[markup.goldmark.parser]
+autoHeadingID = true
+autoHeadingIDType = "github"
+[markup.goldmark.parser.attribute]
+block = true
+title = true
+
+[privacy.googleAnalytics]
+respectDoNotTrack = true
+
+
+[params]
+colorScheme = "Ocean"
+summaryLength = 0
+[params.author]
+name= "Robert Underwood"
+headline=""
+bio="""
+Robert is an Assistant Computer Scientist in the Mathematics and Computer Science Division at Argonne National Laboratory focusing on data and I/O for large-scale scientific applications including AI for Science using techniques of lossy compression, and data management.  He currently co-leads the AuroraGPT Data Team with Ian Foster.  In addition to AI, Robert’s library LibPressio,  allows users to experiment and adopt advanced compressors quickly, has over 200 average unique monthly downloads, is used in over 17 institutions worldwide, and he is also a contributor to the R&D100 winning SZ family of compressors and other compression libraries.  He regularly mentors students and is the early career ambassador for Argonne to the Joint Laboratory for Extreme Scale Computing.
+"""
+links = [
+    { github = "https://github.com/robertu94" },
+    { email = "mailto:rr.underwood94@gmail.com" },
+    { link = "/about" },
+    { google-scholar = "https://scholar.google.com/citations?user=GbhfWUIAAAAJ&hl=en" },
+    { orcid = "https://orcid.org/0000-0002-1464-729X" },
+    { youtube = "https://www.youtube.com/@robertunderwood97" },
+    { keybase = "https://keybase.io/robertu94" },
+]

@@ -13,30 +13,31 @@ Lastly, if you find the articles insufficient in some way, please [email me](mai
 
 ## Meta 
 
-+ [Journaling, Task Management, and Time Tracking]({{< ref time.markdown >}}): three foundational skills for everything else
-+ [Reading]({{< ref reading.markdown >}}): how to get the most out of technical documents
-+ [Studying]({{< ref litrature-review.markdown >}}): how to go about learning new topics
-+ [Intake]({{< ref intake.markdown >}}): how to stay up to date on current topics
-+ [Writing]({{< ref writing.markdown >}}): how to summarize topics for others to learn
++ [Journaling, Task Management, and Time Tracking](/learning/time): three foundational skills for everything else
++ [Reading](/learning/reading): how to get the most out of technical documents
++ [Studying](/learning/litrature-review): how to go about learning new topics
++ [Intake](/learning/intake): how to stay up to date on current topics
++ [Writing](/learning/writing): how to summarize topics for others to learn
 
 ## Process
 
-+ [Linux]({{< ref linux.markdown >}}) how to get started with learning and using Linux
-+ [Software Development]({{< ref development.markdown >}}) how to approach writing a software project using Linux
-+ [HPC]({{< ref hpc.markdown >}}) how to write software for High Performance Computing
-+ [Experiments]({{< ref experiments.markdown >}}) how to write empirical computer science experiments
-+ [Software Teams]({{< ref software_for_teams.markdown >}}): how to lead and be an effective member of a software team
++ [Linux](/learning/linux) how to get started with learning and using Linux
++ [Software Development](/learning/development) how to approach writing a software project using Linux
++ [Software Patterns](/learning/patterns) how to approach writing a software project using Linux
++ [HPC](/learning/hpc) how to write software for High Performance Computing
++ [Experiments](/learning/experiments) how to write empirical computer science experiments
++ [Software Teams](/learning/software_for_teams): how to lead and be an effective member of a software team
 
 ## Programming Languages
 
-+ [C++]({{< ref cpp.markdown >}}) how to learn C++, a low-level systems language that helps you get the most out of your hardware
-+ [Python]({{< ref python.markdown >}}) how to learn Python, a high-level programming language aimed at developer productivity
++ [C++](/learning/cpp) how to learn C++, a low-level systems language that helps you get the most out of your hardware
++ [Python](/learning/python) how to learn Python, a high-level programming language aimed at developer productivity
 
 ## Tools
 
-+ [CMake]({{< ref cmake.markdown >}}) the defacto C++ build system
-+ [GDB]({{< ref gdb.markdown >}}) the most commonly used open source debugger for natively compiled languages.
-+ [MPI]({{< ref mpi.markdown >}}) the defacto parallel processing framework in C++ for HPC
++ [CMake](/learning/cmake) the defacto C++ build system
++ [GDB](/learning/gdb) the most commonly used open source debugger for natively compiled languages.
++ [MPI](/learning/mpi) the defacto parallel processing framework in C++ for HPC
 
 # Most Recent Updates
 

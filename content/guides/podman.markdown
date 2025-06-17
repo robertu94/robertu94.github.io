@@ -1,3 +1,9 @@
+---
+title: "Install podman on Windows, MacOS, and Linux"
+date: 2024-01-01
+summary: "how to install the podman container engine on various operating systems"
+---
+
 # For Windows
 
 ```bash

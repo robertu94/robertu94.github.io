@@ -1,6 +1,7 @@
 ---
 title: "What to support if you are supporting"
 layout: post
+lastmod: 2025-04-17
 date: 2023-09-12
 ---
 
@@ -8,40 +9,41 @@ Dependencies matter a lot in terms of who can easily install and use your softwa
 However there are trade-offs in what features are provided by each version and the availability of these versions.
 This presents an opinionated take on what these trade-offs are so one can know what can be widely supported.
 
-Last update: 2023-09-12
 
 # Major Linux Distros
 
-| Distro              | Standard EoL     |
-|---------------------|------------------|
-| CentOS-8 compatible | December 2021`*` |
-| CentOS-9 stream     | May 2027`*`      |
-| OpenSUSE Leap 15.6  | December 2025    |
-| Ubuntu 20.04        | April 2025       |
-| Ubuntu 22.04        | April 2027       |
-| Ubuntu 24.04        | April 2029       |
+| Distro              | Standard EoL     | Extended |
+|---------------------|------------------|----------|
+| CentOS-8 compatible | December 2021`*` |   2029   |
+| CentOS-9 stream     | May 2027`*`      |   2032   |
+| CentOS-10 stream    | December 2030`*` |   2038   |
+| OpenSUSE Leap 15.6  | December 2025    |          |
+| Ubuntu 22.04        | April 2027       |          |
+| Ubuntu 24.04        | April 2029       |          |
 
 + Ubuntu LTS releases generally get 5 years of standard support
 + Fedora releases generally get ~1 year of support
-+ `*` Third party vendors such as AlmaLinux support these for much longer 2029 for CentOS-8, and 2032 for CentOS-9.
++ `*` Third party vendors such as AlmaLinux support these for much longer 2029 for CentOS-8, 2032 for CentOS-9, 2038 for Cento-10.
 
 # Tooling Versions
 
-| Tool     | Ubuntu 20.04 | Ubuntu 22.04 |Ubuntu 24.04 |  CentOS 8        | CentOS 9 Stream | SUSELeap       |Fedora       |
-|----------|--------------|--------------|-------------|------------------|-----------------|----------------|-------------|
-| gcc      |  9.4.0       | 11.4.0       | 13.2.0      |  8.5.0           | 11.3            | 7.5.0`^` to 14 | 15.0.1      |
-| clang    |  10.0.0      | 14.0.0       | 18.1.3      |  15.0.0          | 16.0            | 17.0.6         | 20.1.2      |
-| cmake    |  3.16.3      | 3.22.1       | 3.28.3      |  3.20            | 3.20            | 3.28.3         | 3.31.6      |
-| python3  |  3.8.10      | 3.10.0       | 3.12.3      |  3.6-3.9         | 3.9,3.11        | 3.6.15         | 3.13.3      |
-| julia    |  1.4.1`#`    | n/a          | n/a         |  n/a             | n/a             | 1.0.3`#`       | 1.11.0-rc3  |
-| cargo    |  1.66.1      | 1.66.1       | 1.75.0      |  1.66.1          | 1.61.1          | 1.82.0         | 1.86.0      |
-| swig     |  4.0         | 4.0          | 4.2.0       |  3.0.12          | 3.0.12          | 4.1.1          | 4.3.0       |
-| nvcc `*` |  10.1        | 11.5.0       | 12.0.140    |  n/a `*`         | n/a `*`         | n/a `*`        | n/a `*`     |
-| numpy    |  1.17.4      | 1.21.5       | 1.26.4      |  1.14.3          | 1.20.1          | 1.17.3         | 2.2.4       |
+| Tool     | Minimum Sandard EoL    | Ubuntu 22.04 |Ubuntu 24.04 | CentOS 9 Stream |CentOS 10 Stream | SUSELeap       |Fedora       |  CentOS 8        |
+|----------|------------------------|--------------|-------------|-----------------|-----------------|----------------|-------------|------------------|
+| EOL      |                        | Current      |             |                 |                 |                |             |  Extended        |
+| gcc      | 11.3                   | 11.4.0       | 13.2.0      | 11.3            | 14.2.1          | 7.5.0`^` to 14 | 15.0.1      |  8.5.0           |
+| clang    | 16.0                   | 14.0.0       | 18.1.3      | 16.0            | 20.1.2          | 17.0.6         | 20.1.2      |  15.0.0          |
+| cmake    | 3.20                   | 3.22.1       | 3.28.3      | 3.20            | 3.30.5          | 3.28.3         | 3.31.6      |  3.20            |
+| python3  | 3.6.15                 | 3.10.0       | 3.12.3      | 3.9,3.11        | 3.12.10         | 3.6.15         | 3.13.3      |  3.6-3.9         |
+| julia    | n/a                    | n/a          | n/a         | n/a             | n/a             | 1.0.3`#`       | 1.11.0-rc3  |  n/a             |
+| cargo    | 1.66.1                 | 1.66.1       | 1.75.0      | 1.61.1          | 1.85.0          | 1.82.0         | 1.86.0      |  1.66.1          |
+| swig     | 3.0.12                 | 4.0          | 4.2.0       | 3.0.12          | 4.3.0 `$`       | 4.1.1          | 4.3.0       |  3.0.12          |
+| nvcc `*` | 11.5                   | 11.5.0       | 12.0.140    | n/a `*`         | n/a `*`         | n/a `*`        | n/a `*`     |  n/a `*`         |
+| numpy    | 1.17.3                 | 1.21.5       | 1.26.4      | 1.20.1          | 1.26.4          | 1.17.3         | 2.2.4       |  1.14.3          |
 
 `#1` has known issues and upstream [recommends avoiding using this version](https://old.reddit.com/r/Julia/comments/ubdva0/what_happened_to_julia_on_ubuntu_2204_repos/i65xf8n/)
 `*` CentOS, and Fedora do not package CUDA themselves, but instead rely on Nvidia to provide the package which provides the newest version.
 `^` OpenSUSE Leap provides many gcc compilers, the default is 7.5.0
+`$` CentOS provides some packages in the code-ready builder or EPEL repositories
 
 # Language Features
 
@@ -68,8 +70,8 @@ C++17 library features require very new compilers to implement fully and are not
 
 | Compiler | C++17 (language full) | C++17 (language 90%) | Missing | C++17 (library full) | C++17 (library 90%) | Missing |
 |----------|-----------------------|----------------------|---------|----------------------|---------------------|---------|
-| GCC/libstdc++      | 7                     | 7                    | N/A     | 12                   | 9                   | "elementary string conversions" (P0067R5),          |
-| Clang/libc++    | 4                     | 4                    | N/A     | No                   | 17                  | parallel algoirthms, hardware interference size, special math functions        |
+| GCC/libstdc++   | 7              | 7                    | N/A     | 12                   | 9                   | "elementary string conversions" (P0067R5),          |
+| Clang/libc++    | 4              | 4                    | N/A     | No                   | 17                  | parallel algoirthms, hardware interference size, special math functions        |
 
 ### C++20
 

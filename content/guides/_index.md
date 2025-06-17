@@ -1,5 +1,10 @@
+
 # Guides
 
-A list of more "how to" vs "how to learn" documents
+A set of "how to" rather than "how to think about"
 
-# Recent Updates
++ [spack setup guides](/guides/spack)
++ [C++ Programming](/guides/cpp)
+
+
+# Other Guides
