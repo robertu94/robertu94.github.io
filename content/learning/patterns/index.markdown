@@ -7,40 +7,68 @@ tags:
 - Programming
 ---
 
-# **Foundation Parallel Operations**
+# Foundation Parallel Operations
 
 Fundamental to developing high-performance software is having an understanding of the basics of parallel architecture.
 
-## **Enumeration and Grouping**
+## Enumeration and Grouping
 
-### **Intent**
+### Intent
 
 Label each processing element in a group with a distinct label and describe new groups in a way that is consistent across nodes.
 
-### **Motivation**
+### Motivation
 
 Enumeration and grouping is foundational to other parallel primitives such as Send/Recv, which need these labels to identify sources and targets.  It is often also used as a primitive in larger algorithms to statically partition work between a collection of processing elements.  Lastly, programs might create multiple distinct enumerations for various subtasks to facilitate collectives on subsets of processes better, or create new groups dynamically to via collaboration with the scheduler to expand the quantity of resources for a task.  This also applies to GPU device programming (e.g. threadId.x in CUDA).
 
-### **Applicability**
+### Applicability
 
 * As a fundamental primitive, it's applicable to almost all use cases  
 * For systems with rapidly changing group members, other work partitioning schemes and addressing schemes that hide this aspect from the user may be more important
 
-### **Structure**
+### Structure
 
-### **Participants/Elements**
 
+{{< mermaid >}}
+classDiagram
+    class User:::user
+    class ResourceManager:::optional  {
+        +group(): Group
+    }
+    class Scheduler:::optional  {
+        +allocate(r: Request): Lease
+        +deallocate(l: Lease)
+    }
+    class Element:::required
+    class Group:::required {
+        +id(Element: e): int
+        +size(): int
+    }
+    Group "1..n" <-- "1" Element: Belongs To
+    ResourceManager --> Group: Creates
+    ResourceManager <-- Scheduler: Provisions
+    Scheduler "1" --> "*" Element: Allocates/Deallocates
+    User "1" --> "1" Scheduler: Requests
+
+    classDef required fill:#f9f,stroke:#333,stroke-width:4px;
+    classDef optional fill:#bbf,stroke:#333,stroke-width:4px;
+    classDef user fill:#eea,stroke:#333,stroke-width:4px;
+{{< /mermaid >}}
+
+### Participants/Elements
+
+* Elements - an individual processing element
 * Groups – collections of processing elements  
 * (optional) resource manager – a leader (see leader election) that decides identity within a group  
-* (optional) scheduler – used to allocate/deallocate additional resources
+* (optional) scheduler – used to allocate/deallocate additional elements
 
-### **Collaboration with other patterns**
+### Collaboration with other patterns
 
 * A fundamental concept used in most other operations  
 * Dynamic group management often requires interaction with the scheduler and thus resource management patterns  
 * Dynamic group management allows fault tolerance on collectives and thus resilience patterns
 
-### **Code Examples**
+### Code Examples
 
 MPI Comm examples using Sessions, which interact with the resource manager to create processes aligned with hardware resources
 
@@ -127,7 +155,7 @@ int main(int argc, char* argv[]) {
 
 CUDA kernel launch examples
 
-```cuda
+```cpp
 #include <random>
 #include <vector>
 
@@ -181,18 +209,18 @@ int main(){
 ```
 ```
 
-### **Concequences (pros and cons of use)**
+### Concequences (pros and cons of use)
 
 * Use of groups may simplify programming by allowing collective operations to be used as opposed to independent operations  
 * The creation of strongly consistent groups is a syncronization point which inroduces overhead especially for extreemly large number of processing elements.
 
-### **Implementation considerations**
+### Implementation considerations
 
 * Static vs Dynamic number of processing elements – this addresses whether or not groups can be created or destroyed at runtime by introducing or removing processing elements.  The creating groups proses an operational challenge if the number of nodes exceeds the current resource request because the overall system may not have sufficent resources to satisfy the request.  In which case the scheduler accepts immediately, either refueses, or accepts with a delay.  Refusing could result in the task having insufficent resources, delaying often causes waiting while resources are allocated.  The case where the new request is fits within an existing allocation is much more operatoinally simple, but requires additional resources be allocated by scheduler but for some of the job might be unused.  
 * Static vs Dynamic membership of groups – this addresses whether or not an existing groups membership can change.  Allowing changes of group membership allows for more better handling of failures and more dynamic right-sizing of resource needs, but increases complexity to handle cases where a node is deallocated from or added to a group.  
 * Strict consistency vs Weak consistency – can group members have an inconsistent view of group membership?  Weak consistency can enable lower overhead (from less syncronization), more scalablity (from less syncronization) and greater fault tolerance (because groups can remain if one of its members die).  Strong consistency of group membership is dramatically easier to reason about.
 
-### **Known uses**
+### Known uses
 
 * MPI\_Communicators are strongly consistent  
   * MPI\_Comm\_size, MPI\_Comm\_rank – get the number of processing elements in a group and the id of a specific processing element  
@@ -202,39 +230,39 @@ int main(){
 * etcd, zookeeper, mochi-ssg – implements weakly consistent dynamic group management  
 * CUDA – strongly consistent, uses dynamic group creation, but not dynamic membership changes 
 
-## **Send/Recv**
+## Send/Recv
 
-### **Intent**
+### Intent
 
 Fundmental primiative describing point to point communication between two processing elements.
 
-### **Motivation**
+### Motivation
 
 Without some mechanism to communicate between physically distinct hardware, parallel and distributed software does not exist.  It important to note this even applies withing a single node on systems featuring multiple Non Uniform Memory Access (NUMA) domains which violate traditional Von Neuman assumptions around system architecture by having some memory that is “lower latency” to computation on certain processing elements than others.  It can seldonly be completely avoided.
 
-### **Applicability**
+### Applicability
 
 * As a fundemental primitive, it is applicable to almost all use cases  
 * Some communication patterns can be more consisely expressed using higher level primatives which can then be then be specialized for the underlying hardware capabilties.  In such cases, higher level collective operations can be used.  
 * Some uses cases (e.g. consistent and partition tolerant systems like traditional relational database managment systems like PostgresQL, some aspects of filesystems) require frequent syncronization to maintain consistency.  In such systems, avoiding distributing the workload requires fewer expensive syncronizations that occur over the network and may improve performance.
 
-### **Structure**
+### Structure
 
-### **Participants/Elements**
+### Participants/Elements
 
 * Message – what is being sent  
 * Sender – who is communicating information  
 * Reciever – who is obtaining information  
 * Switch(es)/Interconnect – intermediate network devices/nodes that transpartently conveys a message
 
-### **Collaboration with other patterns**
+### Collaboration with other patterns
 
 * Scatter/Gather/Broadcast – depending on hardware, these higher level collectives are implemented in terms of a point-to-point communication method.  
 * Hardware specialization – these routines are so primiative that often one or more aspect of them are implemented in dedicated hardware  
 * Pooling – often underlying resources use for sending and recieving messages are pooled  
 * Syncronization and Resilance patterns – use these as a primitive
 
-### **Code Example(s)**
+### Code Example(s)
 
 // example from an RPC based system
 
@@ -250,14 +278,14 @@ Without some mechanism to communicate between physically distinct hardware, para
 
 // example from a GASNet based approach
 
-### **Concequences**
+### Concequences
 
 * Communication incurs overhead which is often orders of magnitude slower than simple computations.  
 * Communication enables greater access to resources via horizontal scaling (more nodes) which is often cheaper than vertical scaling (more powerful nodes) past a certain scale due to the difficulty of implicity maintaining coherence on progressively larger systems.  
 * Communication introduces complexity of managing distributed state to the application  
 * Communication enables fault recovery and resilance by reducing the probability of a single point of failiure from a single node failure.
 
-### **Implementation considerations**
+### Implementation considerations
 
 * Implicit (Global Address Space) vs Explicit (e.g. Message Passing).  There are two fundemental models of communication – explicit models where the programmer specifically describes which processes send and which recieve – this describes UNIX sockets as well as HPC oriented solutions such as MPI.  There is however an alternative with global addressing systems which instead make communication implict much like the communication between threads.  At scale, there tends to be a tradeoff between performance (explicit) and productivity (implicit), but depending on the usage pattern, this performance overhead can be either minimal or catestrophic.  
 * Message Sizes – The performance of small messages are dominated by the latency to send any data at all.  Large messages are dominated by the bandwidth of the system.  Often there is a tradeoff between latency and throughput.  Frequenly a small amount of throughput can be sacrificed for much lower latency.  Frequenly, these choices are made by your networking library, but may be tunable for a specific code.  
@@ -275,7 +303,7 @@ Without some mechanism to communicate between physically distinct hardware, para
 * Atomisity – what operations can be performed on remote memory?  At its simplist, read/writes are allowed, but more modern systems allow certain atomic operations such as arithmatic, bitwise, and certian other operations to be preformed in such a way that either the entire operation is performed or none of the operation is performed allowing lower overhead and not requring return messages.  Hardware frequently limits this to a single 64 bit instruction having atomic operations.  If an array of such values are “atomically” operated on, each value is independently treated as atomic but the ordering of operations to each value may be arbitarily interleaved.  
 * Security – in HPC systems, security of communication is often handled at the network level and communication initation stage  rather than at the node level while non-HPC system often implement security at the node level assuming the network is untrusted.  This allows less overhead enforcing access controls, but requires a trusted adminstrative domain.
 
-### **Known uses**
+### Known uses
 
 * Lower Level  
   * TCP/UDP/ROCE over IP  
@@ -288,41 +316,42 @@ Without some mechanism to communicate between physically distinct hardware, para
   * GASNet based Languages (e.g. Chapel, upc++)  
   * Device \<-\> Host in GPU Programing (e.g. OpenMP Target, CUDA, SYCL, etc…)
 
-## **Collectives**
+## Collectives
 
-### **Intent**
+### Intent
 
 A collective operations that send data from one node to collection of other nodes either in whole (broadcast) or in part (scatter) of others or visa versa to send from many nodes to one node (gather) or all nodes (allgather), or from all nodes to all other nodes (all to all).
 
-### **Motivation**
+### Motivation
 
 These are foundational communication patterns for group of nodes.  This might be used to spread work out to a group of nodes, inform them of a request, wait for them (or some subset of them) to complete a request.
 
-### **Applicability**
+### Applicability
 
 * As a fundemental primitive, it is applicable to almost all use cases  
 * Collectives are often “implicit” in global address space schemes so may not be explicity invoked by the user making them less relevent in this context.  
 * The larger the group of processes collectively performing some task, the greater the overhead can be from a straggler who takes a disproportionately long time to complete the collective operation.
 
-### **Structure**
+### Structure
 
-### **Participants/Elements**
+
+### Participants/Elements
 
 * (optional) a root process \[for broadcast, gather, scatter\]  
 * A group of processing elements
 
-### **Collaboration with other patterns**
+### Collaboration with other patterns
 
 * As a fundemental primative, this patterns is used to build many large patterns
 
-### **Code Example**
+### Code Example
 
-### **Concequences**
+### Concequences
 
 * Collective simplify code and allow performance portability accross diverse architectures.  
 * Collectives can become a point of failure in large jobs when one or more nodes fail during a collective
 
-### **Implementation considerations**
+### Implementation considerations
 
 * Syncronous vs Asyncronous – asyncronous collectives allow computation or other communication to occur during a collective operation, but increase the complexity of the underlying implementation  
 * Non-contigious collectives – collectives may support sending different quantties of information during a collective (e.g. gatherv/scatterv)  
@@ -336,7 +365,63 @@ These are foundational communication patterns for group of nodes.  This might be
   * Bionomial Tree – minimizes volumes of communication and maximizes throughput by communicating in k-nary tree  
   * Linear – offers lower latency in some cases (e.g. small numbers of processes sending small messages)
 
-### **Known uses**
+### Known uses
 
 * MPI Collectives  
 * NCCL (network)/CUB(device) collectives for CUDA
+
+## Map
+
+### Intent
+
+Applies the “same” function to a collection of tasks in parallel
+
+###  Motivation
+
+This is a foundational programming pattern.  It can be used in parallel or serial cases.
+
+###  Applicability
+
+* As a fundamental primitive, it is applicable to many use cases  
+* Not appropriate for cases where tasks need to synchronize/communicate with each other, instead consider reductions or scans
+
+###  Structure
+
+###  Participants/Elements
+
+* Workers – who performs the tasks  
+* Tasks – the actual work to be performed
+* (optional) Scheduler – decides which tasks process each work element
+
+###  Collaboration with other patterns
+
+* Load balancing – load balancing patterns can be used to deal with imbalanced workloads which require inconsistent quantities of resources per task  
+* Resource Management  – how tasks are assigned to resources can dramatically effect performance
+* Hardware specialization – common and foundational operations are often implemented in hardware (e.g. vector addition, matrix matrix multiply for small matrices) in a paradigm referred to as Single Instruction Multiple Data (SIMD).  GPUs implement Single Instruction Multiple Threads (SIMT) which allows for an additional level of hierarchy.
++ Fault Tolerance - how errors and cancellation are handled has implications for fault tolerance of parallel maps especially checkpointing, bulkheads, replicas and algorithm based fault tolerance.
+
+###  Code Example
+
+###  Consequences
+
+* Tasks can be distributed over processing elements in parallel allowing for less wallclock execution time.  
+* Starting/tearing down parallel resources has some overhead, or may introduce less regular data access patterns resulting in less efficent data access than the serial case.
+
+###  Implementation considerations
+
+* Serial vs parallel -- are the tasks performed in serial or in parallel.  Performing tasks in serial may be optimal when the overhead for creating the workers or scheduling the tasks exceeds the benefits from parallel execution.
+* Task heterogenitity vs homogenity -- heterogeneous tasks often feature greater load imbalance than homogeneous tasks and may be harder to schedule on certain kinds of hardware platforms.  For example on GPUs, there is both a limit on the number of heterogenous tasks that can execute concurrently (which can be lower than on CPUs), but even for homogenous workflows also when there is divergence in the workflow (e.g. some tasks take different branches of an "if" statement), GPUs may pause execution on for threads while other threads in the same team take a different branch resulting in dramatically increase execution time.
+* Static vs dynamic task assignment  -- once a task is assigned to a worker, can the task be re-assigned to another worker?  Cluster wide HPC schedulers (e.g. Slurm, PBS) tend to perform static task assignment which is much easier to implement.  Node local, tasking runtime, and cloud oriented schedulers (e.g. Linux, OpenMP, Kubernetes) may perform dynamic task assignment to better balance load, to facilitate system maintenance, or to perform efficient packing of jobs.  Dynamic scheduling often requires careful attention to task migration, but is easier in the case of "Map" tasks which are independent.  See work stealing for additional discussion.
++ lazy vs eager -- are the tasks launched as soon as the function is called or are they called later either all at once or batch by batch.  Lazy execution can be more resource efficient if not all tasks are required.
+* Static or dynamic queue contents  -- are all tasks known at the beginning of the execution of the first task, or are tasks added to the queue as the workflow progresses?  Static queue contents may allow for more detailed and optimal scheduling decisions than in the dynamic case.  If tasks are added to the queue, how are they scheduled relative to existing tasks?  See resource management for additional discussion.
+* Cancellation -- At which points can tasks be canceled?  Popular choices include never unless the program is killed (e.g. CUDA), prior to task execution (e.g. ), at dedicated points during task execution (e.g. green threads, see cooperative scheduling), or at any point (e.g. linux threads, most HPC schedulers see task premption).  Allowing cancellation may requires additional synchronization or overhead compared to not allowing cancelation, but allows tasks that are no longer needed to be discarded.
+* Error Handling -- what happens if an error occurs during the execution of a task?  Does the entire program attempt to terminate (e.g. `MPI_ERRORS_FATAL`), does the task complete with an exception, does the task complete and the user is required to implement error handling?  Like cancellation, this allows tasks to end earlier than expected, but unlike cancellation may effect fault tolerance
+* scheduling -- discussed in more detail for scans and reduces which introduces task dependencies.  Even in the case of maps, scheduling decisions can be made based on expected/allocated execution time, resource utilization and availability (e.g. requires a GPU but none is currently available), status (e.g. waiting for a file read), fairness (e.g. how to ensure the long tasks continue to make forward progress), priority, and in the case of real-time systems deadlines.
+
+###  Known uses
+
++ the *Map* in *MapReduce* in Hadoop
++ `#pragma omp parallel for` in OpenMP
++ `Kokkos::parallel_for` in Kokkos
++ Job Arrays in OpenPBS/PBSPro/Slurm
++ Kubernetes Jobs with multiple completions

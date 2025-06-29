@@ -24,55 +24,6 @@ pros and cons
 
 \--------------------------------------------------------------------------------
 
-## Map
-
-### Intent
-
-Applies the “same” function to a collection of tasks in parallel
-
-###  Motivation
-
-This is a foundational programming pattern.  It can be used in parallel or serial cases.
-
-###  Applicability
-
-* As a fundamental primitive, it is applicable to many use cases  
-* Not appropriate for cases where tasks need to synchronize/communicate with each other, instead consider reductions or scans
-
-###  Structure
-
-###  Participants/Elements
-
-* Workers – who performs the tasks  
-* Tasks – the actual work to be performed
-* (optional) Scheduler – decides which tasks process each work element
-
-###  Collaboration with other patterns
-
-* Load balancing – load balancing patterns can be used to deal with imbalanced workloads which require inconsistent quantities of resources per task  
-* Resource Management  – how tasks are assigned to resources can dramatically effect performance
-* Hardware specialization – common and foundational operations are often implemented in hardware (e.g. vector addition, matrix matrix multiply for small matrices) in a paradigm referred to as Single Instruction Multiple Data (SIMD).  GPUs implement Single Instruction Multiple Threads (SIMT) which allows for an additional level of hierarchy.
-+ Fault Tolerance - how errors and cancellation are handled has implications for fault tolerance of parallel maps especially checkpointing, bulkheads, replicas and algorithm based fault tolerance.
-
-###  Code Example
-
-###  Consequences
-
-* Tasks can be distributed over processing elements in parallel allowing for less wallclock execution time.  
-* Starting/tearing down parallel resources has some overhead, or may introduce less regular data access patterns resulting in less efficent data access than the serial case.
-
-###  Implementation considerations
-
-* Serial vs parallel -- are the tasks performed in serial or in parallel.  Performing tasks in serial may be optimal when the overhead for creating the workers or scheduling the tasks exceeds the benefits from parallel execution.
-* Task heterogenitity vs homogenity -- heterogeneous tasks often feature greater load imbalance than homogeneous tasks and may be harder to schedule on certain kinds of hardware platforms.  For example on GPUs, there is both a limit on the number of heterogenous tasks that can execute concurrently (which can be lower than on CPUs), but even for homogenous workflows also when there is divergence in the workflow (e.g. some tasks take different branches of an "if" statement), GPUs may pause execution on for threads while other threads in the same team take a different branch resulting in dramatically increase execution time.
-* Static vs dynamic task assignment  -- once a task is assigned to a worker, can the task be re-assigned to another worker?  Cluster wide HPC schedulers (e.g. Slurm, PBS) tend to perform static task assignment which is much easier to implement.  Node local, tasking runtime, and cloud oriented schedulers (e.g. Linux, OpenMP, Kubernetes) may perform dynamic task assignment to better balance load, to facilitate system maintenance, or to perform efficient packing of jobs.  Dynamic scheduling often requires careful attention to task migration, but is easier in the case of "Map" tasks which are independent.  See work stealing for additional discussion.
-* Static or dynamic queue contents  -- are all tasks known at the beginning of the execution of the first task, or are tasks added to the queue as the workflow progresses?  Static queue contents may allow for more detailed and optimal scheduling decisions than in the dynamic case.  If tasks are added to the queue, how are they scheduled relative to existing tasks?  See resource management for additional discussion.
-* Cancelation -- At which points can tasks be canceled?  Popular choices include never unless the program is killed (e.g. CUDA), prior to task execution (e.g. ), at dedicated points during task execution (e.g. green threads, see cooperative scheduling), or at any point (e.g. linux threads, most HPC schedulers see task premption).  Allowing cancellation may requires additional synchronization or overhead compared to not allowing cancelation, but allows tasks that are no longer needed to be discarded.
-* Error Handling -- what happens if an error occurs during the execution of a task?  Does the entire program attempt to terminate (e.g. `MPI_ERRORS_FATAL`), does the task complete with an exception, does the task complete and the user is required to implement error handling?  Like cancellation, this allows tasks to end earlier than expected, but unlike cancellation may effect fault tolerance
-* scheduling -- discussed in more detail for scans and reduces which introduces task dependencies.  Even in the case of maps, scheduling decisions can be made based on expected/allocated execution time, resource utilization and availability (e.g. requires a GPU but none is currently available), status (e.g. waiting for a file read), fairness (e.g. how to ensure the long tasks continue to make forward progress), priority, and in the case of real-time systems deadlines.
-
-###  Known uses
-
 ## Scan/Reduce
 
 + differences between scans and reductions  

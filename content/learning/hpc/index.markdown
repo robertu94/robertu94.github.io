@@ -83,7 +83,7 @@ As mentioned above, often software needs to be refactored to achieve optimal per
 | [enumeration and grouping](learning/patterns#enumeration-and-grouping)    | identify and group parallel resources                                                                                         |
 | [send/recv](learning/patterns#sendrecv)                                   | point to point communication                                                                                                  |
 | [collectives](learning/patterns/#collectives)    | distribute or collect factions of work from a collection of nodes                                      |
-| functors/map                | perform many completely independent problems                                                                                  |
+| [functors/map](learning/patterns/#map)                | perform many completely independent problems                                                                                  |
 | catamorphisms/reduce/scan                              | combine many associative operations                                                                |
 | anamorphisms/hylomorphisms/divide and conquer          | problems that can be partitioned into independent sub problems                                     |
 | sorting                     | permute elements into a specified order                                                                                       |
