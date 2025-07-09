@@ -2,36 +2,42 @@
 draft: true
 ---
 
-# Template
+## Template
 
-## Intent 
+### Intent 
 short what does this do
-## Motivation
+
+### Motivation
 why is intent useful
-## Applicability
+
+### Applicability
 limitations and strengths regarding when you should use this
-## Structure
+
+### Structure
 diagram
-## Participants/Elements 
+
+### Participants/Elements 
 what can be tweaked
-## Collaboration with other patterns
-## Code Examples
-## Consequences of using pattern
+
+### Collaboration with other patterns
+
+### Code Examples
+
+### Consequences of using pattern
 pros and cons
-## Implementation considerations
+
+### Implementation considerations
+
+### Known Uses
 
 
 
 \--------------------------------------------------------------------------------
 
-## Scan/Reduce
+# Fundamental Patterns
 
-+ differences between scans and reductions  
-+ tree-based methods, 2 pass reduction   
-+ decoupled lookback leveraging task monotonisity on Cuda with atomic operations   
-+ scans and reductions with NPU/TPUs via linear algebra leveraging the matrix vector unit  
-+ Reduce by key \-- uses a fused scan with a reduce  
-+ implementation with linear algebra 
+
+## Divide and Conquer
 
 ## Sort
 
@@ -48,6 +54,8 @@ Merge sort
 + Matrix Matrix (BLAS level 3\)  
 + SparseBLAS  
 + GraphBLAS
+
+## Graph Operations
 
 ## Pipelines
 

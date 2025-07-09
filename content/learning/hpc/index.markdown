@@ -84,7 +84,7 @@ As mentioned above, often software needs to be refactored to achieve optimal per
 | [send/recv](learning/patterns#sendrecv)                                   | point to point communication                                                                                                  |
 | [collectives](learning/patterns/#collectives)    | distribute or collect factions of work from a collection of nodes                                      |
 | [functors/map](learning/patterns/#map)                | perform many completely independent problems                                                                                  |
-| catamorphisms/reduce/scan                              | combine many associative operations                                                                |
+| [catamorphisms/reduce/scan](learning/patterns/#scanreduce)                              | combine many associative operations                                                                |
 | anamorphisms/hylomorphisms/divide and conquer          | problems that can be partitioned into independent sub problems                                     |
 | sorting                     | permute elements into a specified order                                                                                       |
 
@@ -141,8 +141,8 @@ As mentioned above, often software needs to be refactored to achieve optimal per
 | reconfiguration             | upon failure, reconfigure the application to run in a reduced mode                                                            |
 | reconstruction              | upon failure, partially rebuild the application using new resources                                                           |
 | erasure codes               | a less memory/disk intensive form of replica which can recompute the state provided a certain number of "copies" survive      |
-| merkel trees                    | upon failure, partially rebuild the application using new resources                                                           |
-| algorithm based fault tolerance | upon failure, partially rebuild the application using new resources                                                           |
+| merkel trees                    | incrementally hash a structure to be able to validate changes in subsets                                                           |
+| algorithm based fault tolerance | introducing slight modifications to algorithms to apply lightweight fault tolerance                                                           |
 
 ## Approximation Patterns
 
