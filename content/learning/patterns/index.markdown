@@ -378,11 +378,12 @@ Applies the “same” function to a collection of tasks in parallel
 
 ###  Motivation
 
-This is a foundational programming pattern.  It can be used in parallel or serial cases.
+This is a foundational programming pattern.  It can be used in parallel or serial cases whenever "the same" independent operation needs to be performed on a collection of elements.
 
 ###  Applicability
 
-* As a fundamental primitive, it is applicable to many use cases  
+* As a fundamental primitive, it is applicable to many use cases
+* This pattern is still applicable for use cases where different operations (including no-ops) need to be performed on non-overlapping subsets of elements provided that the decision of which operation should be performed can be determined only by considering each element individually.
 * Not appropriate for cases where tasks need to synchronize/communicate with each other, instead consider reductions or scans
 
 ###  Structure
@@ -412,9 +413,12 @@ This is a foundational programming pattern.  It can be used in parallel or seria
 * Serial vs parallel -- are the tasks performed in serial or in parallel.  Performing tasks in serial may be optimal when the overhead for creating the workers or scheduling the tasks exceeds the benefits from parallel execution.
 * Task heterogenitity vs homogenity -- heterogeneous tasks often feature greater load imbalance than homogeneous tasks and may be harder to schedule on certain kinds of hardware platforms.  For example on GPUs, there is both a limit on the number of heterogenous tasks that can execute concurrently (which can be lower than on CPUs), but even for homogenous workflows also when there is divergence in the workflow (e.g. some tasks take different branches of an "if" statement), GPUs may pause execution on for threads while other threads in the same team take a different branch resulting in dramatically increase execution time.
 * Static vs dynamic task assignment  -- once a task is assigned to a worker, can the task be re-assigned to another worker?  Cluster wide HPC schedulers (e.g. Slurm, PBS) tend to perform static task assignment which is much easier to implement.  Node local, tasking runtime, and cloud oriented schedulers (e.g. Linux, OpenMP, Kubernetes) may perform dynamic task assignment to better balance load, to facilitate system maintenance, or to perform efficient packing of jobs.  Dynamic scheduling often requires careful attention to task migration, but is easier in the case of "Map" tasks which are independent.  See work stealing for additional discussion.
-+ lazy vs eager -- are the tasks launched as soon as the function is called or are they called later either all at once or batch by batch.  Lazy execution can be more resource efficient if not all tasks are required.
++ Collective vs Non-Collective -- do all workers obtain the results of the other workers after the map is completed (i.e. Collective) or not (i.e. non-Collective)?  A non-collective implementation can be made to be collective by adding a collective operation (e.g. gather or all-gather) after the map; collective implementations can be easier to reason about.  See collectives.
++ Returning `void` -- sometimes the user does not care about the return value of the function only that the side effects of the function occur eventually (e.g. Providing a progress notification to the user, or reporting some metrics to metrics collection endpoint).  These are sometimes called "fire-and-forget" functions or "detached" functions.  In practice, I find the true use cases for this to be rare; you almost always want to know if something failed unexpectedly and be able to handle that condition or to ensure that something eventually completes (e.g. asynchronous checkpointing).  Instead prefer queuing style systems where error conditions and progress can be handled in a structured way.
++ Preserving the ordering to tasks -- if tasks are provided in the order from 1..N, are they returned in the same order or some other order.  Returning tasks in a different order (e.g. In the order of completion) may reduce synchronization between tasks, but introduces synchronization where the elements are returned as tasks compete to be the next value to return.
++ lazy vs eager -- are the tasks launched as soon as the function and returned synchronously (e.g. `Vector<T>`) is called or are they called later either all  at once (e.g. `Future<Vector<T>>`) or batch by batch (e.g. `Generator<T>` or `Generator<Vector<T>>`).  Lazy execution can be more resource efficient if not all tasks are required or can reduce the operating memory overhead by not materializing the entire structure in memory.
 * Static or dynamic queue contents  -- are all tasks known at the beginning of the execution of the first task, or are tasks added to the queue as the workflow progresses?  Static queue contents may allow for more detailed and optimal scheduling decisions than in the dynamic case.  If tasks are added to the queue, how are they scheduled relative to existing tasks?  See resource management for additional discussion.
-* Cancellation -- At which points can tasks be canceled?  Popular choices include never unless the program is killed (e.g. CUDA), prior to task execution (e.g. ), at dedicated points during task execution (e.g. green threads, see cooperative scheduling), or at any point (e.g. linux threads, most HPC schedulers see task premption).  Allowing cancellation may requires additional synchronization or overhead compared to not allowing cancelation, but allows tasks that are no longer needed to be discarded.
+* Cancellation -- At which points can tasks be canceled?  Popular choices include never unless the program is killed (e.g. CUDA), prior to task execution, at dedicated points during task execution (e.g. Green threads, pthread\_cancel with deferred cancellation, see cooperative scheduling), or at any point (e.g. Linux threads, most HPC schedulers see task preemption).  Allowing cancellation may requires additional synchronization or overhead compared to not allowing cancelation, but allows tasks that are no longer needed to be discarded.
 * Error Handling -- what happens if an error occurs during the execution of a task?  Does the entire program attempt to terminate (e.g. `MPI_ERRORS_FATAL`), does the task complete with an exception, does the task complete and the user is required to implement error handling?  Like cancellation, this allows tasks to end earlier than expected, but unlike cancellation may effect fault tolerance
 * scheduling -- discussed in more detail for scans and reduces which introduces task dependencies.  Even in the case of maps, scheduling decisions can be made based on expected/allocated execution time, resource utilization and availability (e.g. requires a GPU but none is currently available), status (e.g. waiting for a file read), fairness (e.g. how to ensure the long tasks continue to make forward progress), priority, and in the case of real-time systems deadlines.
 
@@ -425,3 +429,75 @@ This is a foundational programming pattern.  It can be used in parallel or seria
 + `Kokkos::parallel_for` in Kokkos
 + Job Arrays in OpenPBS/PBSPro/Slurm
 + Kubernetes Jobs with multiple completions
+
+## Scan/Reduce
+
+### Intent 
+
+This pattern combines multiple elements of a data structure into a single cumulative result.  The result can represent a single element (a reduction), or a collection of elements (a scan).
+
+### Motivation
+
+Reductions and scans are foundational parallel programming patterns.  They can be used in parallel and serial use cases where multiple element of a data structure need to be combined to produce a result.
+
+### Applicability
+
+* As a fundamental primitive, it is applicable to almost all use cases where you need to combine the values of multiple elements of a data structure such as `filter` operations and `aggregations` (e.g. count, mean, etc...)
+* While it is possible to implement `map` using a scan, this will likely introduce undue synchronization overhead.
+
+### Structure
+
+
+### Participants/Elements 
+
++ tasks -- what work needs to be performed
+    + "the zero/identity element" -- what is the initial state of the reduction, or alternatively how is the inital state created?
+    + the binary operation -- how are elements of the data structure combined?  Is the operation associative, or effectful?
++ workers -- where the work of the reduction preformed
++ scheduler -- how tasks are mapped to workers
+
+### Collaboration with other patterns
+
+Many of the same collaborations as Map.  This list focuses on distinctive of Reduces/Scans.
+
+* Operator Fusion and Reordering -- the ordering of reductions compared to other operations can have substantial effects on the amount of work to be performed
+* Load balancing – reduces and scans are inherently less load balanced than map (i.e. the root of the reduction has more work to do than the leaves) so is a more important consideration.
+* Hardware specialization – common and foundational operations are often implemented in hardware (e.g. Vector dot product) in a paradigm referred to as Single Instruction Multiple Data (SIMD).  GPUs implement hierarchical primitives (e.g. Shuffles, warp/group primitives) that can also accelerate these functions.
+* Synchronization patterns -- unlike map, synchronization is inherent to reductions/scans so careful attention to these patterns is critical for performance and correctness.
++ Fault Tolerance -- Unlike map, there are more meaningful intermediate states that can potentially be checkpointed, and more complexity in recovering from failures because the loss of a node necessitates additional communication with the other nodes that would otherwise need to cooperate in a reduction/scan.
+
+
+### Code Examples
+
+### Consequences of using pattern
+
++ parallel reductions can require less wallclock time by distributing the work to be performed over multiple processing elements.
++ more-so than map, reductions/scans require synchronizations that introduce overhead when conducted in parallel.
+
+### Implementation considerations
+
++ What kind of iterator model exists for the collection?
+    + For random access and continuious iterators parallelism is possible because multiple processors can "jump" to a portion of the collection for processing. 
+    + For input, output, forward, and bidirectional iterators limited parallelism is possible without first converting to a random or continuous iterator because the inherently serial nature of advancing iterators one by one prohibits parallelism.
++ Are you producing a single result or a collection of results?
+    + scans (`scanl operation init collection :: Foldable f => (b -> a -> b) -> b -> f a -> f b` ) produce a collection of elements instead of a single element for example a prefix sum, a maximum value in each subtree, or a shortest path from one node to any node in a graph.
+    + reductions (`foldl operation init collection :: Foldable f => (b -> a -> b) -> b -> f a -> b`) produce a single element such as a maximum, the final state of a state machine over a series of events, the depth of a tree, or the size of the largest connected component.
+    + There are also variants of these operations such as "Reduce by Key" which uses a fused scan with a reduce to process a group of elements with the same key together.
+    + There are other variants of reductions that take additional arguments to the reduction function (e.g. `paramorphisms` that pass the original data structure in addition to the reduction state, `histomorphisms` which can look at multiple preceding states)  For more information refer to the paper ["Fantastic Morphisms and Where to Find Them A Guide to Recursion Schemes"](https://yangzhixuan.github.io/pdf/fantastic-morphisms.pdf).
++ What are the properties of the binary operation?
+    + magmas vs semi-groups and associativity.  A magma is just a binary operation that peserves type.  A semi-group godes further and requires that the operation be associative.  Associativity is a key property in that it allows for operations to be grouped in an arbitary order which enables parallelism by allowing operations to be scattered to multiple parallel processing elements and performed in an arbitary order.  Sometimes, it is possible to conduct these operations as if they are a true semi-group, but are not.  For example floating point operations are not truely associative, but are approximately associative.  By relaxing the constraint and allowing associtaivity, the computation can be performed faster, but at the cost of some accuracy.  Further more a semi-group can be an Abelian semi-group further allowing communativity -- or reordering of operations.  This enables a further set of performance improvements by allowing more arbitary work stealing which is useful in the case of load imbalanced problems.
+    + semi-groups vs monoids  and the "zero"/"identity" element.  A monoid is just a semi-group that has a "zero element" also known as an "identity element".  The identity element combined using the binary operation with any other element produces the other element unchanged.  For addtion, this is `0`; for multication this is `1`.  Monoids offer an advantage over semigroups for parallelism because multiple elements can be "lifted" into the monoid using the identity element allowing for multiple starting positions instead of a single element.  In contrast, for semi-groups, the user needs to provide an explicit base case of the reduction or scan.
+    + monoids vs monads and effectful reductions.  Monads are "programmable semi-colons" -- they describe how to take the value in a "wrapped" value and return a new "wrapped" value -- for example optionals and futures are monads.  There are more abstact notions of monads such as `IO` in haskell that model side effects of calling functions (e.g. printing a value).  If the order of the effects "matters" for the correctness of your program, this will limit parallelism.  Just as you can sometimes "cheat" and ignore the ordering imposed by magmas you can do the same for monads (e.g. if two prints are out of order, that can be confusing for the debugging/monitoring of a program, but likely not impactful for correctness).
++ The optimal implementation of a scan/reduce is effected by the programming model
+    + tree-based methods, 2 pass reduction.  This pattern maps nicely onto many hardware types and is the principle way to implement distributed reductions.  In this pattern, each iteration elements are paired up and passed to the binary function, and then the process is repeated taking the outputs of the pairs are passed to the as the inputs to the next iteration until only a single element remains.  Some optimizations may implement this as a multi-level reduction the width of the nodes changes depending on their depth in the tree.  To implement a scan using this design, a "upward" pass that computes the reduction of each subtree is computed, and then a "downward" pass computes the actual prefix values.
+    + decoupled lookback -- On CUDA and GPUs, scans can be efficiently implemented by leveraging the aspect of the hardware that threads are scheduled in a montonistically increasing manner. This means that the $i^{th}$ thread knows that at least threads $i-1$ have begun to execute (even if they haven't finished).  Decoupled lookback combines this with hardware atomic operations to mark reductions as pending, prefix available , or aggregate available.  In the case that fewer than $2^62$ elements are processed, the atomic store of the status can be stored with the aggregate into a single 64 bit integer register atomically.
+    + For NPU and TPUs which feature hardware instructions for matrix-vector multiplication scans and reductions for certain datatypes can be implemented by multiplication by a specially designed matrix.  For a scan, this is the upper triagular matrix of ones.  For a reduction, it is the matrix where the matrix with the top row contains only ones.
++ error handling and cancellation -- unlike maps, reductions and scans have more complex error handling because the operations that fail may be intermediate results from the scan or reduction instead of from the raw elements.  In this case, it may be desirable for a reduction to accumulate the errors either in an aabitary order (see magmas vs semigroups) or in the order of the original elements.  This also has implications for recovering from failures as resuming from a failure in the middle of a reduction requires additional effort and careful syncroinzation during recovery.  See the discussion on checkpointing of directed acyclic graphs for additional discussion.
+
+### Known Uses
+
++ MPI features Scan and Reduce collectives
++ OpenMP features Reduce and now Scan intents for loops.
++ Cuda's CUB (now part of NCCL) impement device (and collective) reductions respectively
++ In MapReduce/Hadoop, the Reducer implements a reduce by key.
++ Functional programming languages such as Haskell have the most robust notions of reductions (called fold) and scans.
