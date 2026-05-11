@@ -17,7 +17,6 @@ This presents an opinionated take on what these trade-offs are so one can know w
 | CentOS-8 compatible | December 2021`*` |   2029   |
 | CentOS-9 stream     | May 2027`*`      |   2032   |
 | CentOS-10 stream    | December 2030`*` |   2038   |
-| OpenSUSE Leap 15.6  | December 2025    |          |
 | Ubuntu 22.04        | April 2027       |          |
 | Ubuntu 24.04        | April 2029       |          |
 
@@ -27,23 +26,27 @@ This presents an opinionated take on what these trade-offs are so one can know w
 
 # Tooling Versions
 
-| Tool     | Minimum Sandard EoL    | Ubuntu 22.04 |Ubuntu 24.04 | CentOS 9 Stream |CentOS 10 Stream | SUSELeap       |Fedora       |  CentOS 8        |
-|----------|------------------------|--------------|-------------|-----------------|-----------------|----------------|-------------|------------------|
-| EOL      |                        | Current      |             |                 |                 |                |             |  Extended        |
-| gcc      | 11.3                   | 11.4.0       | 13.2.0      | 11.3            | 14.2.1          | 7.5.0`^` to 14 | 15.0.1      |  8.5.0           |
-| clang    | 16.0                   | 14.0.0       | 18.1.3      | 16.0            | 20.1.2          | 17.0.6         | 20.1.2      |  15.0.0          |
-| cmake    | 3.20                   | 3.22.1       | 3.28.3      | 3.20            | 3.30.5          | 3.28.3         | 3.31.6      |  3.20            |
-| python3  | 3.6.15                 | 3.10.0       | 3.12.3      | 3.9,3.11        | 3.12.10         | 3.6.15         | 3.13.3      |  3.6-3.9         |
-| julia    | n/a                    | n/a          | n/a         | n/a             | n/a             | 1.0.3`#`       | 1.11.0-rc3  |  n/a             |
-| cargo    | 1.66.1                 | 1.66.1       | 1.75.0      | 1.61.1          | 1.85.0          | 1.82.0         | 1.86.0      |  1.66.1          |
-| swig     | 3.0.12                 | 4.0          | 4.2.0       | 3.0.12          | 4.3.0 `$`       | 4.1.1          | 4.3.0       |  3.0.12          |
-| nvcc `*` | 11.5                   | 11.5.0       | 12.0.140    | n/a `*`         | n/a `*`         | n/a `*`        | n/a `*`     |  n/a `*`         |
-| numpy    | 1.17.3                 | 1.21.5       | 1.26.4      | 1.20.1          | 1.26.4          | 1.17.3         | 2.2.4       |  1.14.3          |
+| Tool     | Spack 1.1        |  Minimum Sandard EoL    | Ubuntu 22.04 |Ubuntu 24.04 | CentOS 9 Stream |CentOS 10 Stream |Fedora       |  CentOS 8        |
+|----------|------------------|-------------------------|--------------|-------------|-----------------|-----------------|-------------|------------------|
+| EOL      |                  |                         | Current      |             |                 |                 |             |  Extended        |
+| gcc      | 15.2.0           |  11.3                   | 11.4.0       | 13.2.0      | 11.3            | 14.2.1          | 15.0.1      |  8.5.0           |
+| clang    | 21.1.4           |  16.0                   | 14.0.0       | 18.1.3      | 16.0            | 20.1.2          | 20.1.2      |  15.0.0          |
+| cmake    | 3.31.9`@`, 4.1.2 |  3.20                   | 3.22.1       | 3.28.3      | 3.20            | 3.30.5          | 3.31.6      |  3.20            |
+| python3  | 3.14.0           |  3.9                    | 3.10.0       | 3.12.3      | 3.9,3.11        | 3.12.10         | 3.13.3      |  3.6-3.9         |
+| julia    | 1.11.7           |  n/a                    | n/a          | n/a         | n/a             | n/a             | 1.11.0-rc3  |  n/a             |
+| cargo    | 1.86.0           |  1.66.1                 | 1.66.1       | 1.75.0      | 1.61.1          | 1.85.0          | 1.86.0      |  1.66.1          |
+| swig     | 4.1.1            |  3.0.12                 | 4.0          | 4.2.0       | 3.0.12          | 4.3.0 `$`       | 4.3.0       |  3.0.12          |
+| nvcc `*` | 13.0.2           |  11.5                   | 11.5.0       | 12.0.140    | n/a `*`         | n/a `*`         | n/a `*`     |  n/a `*`         |
+| numpy    | 2.3.4            |  1.21.5                 | 1.21.5       | 1.26.4      | 1.20.1          | 1.26.4          | 2.2.4       |  1.14.3          |
+| pytorch  | 2.9.0            |  2.5.1                  | n/a          | n/a         | n/a             | 2.8.0           | 2.5.1       |  n/a             |
+| mpich    | 4.3.2            |  4.1.1                  | n/a          | n/a         | 4.1.1           | 4.1.2           | 4.2.2       |  4.1.1           |
+| openmpi  | 5.0.8            |  4.1.1                  | n/a          | n/a         | 4.1.1           | 5.0.2           | 5.0.8       |  4.1.1           |
+| mpi4py   | 4.1.1            |  3.1.3                  | n/a          | n/a         | 3.1.3           | 4.0.1           | 4.0.3       |  3.0.3           |
 
 `#1` has known issues and upstream [recommends avoiding using this version](https://old.reddit.com/r/Julia/comments/ubdva0/what_happened_to_julia_on_ubuntu_2204_repos/i65xf8n/)
 `*` CentOS, and Fedora do not package CUDA themselves, but instead rely on Nvidia to provide the package which provides the newest version.
-`^` OpenSUSE Leap provides many gcc compilers, the default is 7.5.0
 `$` CentOS provides some packages in the code-ready builder or EPEL repositories
+`@` Spack defaults to preferred versions
 
 # Language Features
 
@@ -196,15 +199,16 @@ For widest compatibility, avoid features newer than 3.6, however when CentOS7 is
 + **3.11** Added exception groups, tomllib, variatic generics, Self type, string literal type, is much faster and more
 + **3.12** Added `Path.walk`, improved f-strings, type alias, `sys.monitoring`, `collections.abc.Buffer`
 + **3.13** Added improved interpreter and error messages, jit bytecode interpreter for faster hot functions, `copy.replace`. Experimental support for noGIL python
-+ **3.14** Deferred evolution of annotations, improved python debugging
++ **3.14** Deferred evolution of annotations, t-strings, improved python debugging, noGIL out of experimental but still optional
 
 ### Manylinux
 
 Python's pip uses `manylinux` containers to provide broadly compatible binaries for use with python.
 
-| Version                       | GCC  | Python                   | Base        |
-|-------------------------------|------|--------------------------|-------------|
-| manylinux_2_28                | 12   | 3.8.10+, 3.9.5+, 3.10.0+ | Almalinux 8 |
+| Version                       | GCC  | Python                   | Base        | Status |
+|-------------------------------|------|--------------------------|-------------|--------|
+| manylinux_2_34                | 14   | 3.8.10+, 3.9.5+, 3.10.0+ | Almalinux 9 | Alpha  |
+| manylinux_2_28                | 12   | 3.8.10+, 3.9.5+, 3.10.0+ | Almalinux 8 | Prod   |
 
 PEP 600 defines manylinux_x_y where x==glibc_major version, y==glibc_minor_version.
 There are docker containers that provide build envionments for these packages that should be preferred.
@@ -212,17 +216,47 @@ One should also check the `auditwheel` command to ensure that the compiled libra
 
 ### Numpy
 
-+ 1.17 `__array_function__` support, `random` module made more modular
-+ 1.18 64 bit BLAS/LAPACK support
-+ 1.19 dropped support for python < 3.6
-+ 1.20 Numpy added typing support, wider use of SIMD, start of dtype refactor
-+ 1.21 more type annotations, more SIMD
-+ 1.22 most of main numpy is typed, array api and C support for dlpack supported
-+ 1.23 python support for dlpack
-+ 1.26 support array_api v0.2022.12, but fft not supported for now; new build flags
-+ 2.0 many changes to the public/private api, changes to C functions, many performance improvements
-+ 2.1 support for array_api v2023.12, prelimiary support for GIL free python
-+ 2.2 improved support for GIL free python, improved use of BLAS for matrix vector products
+| version | eol          | features                                                                                     |
+|---------|--------------|----------------------------------------------------------------------------------------------|
+| 1.17    | eol*         | `__array_function__` support, `random` module made more modular                              |
+| 1.18    | eol          | 64 bit BLAS/LAPACK support                                                                   |
+| 1.19    | eol          | dropped support for python < 3.6                                                             |
+| 1.20    | eol*         | Numpy added typing support, wider use of SIMD, start of dtype refactor                       |
+| 1.21    | eol*         | more type annotations, more SIMD                                                             |
+| 1.22    | eol          | most of main numpy is typed, array api and C support for dlpack supported                    |
+| 1.23    | eol          | python support for dlpack                                                                    |
+| 1.26    | Febuary 2025 | support array_api v0.2022.12, but fft not supported for now; new build flags                 |
+| 2.0     | June 2026    | many changes to the public/private api, changes to C functions, many performance improvements|
+| 2.1     | August 2026  | support for array_api v2023.12, prelimiary support for GIL free python                       |
+| 2.2     | December 2026| improved support for GIL free python, improved use of BLAS for matrix vector products        |
+| 2.3     | June 2027    | openmp acceleration for some functions, free threaded pythhon                                |
+
+Items with `*` are out of upstream support but may be supported by a LTS distribution
+
+### DLPack
+
+DLPack is a zero-copy data exchange protocol used in many python libraries for CPUs and GPUs.
+The latest versions all major data libraries support version dlpack 1.0.
+Given many users install python libraries with pip this make it widely available across platforms.
+
+However, Numpy versions provided in many package managers do not support it at all.
+Given the numpy versions included with all packages it is important to also support NumPy's `__array_interface__` in the mean time.
+Additionally, For other libraries some distributions package libraries that support only 0.6 or newer versions.
+For example of how to support multiple versions simultaneously consider the implementation in Pytorch for [`__dlpack__`](https://github.com/pytorch/pytorch/blob/0ec53beaeb5d6a40d57b47a753f86a0a3961c696/torch/_tensor.py#L1712-L1874) and [`from_dlpack`](https://github.com/pytorch/pytorch/blob/0ec53beaeb5d6a40d57b47a753f86a0a3961c696/torch/utils/dlpack.py#L58-L171).
+
+
+| dlpack version | library  | library version |
+|----------------|----------|-----------------|
+| 0.1            | Torch    | 0.3.0           |
+| 0.5            | Numpy    | 1.23            |
+| 0.6            | CuPy     | 10.0.0          |
+| 0.6            | MPI4PY   | 3.1.0           |
+| 0.8            | CuPy     | 12.0.0          |
+| 0.8            | Torch    | 2.5.1           |
+| 1.0            | CuPy     | 13.4.0          |
+| 1.0            | Torch    | 2.9.0           |
+| 1.0            | Numpy    | 2.1             |
+| 1.0            | MPI4PY   | 4.0.3           |
 
 ## Julia
 
