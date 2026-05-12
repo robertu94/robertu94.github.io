@@ -18,6 +18,7 @@ Lastly, if you find the articles insufficient in some way, please [email me](mai
 + [Studying](/learning/litrature-review): how to go about learning new topics
 + [Intake](/learning/intake): how to stay up to date on current topics
 + [Writing](/learning/writing): how to summarize topics for others to learn
++ [Traveling](/learning/travel): how to prepare to travel
 
 ## Process
 
